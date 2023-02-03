@@ -4,16 +4,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Models.Models;
 using Repository.Utils.Repository.Interface;
-using Traibanhoa.Models;
 
 namespace Repository.Utils.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-
         private readonly TraibanhoaContext _db;
-        internal readonly DbSet<T> DbSet;
+        public readonly DbSet<T> DbSet;
 
         public Repository(TraibanhoaContext db)
         {
@@ -39,12 +38,12 @@ namespace Repository.Utils.Repository
             await _db.SaveChangesAsync();
         }
 
-        public async Task<T> GetByIdAsync(string key)
+        public async Task<T> GetByIdAsync(Guid key)
         {
             return await DbSet.FindAsync(key);
         }
 
-        public ICollection<T> GetAll(Func<IQueryable<T>, ICollection<T>> options = null, string includeProperties = null)
+        public async Task<ICollection<T>> GetAll(Func<IQueryable<T>, ICollection<T>> options = null, string includeProperties = null)
         {
             try
             {
@@ -63,7 +62,7 @@ namespace Repository.Utils.Repository
                     return options(query).ToList();
                 }
 
-                return query.ToList();
+                return await query.ToListAsync();
             }
             catch
             {

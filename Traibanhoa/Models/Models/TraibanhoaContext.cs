@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace Traibanhoa.Models
+namespace Models.Models
 {
     public partial class TraibanhoaContext : DbContext
     {

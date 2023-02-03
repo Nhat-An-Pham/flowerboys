@@ -8,7 +8,7 @@ namespace Repository.Utils.Repository.Interface
 {
     public interface IRepository<T> where T : class
     {
-        Task<T> GetByIdAsync(string key);
+        Task<T> GetByIdAsync(Guid key);
 
         Task AddAsync(T entity);
 
@@ -16,9 +16,10 @@ namespace Repository.Utils.Repository.Interface
 
         Task AddRangeAsync(IEnumerable<T> entities);
 
-        ICollection<T> GetAll(
-            Func<IQueryable<T>, ICollection<T>> options = null,
-            string includeProperties = null
+        Task<ICollection<T>> GetAll(
+                Func<IQueryable<T>,
+                ICollection<T>> options = null,
+                string includeProperties = null
         );
 
         Task<T> GetFirstOrDefaultAsync(

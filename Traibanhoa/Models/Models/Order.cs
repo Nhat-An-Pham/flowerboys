@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Traibanhoa.Models
+namespace Models.Models
 {
     public partial class Order
     {

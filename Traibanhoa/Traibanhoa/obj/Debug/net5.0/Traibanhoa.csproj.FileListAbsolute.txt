@@ -54,10 +54,12 @@ C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\obj\Debug\net5.0\staticwebasse
 C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\obj\Debug\net5.0\staticwebassets\Traibanhoa.StaticWebAssets.xml
 C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\obj\Debug\net5.0\scopedcss\bundle\Traibanhoa.styles.css
 C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\obj\Debug\net5.0\Traibanhoa.RazorTargetAssemblyInfo.cache
-C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\obj\Debug\net5.0\Traibanhoa.csproj.CopyComplete
 C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\obj\Debug\net5.0\Traibanhoa.dll
 C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\obj\Debug\net5.0\ref\Traibanhoa.dll
 C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\obj\Debug\net5.0\Traibanhoa.pdb
 C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\obj\Debug\net5.0\Traibanhoa.genruntimeconfig.cache
 C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\Humanizer.dll
 C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\FluentValidation.dll
+C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\Repository.dll
+C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\Repository.pdb

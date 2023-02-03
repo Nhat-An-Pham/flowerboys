@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "2BbY9HZSObvJ+Qq703PwKbEnWB3naHABrAkoIeOOCgj/l/w9b4WDfkO58rx4qEyzja2BTTaKmR8l5UjVX+8jvg==",
+  "dgSpecHash": "0Q9+OUzY+q2ZiKPAlhzRW4qJNEaCVbaGma+NQKr84GHaZztrWbBsWP3h1B9Ko0QNBnMFqdndTvyy8EP1SmcGkw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Nam\\.nuget\\packages\\fluentvalidation\\11.4.0\\fluentvalidation.11.4.0.nupkg.sha512",
     "C:\\Users\\Nam\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Nam\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Nam\\.nuget\\packages\\microsoft.data.sqlclient\\2.0.1\\microsoft.data.sqlclient.2.0.1.nupkg.sha512",

@@ -1,19 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Traibanhoa.Models;
+using Models.Models;
+using Traibanhoa.Modules.TypeModule;
+using Traibanhoa.Modules.TypeModule.Interface;
 
 namespace Traibanhoa
 {
@@ -40,6 +34,9 @@ namespace Traibanhoa
                     Configuration.GetConnectionString("DefaultConnection")
                 )
             );
+            //Type Module
+            services.AddScoped<ITypeRepository, TypeRepository>();
+            services.AddScoped<ITypeService, TypeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
