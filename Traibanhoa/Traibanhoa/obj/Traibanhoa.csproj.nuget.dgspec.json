@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj": {}
+    "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Models\\Models.csproj": {
+    "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Models\\Models.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj",
         "projectName": "Models",
-        "projectPath": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Models\\Models.csproj",
-        "packagesPath": "C:\\Users\\Nam\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Models\\obj\\",
+        "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Nam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -63,7 +63,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -72,21 +73,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Repository\\Repository.csproj": {
+    "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Repository\\Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Repository\\Repository.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Repository\\Repository.csproj",
         "projectName": "Repository",
-        "projectPath": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Repository\\Repository.csproj",
-        "packagesPath": "C:\\Users\\Nam\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Repository\\obj\\",
+        "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Repository\\Repository.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Repository\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Nam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -100,8 +101,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Models\\Models.csproj": {
-                "projectPath": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Models\\Models.csproj"
+              "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj": {
+                "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj"
               }
             }
           }
@@ -121,7 +122,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -130,21 +132,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj": {
+    "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj",
         "projectName": "Traibanhoa",
-        "projectPath": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj",
-        "packagesPath": "C:\\Users\\Nam\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Traibanhoa\\obj\\",
+        "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Traibanhoa\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Nam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -158,11 +160,11 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Models\\Models.csproj": {
-                "projectPath": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Models\\Models.csproj"
+              "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj": {
+                "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj"
               },
-              "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Repository\\Repository.csproj": {
-                "projectPath": "C:\\Users\\Nam\\Desktop\\PRN231\\Traibanhoa\\Repository\\Repository.csproj"
+              "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Repository\\Repository.csproj": {
+                "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Repository\\Repository.csproj"
               }
             }
           }
@@ -212,7 +214,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -224,7 +227,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
