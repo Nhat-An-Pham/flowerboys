@@ -3,28 +3,26 @@ using System.Linq.Expressions;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Traibanhoa.Modules.TypeModule.Request;
-using Traibanhoa.Modules.TypeModule.Response;
 using Models.Models;
-using Traibanhoa.Modules.UserModule.Request;
+using Traibanhoa.Modules.CustomerModule.Request;
 
-namespace Traibanhoa.Modules.UserModule.Interface
+namespace Traibanhoa.Modules.CustomerModule.Interface
 {
     public interface ICustomerService
     {
-        public Task<ICollection<User>> GetUsersBy(
-            Expression<Func<User, bool>> filter = null,
-            Func<IQueryable<User>, ICollection<User>> options = null,
+        public Task<ICollection<Customer>> GetCustomersBy(
+            Expression<Func<Customer, bool>> filter = null,
+            Func<IQueryable<Customer>, ICollection<Customer>> options = null,
             string includeProperties = null);
 
-        public Task<Boolean> AddNewUser(CreateCustomerRequest UserCreate);
+        public Task<Boolean> AddNewCustomer(CreateCustomerRequest CustomerCreate);
 
-        public Task<Boolean> UpdateUser(UpdateCustomerRequest UserUpdate);
+        public Task<Boolean> UpdateCustomer(UpdateCustomerRequest CustomerUpdate);
 
-        public Task<Boolean> DeleteUser(User UserDelete);
+        public Task<Boolean> DeleteCustomer(Customer CustomerDelete);
 
-        public Task<ICollection<User>> GetAll();
+        public Task<ICollection<Customer>> GetAll();
 
-        public Task<User> GetUserByID(Guid? id);
+        public Task<Customer> GetCustomerByID(Guid? id);
     }
 }

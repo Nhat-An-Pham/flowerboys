@@ -5,12 +5,12 @@ using System.Linq.Expressions;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Traibanhoa.Modules.UserModule.Interface;
+using Traibanhoa.Modules.BasketModule.Interface;
 using Repository.Utils.Repository;
 
-namespace Traibanhoa.Modules.UserModule
+namespace Traibanhoa.Modules.BasketModule
 {
-    public class BasketRepository : Repository<User>, IBasketRepository
+    public class BasketRepository : Repository<Basket>, IBasketRepository
     {
         private readonly TraibanhoaContext _db;
 
@@ -18,13 +18,13 @@ namespace Traibanhoa.Modules.UserModule
         {
             _db = db;
         }
-        public async Task<ICollection<User>> GetUsersBy(
-            Expression<Func<User, bool>> filter = null,
-            Func<IQueryable<User>, ICollection<User>> options = null,
+        public async Task<ICollection<Basket>> GetBasketsBy(
+            Expression<Func<Basket, bool>> filter = null,
+            Func<IQueryable<Basket>, ICollection<Basket>> options = null,
             string includeProperties = null
         )
         {
-            IQueryable<User> query = DbSet;
+            IQueryable<Basket> query = DbSet;
 
             if (filter != null)
             {

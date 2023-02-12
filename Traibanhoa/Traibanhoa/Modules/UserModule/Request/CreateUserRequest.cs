@@ -4,7 +4,7 @@ using Traibanhoa.Modules.TypeModule.Request;
 
 namespace Traibanhoa.Modules.UserModule.Request
 {
-    public class CreateCustomerRequest
+    public class CreateUserRequest
     {
         public Guid UserId { get; set; }
         public string Username { get; set; }
@@ -20,7 +20,7 @@ namespace Traibanhoa.Modules.UserModule.Request
         public bool? IsGoogle { get; set; }
         public bool? IsBlocked { get; set; }
     }
-    public class CreateUserRequestValidator : AbstractValidator<CreateCustomerRequest>
+    public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
     {
         public CreateUserRequestValidator()
         {

@@ -3,25 +3,18 @@ using System.Linq.Expressions;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Traibanhoa.Modules.TypeModule.Interface;
-using Traibanhoa.Modules.TypeModule.Request;
-using Traibanhoa.Modules.TypeModule.Response;
 using Traibanhoa.Modules.BasketModule.Interface;
 using Models.Models;
 using Traibanhoa.Modules.BasketModule.Request;
-using Type = Models.Models.Type;
-using Traibanhoa.Modules.TypeModule;
 
 namespace Traibanhoa.Modules.BasketModule
 {
     public class BasketService : IBasketService
     {
         private readonly IBasketRepository _BasketRepository;
-        private readonly ITypeRepository _typeRepository;
-        public BasketService(IBasketRepository BasketRepository, ITypeRepository typeRepository)
+        public BasketService(IBasketRepository BasketRepository)
         {
             _BasketRepository = BasketRepository;
-            _typeRepository = typeRepository;
         }
 
         public async Task<ICollection<Basket>> GetAll()

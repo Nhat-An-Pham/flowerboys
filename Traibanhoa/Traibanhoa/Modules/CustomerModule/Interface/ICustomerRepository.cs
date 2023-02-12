@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using System;
 using Models.Models;
 
-namespace Traibanhoa.Modules.UserModule.Interface
+namespace Traibanhoa.Modules.CustomerModule.Interface
 {
-    public interface ICustomerRepository : IRepository<User>
+    public interface ICustomerRepository : IRepository<Customer>
     {
-        public Task<ICollection<User>> GetUsersBy(
-               Expression<Func<User, bool>> filter = null,
-               Func<IQueryable<User>, ICollection<User>> options = null,
+        public Task<ICollection<Customer>> GetCustomersBy(
+               Expression<Func<Customer, bool>> filter = null,
+               Func<IQueryable<Customer>, ICollection<Customer>> options = null,
                string includeProperties = null
            );
     }

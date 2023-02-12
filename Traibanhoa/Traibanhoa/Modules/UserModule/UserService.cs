@@ -3,25 +3,18 @@ using System.Linq.Expressions;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Traibanhoa.Modules.TypeModule.Interface;
-using Traibanhoa.Modules.TypeModule.Request;
-using Traibanhoa.Modules.TypeModule.Response;
 using Traibanhoa.Modules.UserModule.Interface;
 using Models.Models;
 using Traibanhoa.Modules.UserModule.Request;
-using Type = Models.Models.Type;
-using Traibanhoa.Modules.TypeModule;
 
 namespace Traibanhoa.Modules.UserModule
 {
-    public class CustomerService : IBasketService
+    public class UserService : IUserService
     {
-        private readonly IBasketRepository _UserRepository;
-        private readonly ITypeRepository _typeRepository;
-        public CustomerService(IBasketRepository UserRepository, ITypeRepository typeRepository)
+        private readonly IUserRepository _UserRepository;
+        public UserService(IUserRepository UserRepository)
         {
             _UserRepository = UserRepository;
-            _typeRepository = typeRepository;
         }
 
         public async Task<ICollection<User>> GetAll()
@@ -40,7 +33,7 @@ namespace Traibanhoa.Modules.UserModule
         }
 
 
-        public async Task<Boolean> AddNewUser(CreateCustomerRequest UserRequest)
+        public async Task<Boolean> AddNewUser(CreateUserRequest UserRequest)
         {
             var newUser = new User();
 
@@ -66,7 +59,7 @@ namespace Traibanhoa.Modules.UserModule
             return true;
         }
 
-        public async Task<Boolean> UpdateUser(UpdateCustomerRequest userRequest)
+        public async Task<Boolean> UpdateUser(UpdateUserRequest userRequest)
         {
             var userUpdate = GetUserByID(userRequest.UserId).Result;
 

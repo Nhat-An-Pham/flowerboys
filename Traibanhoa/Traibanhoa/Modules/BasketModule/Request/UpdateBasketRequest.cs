@@ -1,38 +1,32 @@
 ﻿using FluentValidation;
 using System;
 
-namespace Traibanhoa.Modules.CustomerModule.Request
+namespace Traibanhoa.Modules.BasketModule.Request
 {
     public class UpdateBasketRequest
     {
-        public Guid CustomerId { get; set; }
-        public string Username { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string Phonenumber { get; set; }
-        public bool? Gender { get; set; }
-        public string Avatar { get; set; }
+        public Guid BasketId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string ImageUrl { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
-        public bool? IsGoogle { get; set; }
-        public bool? IsBlocked { get; set; }
+        public int? View { get; set; }
+        public decimal? BasketPrice { get; set; }
+        public int? Status { get; set; }
     }
-    public class UpdateCustomerRequestValidator : AbstractValidator<UpdateBasketRequest>
+    public class UpdateBasketRequestValidator : AbstractValidator<UpdateBasketRequest>
     {
-        public UpdateCustomerRequestValidator()
+        public UpdateBasketRequestValidator()
         {
-            RuleFor(x => x.Username).NotEmpty().NotNull();
-            RuleFor(x => x.Name).NotEmpty().NotNull();
-            RuleFor(x => x.Email).NotEmpty().NotNull();
-            RuleFor(x => x.Password).NotEmpty().NotNull();
-            RuleFor(x => x.Phonenumber).NotEmpty().NotNull();
-            RuleFor(x => x.Gender).NotEmpty().NotNull();
-            RuleFor(x => x.Avatar).NotEmpty().NotNull();
+            RuleFor(x => x.Title).NotEmpty().NotNull();
+            RuleFor(x => x.Description).NotEmpty().NotNull();
+            RuleFor(x => x.ImageUrl).NotEmpty().NotNull();
+            RuleFor(x => x.View).NotEmpty().NotNull();
+            RuleFor(x => x.BasketPrice).NotEmpty().NotNull();
+            RuleFor(x => x.Status).NotEmpty().NotNull();
             RuleFor(x => x.CreatedDate).NotEmpty().NotNull();
             RuleFor(x => x.UpdatedDate).NotEmpty().NotNull();
-            RuleFor(x => x.IsGoogle).NotEmpty().NotNull();
-            RuleFor(x => x.IsBlocked).NotEmpty().NotNull();
         }
     }
 }

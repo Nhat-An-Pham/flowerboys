@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using System;
-using Traibanhoa.Modules.TypeModule.Request;
 
 namespace Traibanhoa.Modules.BasketModule.Request
 {

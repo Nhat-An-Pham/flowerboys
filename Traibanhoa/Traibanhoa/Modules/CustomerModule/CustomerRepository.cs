@@ -5,12 +5,12 @@ using System.Linq.Expressions;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Traibanhoa.Modules.UserModule.Interface;
+using Traibanhoa.Modules.CustomerModule.Interface;
 using Repository.Utils.Repository;
 
-namespace Traibanhoa.Modules.UserModule
+namespace Traibanhoa.Modules.CustomerModule
 {
-    public class CustomerRepository : Repository<User>, ICustomerRepository
+    public class CustomerRepository : Repository<Customer>, ICustomerRepository
     {
         private readonly TraibanhoaContext _db;
 
@@ -18,13 +18,13 @@ namespace Traibanhoa.Modules.UserModule
         {
             _db = db;
         }
-        public async Task<ICollection<User>> GetUsersBy(
-            Expression<Func<User, bool>> filter = null,
-            Func<IQueryable<User>, ICollection<User>> options = null,
+        public async Task<ICollection<Customer>> GetCustomersBy(
+            Expression<Func<Customer, bool>> filter = null,
+            Func<IQueryable<Customer>, ICollection<Customer>> options = null,
             string includeProperties = null
         )
         {
-            IQueryable<User> query = DbSet;
+            IQueryable<Customer> query = DbSet;
 
             if (filter != null)
             {

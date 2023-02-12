@@ -3,25 +3,18 @@ using System.Linq.Expressions;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Traibanhoa.Modules.TypeModule.Interface;
-using Traibanhoa.Modules.TypeModule.Request;
-using Traibanhoa.Modules.TypeModule.Response;
-using Traibanhoa.Modules.CustomerModule.Interface;
 using Models.Models;
 using Traibanhoa.Modules.CustomerModule.Request;
-using Type = Models.Models.Type;
-using Traibanhoa.Modules.TypeModule;
+using Traibanhoa.Modules.CustomerModule.Interface;
 
 namespace Traibanhoa.Modules.CustomerModule
 {
-    public class BasketService : ICustomerService
+    public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _CustomerRepository;
-        private readonly ITypeRepository _typeRepository;
-        public BasketService(ICustomerRepository CustomerRepository, ITypeRepository typeRepository)
+        public CustomerService(ICustomerRepository CustomerRepository)
         {
             _CustomerRepository = CustomerRepository;
-            _typeRepository = typeRepository;
         }
 
         public async Task<ICollection<Customer>> GetAll()
@@ -40,7 +33,7 @@ namespace Traibanhoa.Modules.CustomerModule
         }
 
 
-        public async Task<Boolean> AddNewCustomer(CreateBasketRequest CustomerRequest)
+        public async Task<Boolean> AddNewCustomer(CreateCustomerRequest CustomerRequest)
         {
             var newCustomer = new Customer();
 
@@ -65,7 +58,7 @@ namespace Traibanhoa.Modules.CustomerModule
             return true;
         }
 
-        public async Task<Boolean> UpdateCustomer(UpdateBasketRequest CustomerRequest)
+        public async Task<Boolean> UpdateCustomer(UpdateCustomerRequest CustomerRequest)
         {
             var CustomerUpdate = GetCustomerByID(CustomerRequest.CustomerId).Result;
 

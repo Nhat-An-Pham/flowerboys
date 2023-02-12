@@ -4,13 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using Traibanhoa.Modules.TypeModule.Interface;
-using Traibanhoa.Modules.TypeModule.Request;
-using Traibanhoa.Modules.TypeModule.Response;
 using Traibanhoa.Modules.BasketDetailModule.Interface;
 using Models.Models;
 using Traibanhoa.Modules.BasketDetailModule.Request;
-using Type = Models.Models.Type;
-using Traibanhoa.Modules.TypeModule;
 
 
 namespace Traibanhoa.Modules.BasketDetailModule
@@ -18,11 +14,9 @@ namespace Traibanhoa.Modules.BasketDetailModule
     public class BasketDetailDetailService : IBasketDetailService
     {
         private readonly IBasketDetailRepository _BasketDetailRepository;
-        private readonly ITypeRepository _typeRepository;
-        public BasketDetailDetailService(IBasketDetailRepository BasketDetailRepository, ITypeRepository typeRepository)
+        public BasketDetailDetailService(IBasketDetailRepository BasketDetailRepository)
         {
             _BasketDetailRepository = BasketDetailRepository;
-            _typeRepository = typeRepository;
         }
 
         public async Task<ICollection<BasketDetail>> GetAll()
