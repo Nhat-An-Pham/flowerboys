@@ -3,7 +3,7 @@ using System;
 
 namespace Traibanhoa.Modules.UserModule.Request
 {
-    public class UpdateCustomerRequest
+    public class UpdateUserRequest
     {
         public Guid UserId { get; set; }
         public string Username { get; set; }
@@ -19,7 +19,7 @@ namespace Traibanhoa.Modules.UserModule.Request
         public bool? IsGoogle { get; set; }
         public bool? IsBlocked { get; set; }
     }
-    public class UpdateUserRequestValidator : AbstractValidator<UpdateCustomerRequest>
+    public class UpdateUserRequestValidator : AbstractValidator<UpdateUserRequest>
     {
         public UpdateUserRequestValidator()
         {
