@@ -6041,19 +6041,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\USER\\.nuget\\packages\\": {}
+    "C:\\Users\\ASUS\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj",
+      "projectUniqueName": "D:\\GitHub\\flowerboys\\Traibanhoa\\Models\\Models.csproj",
       "projectName": "Models",
-      "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj",
-      "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\obj\\",
+      "projectPath": "D:\\GitHub\\flowerboys\\Traibanhoa\\Models\\Models.csproj",
+      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+      "outputPath": "D:\\GitHub\\flowerboys\\Traibanhoa\\Models\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
