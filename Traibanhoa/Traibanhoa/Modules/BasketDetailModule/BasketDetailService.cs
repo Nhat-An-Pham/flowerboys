@@ -3,11 +3,9 @@ using System.Linq.Expressions;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Traibanhoa.Modules.TypeModule.Interface;
-using Traibanhoa.Modules.BasketDetailModule.Interface;
 using Models.Models;
 using Traibanhoa.Modules.BasketDetailModule.Request;
-
+using Traibanhoa.Modules.BasketDetailModule.Interface;
 
 namespace Traibanhoa.Modules.BasketDetailModule
 {
