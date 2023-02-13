@@ -57,7 +57,9 @@ namespace Traibanhoa.Controllers
         [HttpPost]
         public async Task<ActionResult<Type>> CreateNewType([FromBody] CreateTypeRequest createTypeRequest)
         {
-            return await _typeService.AddNewType(createTypeRequest);
+            //return await _typeService.AddNewType(createTypeRequest);
+            var type = new Type();
+            return type;
         }
 
 
@@ -65,7 +67,7 @@ namespace Traibanhoa.Controllers
         [HttpPut]
         public async Task<IActionResult> PutType([FromBody] UpdateTypeRequest typeRequest)
         {
-            if (await _typeService.UpdateType(typeRequest) == false);
+            //if (await _typeService.UpdateType(typeRequest) == false);
 
             return Ok();
         }
@@ -79,7 +81,8 @@ namespace Traibanhoa.Controllers
             {
                 return NotFound();
             }
-            await _typeService.DeleteType(type);
+            //await _typeService.DeleteType(type);
+            await _typeService.DeleteType(type.TypeId);
 
             return Ok();
         }
