@@ -19,12 +19,12 @@ namespace Traibanhoa.Modules.ProductModule.Interface
 
         public Task<Boolean> AddNewProduct(CreateProductRequest productCreate);
 
-        public Task<Boolean> UpdateProduct(UpdateProductRequest productUpdate);
+        //public Task<Boolean> UpdateProduct(UpdateProductRequest productUpdate);
 
-        public Task<Boolean> DeleteProduct(Product productDelete);
+        //public Task<Boolean> DeleteProduct(Product productDelete);
 
         public Task<ICollection<Product>> GetAll();
 
-        public Task<Product> GetProductByID(Guid? id);
+        //public Task<Product> GetProductByID(Guid? id);
     }
 }
