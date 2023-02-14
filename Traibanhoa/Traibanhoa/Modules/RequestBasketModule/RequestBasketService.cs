@@ -9,10 +9,10 @@ using Traibanhoa.Modules.RequestBasketModule.Request;
 
 namespace Traibanhoa.Modules.RequestBasketModule
 {
-    public class RequestBasketDetailService : IRequestBasketService
+    public class RequestBasketService : IRequestBasketService
     {
         private readonly IRequestBasketRepository _RequestBasketRepository;
-        public RequestBasketDetailService(IRequestBasketRepository RequestBasketRepository)
+        public RequestBasketService(IRequestBasketRepository RequestBasketRepository)
         {
             _RequestBasketRepository = RequestBasketRepository;
         }

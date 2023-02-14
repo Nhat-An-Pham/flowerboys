@@ -17,14 +17,14 @@ namespace Traibanhoa.Modules.ProductModule.Interface
             Func<IQueryable<Product>, ICollection<Product>> options = null,
             string includeProperties = null);
 
-        public Task<Boolean> AddNewProduct(CreateProductRequest productCreate);
+        public Task<Guid?> AddNewProduct(CreateProductRequest productCreate);
 
-        //public Task<Boolean> UpdateProduct(UpdateProductRequest productUpdate);
+        public Task<bool> UpdateProduct(UpdateProductRequest productUpdate);
 
-        //public Task<Boolean> DeleteProduct(Product productDelete);
+        public Task<bool> DeleteProduct(Guid? productDeleteId);
 
         public Task<ICollection<Product>> GetAll();
 
-        //public Task<Product> GetProductByID(Guid? id);
+        public Task<Product> GetProductByID(Guid? id);
     }
 }

@@ -9,10 +9,10 @@ using Traibanhoa.Modules.OrderModule.Request;
 
 namespace Traibanhoa.Modules.OrderModule
 {
-    public class OrderDetailService : IOrderService
+    public class OrderService : IOrderService
     {
         private readonly IOrderRepository _OrderRepository;
-        public OrderDetailService(IOrderRepository OrderRepository)
+        public OrderService(IOrderRepository OrderRepository)
         {
             _OrderRepository = OrderRepository;
         }

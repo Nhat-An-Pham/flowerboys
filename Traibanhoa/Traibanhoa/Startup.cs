@@ -6,8 +6,28 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Models.Models;
+using Traibanhoa.Modules.BasketDetailModule;
+using Traibanhoa.Modules.BasketDetailModule.Interface;
+using Traibanhoa.Modules.BasketModule;
+using Traibanhoa.Modules.BasketModule.Interface;
+using Traibanhoa.Modules.CustomerModule;
+using Traibanhoa.Modules.CustomerModule.Interface;
+using Traibanhoa.Modules.OrderBasketDetailModule;
+using Traibanhoa.Modules.OrderBasketDetailModule.Interface;
+using Traibanhoa.Modules.OrderModule;
+using Traibanhoa.Modules.OrderModule.Interface;
+using Traibanhoa.Modules.OrderProductDetailModule;
+using Traibanhoa.Modules.OrderProductDetailModule.Interface;
+using Traibanhoa.Modules.ProductModule;
+using Traibanhoa.Modules.ProductModule.Interface;
+using Traibanhoa.Modules.RequestBasketDetailModule;
+using Traibanhoa.Modules.RequestBasketDetailModule.Interface;
+using Traibanhoa.Modules.RequestBasketModule;
+using Traibanhoa.Modules.RequestBasketModule.Interface;
 using Traibanhoa.Modules.TypeModule;
 using Traibanhoa.Modules.TypeModule.Interface;
+using Traibanhoa.Modules.UserModule;
+using Traibanhoa.Modules.UserModule.Interface;
 
 namespace Traibanhoa
 {
@@ -37,6 +57,36 @@ namespace Traibanhoa
             //Type Module
             services.AddScoped<ITypeRepository, TypeRepository>();
             services.AddScoped<ITypeService, TypeService>();
+            //Product Module
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductService, ProductService>();
+            //User Module
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
+            //Basket Module
+            services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<IBasketService, BasketService>();
+            //BasketDetail Module
+            services.AddScoped<IBasketDetailRepository, BasketDetailRepository>();
+            services.AddScoped<IBasketDetailService, BasketDetailService>();
+            //Customer Module
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            //OrderBasketDetail Module
+            services.AddScoped<IOrderBasketDetailRepository, OrderBasketDetailRepository>();
+            services.AddScoped<IOrderBasketDetailService, OrderBasketDetailService>();
+            //Order Module
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderService, OrderService>();
+            //OrderProductDetail Module
+            services.AddScoped<IOrderProductDetailRepository, OrderProductDetailRepository>();
+            services.AddScoped<IOrderProductDetailService, OrderProductDetailService>();
+            //RequestBasketDetail Module
+            services.AddScoped<IRequestBasketDetailRepository, RequestBasketDetailRepository>();
+            services.AddScoped<IRequestBasketDetailService, RequestBasketDetailService>();
+            //RequestBasket Module
+            services.AddScoped<IRequestBasketRepository, RequestBasketRepository>();
+            services.AddScoped<IRequestBasketService, RequestBasketService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

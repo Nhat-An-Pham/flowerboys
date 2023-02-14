@@ -57,9 +57,9 @@ namespace Traibanhoa.Controllers
         [HttpPost]
         public async Task<ActionResult<Type>> CreateNewType([FromBody] CreateTypeRequest createTypeRequest)
         {
-            //return await _typeService.AddNewType(createTypeRequest);
-            var type = new Type();
-            return type;
+            var typeId = await _typeService.AddNewType(createTypeRequest);
+            if (typeId == null) return BadRequest();
+            else return Ok(typeId);
         }
 
 
@@ -67,23 +67,15 @@ namespace Traibanhoa.Controllers
         [HttpPut]
         public async Task<IActionResult> PutType([FromBody] UpdateTypeRequest typeRequest)
         {
-            //if (await _typeService.UpdateType(typeRequest) == false);
-
-            return Ok();
+            if (await _typeService.UpdateType(typeRequest) == false) return BadRequest();
+            else return Ok();
         }
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteType([FromRoute] Guid id)
         {
-            var type = await _typeService.GetTypeByID(id);
-            if (type == null)
-            {
-                return NotFound();
-            }
-            //await _typeService.DeleteType(type);
-            await _typeService.DeleteType(type.TypeId);
-
+            if (await _typeService.DeleteType(id) == false) return BadRequest();
             return Ok();
         }
     }
