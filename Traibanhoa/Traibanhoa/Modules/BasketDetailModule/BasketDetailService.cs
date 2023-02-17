@@ -9,10 +9,10 @@ using Traibanhoa.Modules.BasketDetailModule.Interface;
 
 namespace Traibanhoa.Modules.BasketDetailModule
 {
-    public class BasketDetailDetailService : IBasketDetailService
+    public class BasketDetailService : IBasketDetailService
     {
         private readonly IBasketDetailRepository _BasketDetailRepository;
-        public BasketDetailDetailService(IBasketDetailRepository BasketDetailRepository)
+        public BasketDetailService(IBasketDetailRepository BasketDetailRepository)
         {
             _BasketDetailRepository = BasketDetailRepository;
         }
@@ -72,15 +72,5 @@ namespace Traibanhoa.Modules.BasketDetailModule
         {
             return await _BasketDetailRepository.GetFirstOrDefaultAsync(x => x.BasketId == id);
         }
-
-        //public async Task<ICollection<TypeDropdownResponse>> GetTypeDropdown()
-        //{
-        //    var result = await _typeRepository.GetTypesBy(x => x.Status == true);
-        //    return result.Select(x => new TypeDropdownResponse
-        //    {
-        //        TypeId = x.TypeId,
-        //        TypeName = x.Name
-        //    }).ToList();
-        //}
     }
 }

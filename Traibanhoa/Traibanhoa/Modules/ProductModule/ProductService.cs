@@ -11,6 +11,7 @@ using Models.Models;
 using Traibanhoa.Modules.ProductModule.Request;
 using Type = Models.Models.Type;
 using Traibanhoa.Modules.TypeModule;
+using FluentValidation.Results;
 
 namespace Traibanhoa.Modules.ProductModule
 {
@@ -40,53 +41,86 @@ namespace Traibanhoa.Modules.ProductModule
         }
 
 
-        public async Task<Boolean> AddNewProduct(CreateProductRequest productRequest)
+        public async Task<Guid?> AddNewProduct(CreateProductRequest productRequest)
         {
+            ValidationResult result = new CreateProductRequestValidator().Validate(productRequest);
+            if (!result.IsValid)
+            {
+                return null;
+            }
+
             var newProduct = new Product();
 
             if(_typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == productRequest.TypeId) == null)
             {
-                return false;
+                return null;
             }
-            newProduct.TypeId = Guid.NewGuid();
+            newProduct.ProductId = Guid.NewGuid();
             newProduct.Name = productRequest.Name;
             newProduct.Description = productRequest.Description;
-            newProduct.Status = true;
+            newProduct.TypeId = productRequest.TypeId;
+            newProduct.Picture = productRequest.Picture;
+            newProduct.Price = productRequest.Price;
+            newProduct.Status = productRequest.Status ?? true;
 
             await _productRepository.AddAsync(newProduct);
+            return newProduct.ProductId;
+        }
+
+        public async Task<bool> UpdateProduct(UpdateProductRequest productRequest)
+        {
+            var productUpdate = GetProductByID(productRequest.ProductId).Result;
+
+            if(productUpdate == null)
+            {
+                return false;
+            }
+
+            ValidationResult result = new UpdateProductRequestValidator().Validate(productRequest);
+            if (!result.IsValid)
+            {
+                return false;
+            }
+
+            if (_typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == productRequest.TypeId) == null)
+            {
+                return false;
+            }
+
+            productUpdate.Name = productRequest.Name ?? productUpdate.Name;
+            productUpdate.Description = productRequest.Description ?? productUpdate.Description;
+            productUpdate.Status = productRequest.Status ?? productUpdate.Status;
+            productUpdate.TypeId = productRequest.TypeId ?? productUpdate.TypeId;
+            productUpdate.Picture = productRequest.Picture ?? productUpdate.Picture ;
+            productUpdate.Price = productRequest.Price ?? productUpdate.Price ;
+
+            await _productRepository.UpdateAsync(productUpdate);
             return true;
         }
 
-        public async Task UpdateType(UpdateTypeRequest typeRequest)
+        public async Task<bool> DeleteProduct(Guid? productDeleteId)
         {
-            var typeUpdate = GetTypeByID(typeRequest.TypeId).Result;
-
-            typeUpdate.Name = typeRequest.Name;
-            typeUpdate.Description = typeRequest.Description;
-            typeUpdate.Status = typeRequest.Status;
-
-            await _typeRepository.UpdateAsync(typeUpdate);
-        }
-
-        public async Task DeleteType(Type typeDelete)
-        {
-            typeDelete.Status = false;
-            await _typeRepository.UpdateAsync(typeDelete);
-        }
-
-        public async Task<Type> GetTypeByID(Guid? id)
-        {
-            return await _typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == id);
-        }
-
-        public async Task<ICollection<TypeDropdownResponse>> GetTypeDropdown()
-        {
-            var result = await _typeRepository.GetTypesBy(x => x.Status == true);
-            return result.Select(x => new TypeDropdownResponse
+            if (productDeleteId == null)
             {
-                TypeId = x.TypeId,
-                TypeName = x.Name
-            }).ToList();
+                return false;
+            }
+
+            var productDelete = _productRepository.GetFirstOrDefaultAsync(x => x.ProductId == productDeleteId).Result;
+
+            if (productDelete == null)
+            {
+                return false;
+            }
+
+            productDelete.Status = false;
+            await _productRepository.UpdateAsync(productDelete);
+
+            return true;
+        }
+
+        public async Task<Product> GetProductByID(Guid? id)
+        {
+            return await _productRepository.GetFirstOrDefaultAsync(x => x.ProductId == id);
         }
     }
 }

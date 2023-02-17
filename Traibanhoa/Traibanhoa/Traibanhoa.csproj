@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Modules\ProductModule\Response\**" />
+    <Content Remove="Modules\ProductModule\Response\**" />
+    <EmbeddedResource Remove="Modules\ProductModule\Response\**" />
+    <None Remove="Modules\ProductModule\Response\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.17" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.17">
@@ -23,10 +30,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Modules\ProductModule\Response\" />
   </ItemGroup>
 
 </Project>
