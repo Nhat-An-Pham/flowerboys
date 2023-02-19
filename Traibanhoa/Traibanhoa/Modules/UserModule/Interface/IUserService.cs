@@ -10,16 +10,13 @@ namespace Traibanhoa.Modules.UserModule.Interface
 {
     public interface IUserService
     {
-        public Task<ICollection<User>> GetUsersBy(
-            Expression<Func<User, bool>> filter = null,
-            Func<IQueryable<User>, ICollection<User>> options = null,
-            string includeProperties = null);
+        public Task<ICollection<User>> GetUsersBy();
 
-        public Task<Boolean> AddNewUser(CreateUserRequest UserCreate);
+        public Task<Guid?> AddNewUser(CreateUserRequest UserCreate);
 
-        public Task<Boolean> UpdateUser(UpdateUserRequest UserUpdate);
+        public Task UpdateUser(UpdateUserRequest UserUpdate);
 
-        public Task<Boolean> DeleteUser(User UserDelete);
+        public Task DeleteUser(Guid? userDeleteID);
 
         public Task<ICollection<User>> GetAll();
 

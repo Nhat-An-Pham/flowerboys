@@ -19,7 +19,7 @@ namespace Traibanhoa.Controllers
             _customerService = customerService;
         }
 
-        // GET: api/Customers
+        // GET api/<ValuesController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
@@ -34,7 +34,7 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        // GET: api/Customers/5
+        // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer([FromRoute]Guid id)
         {
@@ -48,27 +48,27 @@ namespace Traibanhoa.Controllers
             return customer;
         }
 
-        // PUT: api/Customers/5
+        // POST api/<ValuesController>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer([FromBody] CreateCustomerRequest createCustomerRequest)
+        public async Task<IActionResult> PostCustomer([FromBody] CreateCustomerRequest createCustomerRequest)
         {
             var check = await _customerService.AddNewCustomer(createCustomerRequest);
             if (check) return Ok();
             else return BadRequest();
         }
 
-        // POST: api/Customers
+        // PUT api/<ValuesController>/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer([FromBody] UpdateCustomerRequest updateCustomerRequest)
+        public async Task<ActionResult<Customer>> PutCustomer([FromBody] UpdateCustomerRequest updateCustomerRequest)
         {
             var check = await _customerService.UpdateCustomer(updateCustomerRequest);
             if (check) return Ok();
             else return BadRequest();
         }
 
-        // DELETE: api/Customers/5
+        // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(Guid id)
         {

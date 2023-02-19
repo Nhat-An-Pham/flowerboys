@@ -19,7 +19,7 @@ namespace Traibanhoa.Controllers
             _orderProductDetail = orderProductDetail;
         }
 
-        // GET: api/OrderProductDetails
+        // GET api/<ValuesController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderProductDetail>>> GetOrderProductDetails()
         {
@@ -34,7 +34,7 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        // GET: api/OrderProductDetails/5
+        // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderProductDetail>> GetOrderProductDetail([FromRoute] Guid id)
         {
@@ -48,20 +48,20 @@ namespace Traibanhoa.Controllers
             return orderProductDetail;
         }
 
-        // PUT: api/OrderProductDetails/5
+        // POST api/<ValuesController>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrderProductDetail([FromBody] CreateOrderProductDetailRequest createOrderProductDetailRequest)
+        public async Task<IActionResult> PostOrderProductDetail([FromBody] CreateOrderProductDetailRequest createOrderProductDetailRequest)
         {
             var check = await _orderProductDetail.AddNewOrderProductDetail(createOrderProductDetailRequest);
             if (check) return Ok();
             else return BadRequest();
         }
 
-        // POST: api/OrderProductDetails
+        // PUT api/<ValuesController>/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<OrderProductDetail>> PostOrderProductDetail([FromBody] UpdateOrderProductDetailRequest updateOrderProductDetailRequest)
+        public async Task<ActionResult<OrderProductDetail>> PutOrderProductDetail([FromBody] UpdateOrderProductDetailRequest updateOrderProductDetailRequest)
         {
             var check = await _orderProductDetail.UpdateOrderProductDetail(updateOrderProductDetailRequest);
             if (check) return Ok();

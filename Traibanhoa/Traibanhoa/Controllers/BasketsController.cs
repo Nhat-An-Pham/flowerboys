@@ -19,7 +19,7 @@ namespace Traibanhoa.Controllers
             _basketService = basketService;
         }
 
-        // GET: api/Baskets
+        // GET api/<ValuesController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Basket>>> GetBaskets()
         {
@@ -34,7 +34,7 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        // GET: api/Baskets/5
+        // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Basket>> GetBasket([FromRoute] Guid id)
         {
@@ -48,27 +48,27 @@ namespace Traibanhoa.Controllers
             return basket;
         }
 
-        // PUT: api/Baskets/5
+        // POST api/<ValuesController>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBasket([FromBody] CreateBasketRequest createBasketRequest)
+        public async Task<IActionResult> PostBasket([FromBody] CreateBasketRequest createBasketRequest)
         {
             var check = await _basketService.AddNewBasket(createBasketRequest);
             if (check) return Ok();
             else return BadRequest();
         }
 
-        // POST: api/Baskets
+        // PUT api/<ValuesController>/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Basket>> PostBasket([FromBody] UpdateBasketRequest updateBasketRequest)
+        public async Task<ActionResult<Basket>> PutBasket([FromBody] UpdateBasketRequest updateBasketRequest)
         {
             var check = await _basketService.UpdateBasket(updateBasketRequest);
             if (check) return Ok();
             else return BadRequest();
         }
 
-        // DELETE: api/Baskets/5
+        // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBasket([FromRoute] Guid id)
         {

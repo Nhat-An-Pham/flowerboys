@@ -19,9 +19,9 @@ namespace Traibanhoa.Controllers
             _userService = userService;
         }
 
-        // GET: api/Users
+        // GET api/<ValuesController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsersForAdmin()
         {
             try
             {
@@ -34,9 +34,9 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        // GET: api/Users/5
+        // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser([FromRoute]Guid id)
+        public async Task<ActionResult<User>> GetUserByID([FromRoute]Guid id)
         {
             var user = await _userService.GetUserByID(id);
 
@@ -48,40 +48,50 @@ namespace Traibanhoa.Controllers
             return user;
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser([FromBody] CreateUserRequest createUserRequest)
-        {
-            var check = await _userService.AddNewUser(createUserRequest);
-            if (check) return Ok();
-            else return BadRequest();
-        }
-
-        // POST: api/Users
+        // POST api/<ValuesController>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser([FromBody] UpdateUserRequest updateUserRequest)
+        public async Task<ActionResult<User>> PostUser([FromBody] CreateUserRequest createUserRequest)
         {
-            var check = await _userService.UpdateUser(updateUserRequest);
-            if (check) return Ok();
-            else return BadRequest();
+            try
+            {
+                return Ok(await _userService.AddNewUser(createUserRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // DELETE: api/Users/5
+        // PUT api/<ValuesController>/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut]
+        public async Task<IActionResult> PutUser([FromBody] UpdateUserRequest updateUserRequest)
+        {
+            try
+            {
+                await _userService.UpdateUser(updateUserRequest);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
         {
-            var user = await _userService.GetUserByID(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                await _userService.DeleteUser(id);
+                return Ok();
             }
-
-            var check = await _userService.DeleteUser(user);
-
-            if(check) return Ok();
-            else return BadRequest();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }

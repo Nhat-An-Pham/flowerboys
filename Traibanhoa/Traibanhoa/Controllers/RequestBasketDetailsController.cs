@@ -19,7 +19,7 @@ namespace Traibanhoa.Controllers
             _requestBasketDetailService = requestBasketDetailService;
         }
 
-        // GET: api/RequestBasketDetails
+        // GET api/<ValuesController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RequestBasketDetail>>> GetRequestBasketDetails()
         {
@@ -34,7 +34,7 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        // GET: api/RequestBasketDetails/5
+        // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<RequestBasketDetail>> GetRequestBasketDetail([FromRoute] Guid id)
         {
@@ -48,20 +48,20 @@ namespace Traibanhoa.Controllers
             return requestBasketDetail;
         }
 
-        // PUT: api/RequestBasketDetails/5
+        // POST api/<ValuesController>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRequestBasketDetail([FromBody] CreateRequestBasketDetailRequest createRequestBasketDetailRequest)
+        public async Task<IActionResult> PostRequestBasketDetail([FromBody] CreateRequestBasketDetailRequest createRequestBasketDetailRequest)
         {
             var check = await _requestBasketDetailService.AddNewRequestBasketDetail(createRequestBasketDetailRequest);
             if (check) return Ok();
             else return BadRequest();
         }
 
-        // POST: api/RequestBasketDetails
+        // PUT api/<ValuesController>/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<RequestBasketDetail>> PostRequestBasketDetail([FromBody] UpdateRequestBasketDetailRequest updateRequestBasketDetailRequest)
+        public async Task<ActionResult<RequestBasketDetail>> PotRequestBasketDetail([FromBody] UpdateRequestBasketDetailRequest updateRequestBasketDetailRequest)
         {
             var check = await _requestBasketDetailService.UpdateRequestBasketDetail(updateRequestBasketDetailRequest);
             if (check) return Ok();

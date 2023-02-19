@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 using System;
-using Traibanhoa.Modules.TypeModule.Request;
 
 namespace Traibanhoa.Modules.UserModule.Request
 {
     public class CreateUserRequest
     {
-        public Guid UserId { get; set; }
+        //public Guid UserId { get; set; }
         public string Username { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
@@ -35,7 +34,7 @@ namespace Traibanhoa.Modules.UserModule.Request
             RuleFor(x => x.CreatedDate).NotEmpty().NotNull();
             RuleFor(x => x.UpdatedDate).NotEmpty().NotNull();
             RuleFor(x => x.IsGoogle).NotEmpty().NotNull();
-            RuleFor(x => x.IsBlocked).NotEmpty().NotNull();
+            //RuleFor(x => x.IsBlocked).NotEmpty().NotNull();
         }
     }
 }

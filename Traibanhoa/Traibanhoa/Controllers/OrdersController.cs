@@ -19,7 +19,7 @@ namespace Traibanhoa.Controllers
             _orderSevice = orderSevice;
         }
 
-        // GET: api/Orders
+        // GET api/<ValuesController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
@@ -34,7 +34,7 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        // GET: api/Orders/5
+        // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder([FromRoute]Guid id)
         {
@@ -48,20 +48,20 @@ namespace Traibanhoa.Controllers
             return order;
         }
 
-        // PUT: api/Orders/5
+        // POST api/<ValuesController>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder([FromBody] CreateOrderRequest createOrderRequest)
+        public async Task<IActionResult> PostOrder([FromBody] CreateOrderRequest createOrderRequest)
         {
             var check = await _orderSevice.AddNewOrder(createOrderRequest);
             if (check) return Ok();
             else return BadRequest();
         }
 
-        // POST: api/Orders
+        // PUT api/<ValuesController>/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder([FromBody] UpdateOrderRequest updateOrderRequest)
+        public async Task<ActionResult<Order>> PutOrder([FromBody] UpdateOrderRequest updateOrderRequest)
         {
             var check = await _orderSevice.UpdateOrder(updateOrderRequest);
             if (check) return Ok();
