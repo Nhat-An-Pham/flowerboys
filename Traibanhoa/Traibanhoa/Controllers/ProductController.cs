@@ -23,11 +23,26 @@ namespace Traibanhoa.Controllers
 
         // GET: api/<ValuesController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsForStaff()
         {
             try
             {
                 var response = await _productService.GetAll();
+                return Ok(response);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        
+        // GET: api/<ValuesController>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsForCustomer()
+        {
+            try
+            {
+                var response = await _productService.GetProductsForCustomer();
                 return Ok(response);
             }
             catch
@@ -40,23 +55,28 @@ namespace Traibanhoa.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct([FromRoute] Guid id)
         {
-            var product = await _productService.GetProductByID(id);
-
-            if (product == null)
+            try
             {
-                return NotFound();
+                return Ok(await _productService.GetProductByID(id));
             }
-
-            return product;
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST api/<ValuesController>
         [HttpPost]
         public async Task<ActionResult<Product>> CreateNewProduct([FromBody] CreateProductRequest createProductRequest)
         {
-            var productId = await _productService.AddNewProduct(createProductRequest);
-            if (productId == null) return BadRequest();
-            else return Ok(productId);
+            try
+            {
+                return Ok(await _productService.AddNewProduct(createProductRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
@@ -64,16 +84,30 @@ namespace Traibanhoa.Controllers
         [HttpPut]
         public async Task<IActionResult> PutProduct([FromBody] UpdateProductRequest productRequest)
         {
-            if (await _productService.UpdateProduct(productRequest) == false) return BadRequest();
-            else return Ok();
+            try
+            {
+                await _productService.UpdateProduct(productRequest);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUpdate([FromRoute] Guid id)
         {
-            if (await _productService.DeleteProduct(id) == false) return BadRequest();
-            return Ok();
+            try
+            {
+                await _productService.DeleteProduct(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
