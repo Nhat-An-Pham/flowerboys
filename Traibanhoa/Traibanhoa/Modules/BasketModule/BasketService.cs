@@ -6,6 +6,10 @@ using System;
 using Traibanhoa.Modules.BasketModule.Interface;
 using Models.Models;
 using Traibanhoa.Modules.BasketModule.Request;
+using Models.Constant;
+using Traibanhoa.Modules.TypeModule.Request;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace Traibanhoa.Modules.BasketModule
 {
@@ -19,7 +23,7 @@ namespace Traibanhoa.Modules.BasketModule
 
         public async Task<ICollection<Basket>> GetAll()
         {
-            return await _BasketRepository.GetAll();
+            return await _BasketRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList());
         }
 
         public Task<ICollection<Basket>> GetBasketsBy(
@@ -33,14 +37,16 @@ namespace Traibanhoa.Modules.BasketModule
         }
 
 
-        public async Task<Boolean> AddNewBasket(CreateBasketRequest BasketRequest)
+        public async Task<Guid?> AddNewBasket(CreateBasketRequest BasketRequest)
         {
+            ValidationResult result = new CreateBasketRequestValidator().Validate(BasketRequest);
+            if (!result.IsValid)
+            {
+                throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
+            }
+
             var newBasket = new Basket();
 
-            if(_BasketRepository.GetFirstOrDefaultAsync(x => x.BasketId == BasketRequest.BasketId) == null)
-            {
-                return false;
-            }
             newBasket.BasketId= Guid.NewGuid();
             newBasket.Title = BasketRequest.Title;
             newBasket.Description = BasketRequest.Description;
@@ -49,38 +55,85 @@ namespace Traibanhoa.Modules.BasketModule
             newBasket.BasketPrice = BasketRequest.BasketPrice;
             newBasket.Status = BasketRequest.Status;
             newBasket.CreatedDate = DateTime.Now;
-            newBasket.UpdatedDate = null;
+            newBasket.UpdatedDate = DateTime.Now;
 
             await _BasketRepository.AddAsync(newBasket);
-            return true;
+            return newBasket.BasketId;
         }
 
-        public async Task<Boolean> UpdateBasket(UpdateBasketRequest BasketRequest)
+        public async Task UpdateBasket(UpdateBasketRequest BasketRequest)
         {
-            var BasketUpdate = GetBasketByID(BasketRequest.BasketId).Result;
+            try
+            {
+                var BasketUpdate = GetBasketByID(BasketRequest.BasketId).Result;
 
-            BasketUpdate.Title = BasketRequest.Title;
-            BasketUpdate.Description = BasketRequest.Description;
-            BasketUpdate.ImageUrl = BasketRequest.ImageUrl;
-            BasketUpdate.View = BasketRequest.View;
-            BasketUpdate.BasketPrice = BasketRequest.BasketPrice;
-            BasketUpdate.Status = BasketRequest.Status;
-            BasketUpdate.UpdatedDate = DateTime.Now;
+                if (BasketUpdate == null)
+                {
+                    throw new Exception(ErrorMessage.BasketError.BASKET_NOT_FOUND);
+                }
 
-            await _BasketRepository.UpdateAsync(BasketUpdate);
-            return true;
+                ValidationResult result = new UpdateBasketRequestValidator().Validate(BasketRequest);
+                if (!result.IsValid)
+                {
+                    throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
+                }
+
+                BasketUpdate.Title = BasketRequest.Title;
+                BasketUpdate.Description = BasketRequest.Description;
+                BasketUpdate.ImageUrl = BasketRequest.ImageUrl;
+                BasketUpdate.View = BasketRequest.View;
+                BasketUpdate.BasketPrice = BasketRequest.BasketPrice;
+                BasketUpdate.Status = BasketRequest.Status;
+                BasketUpdate.UpdatedDate = DateTime.Now;
+
+                await _BasketRepository.UpdateAsync(BasketUpdate);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at update type: " + ex.Message);
+                throw new Exception(ex.Message);
+            }
         }
 
-        public async Task<Boolean> DeleteBasket(Basket BasketDelete)
+        public async Task DeleteBasket(Guid? basketDeleteID)
         {
-            BasketDelete.Status = 0;
-            await _BasketRepository.UpdateAsync(BasketDelete);
-            return true;
+            try
+            {
+                if (basketDeleteID == null)
+                {
+                    throw new Exception(ErrorMessage.CommonError.ID_IS_NULL);
+                }
+
+                Basket basketDelete = _BasketRepository.GetFirstOrDefaultAsync(x => x.BasketId == basketDeleteID && x.Status == 0).Result;
+
+                if (basketDelete == null)
+                {
+                    throw new Exception(ErrorMessage.BasketError.BASKET_NOT_FOUND);
+                }
+
+                basketDelete.Status = 0;
+                await _BasketRepository.UpdateAsync(basketDelete);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at delete type: " + ex.Message);
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<Basket> GetBasketByID(Guid? id)
         {
-            return await _BasketRepository.GetFirstOrDefaultAsync(x => x.BasketId == id);
+            if (id == null)
+            {
+                throw new Exception(ErrorMessage.CommonError.ID_IS_NULL);
+            }
+            var basket = await _BasketRepository.GetFirstOrDefaultAsync(x => x.BasketId == id);
+            if (basket == null)
+            {
+                throw new Exception(ErrorMessage.BasketError.BASKET_NOT_FOUND);
+            }
+            return basket;
         }
 
         //public async Task<ICollection<TypeDropdownResponse>> GetTypeDropdown()

@@ -26,5 +26,6 @@ namespace Traibanhoa.Modules.ProductModule.Interface
         public Task<ICollection<Product>> GetAll();
 
         public Task<Product> GetProductByID(Guid? id);
+        public Task<ICollection<Product>> GetProductsForCustomer();
     }
 }

@@ -27,7 +27,7 @@ namespace Traibanhoa.Modules.ProductModule
 
         public async Task<ICollection<Product>> GetAll()
         {
-            return await _productRepository.GetAll();
+            return await _productRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList());
         }
 
         public Task<ICollection<Product>> GetProductsBy(
@@ -38,6 +38,11 @@ namespace Traibanhoa.Modules.ProductModule
                 string includeProperties = null)
         {
             return _productRepository.GetProductsBy(filter);
+        }
+
+        public Task<ICollection<Product>> GetProductsForCustomer()
+        {
+            return _productRepository.GetProductsBy(x => x.Status == true, options: o => o.OrderByDescending(x => x.UpdatedDate).ToList());
         }
 
 

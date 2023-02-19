@@ -21,7 +21,7 @@ namespace Traibanhoa.Controllers
 
         // GET api/<ValuesController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomersByUser()
         {
             try
             {
@@ -36,7 +36,7 @@ namespace Traibanhoa.Controllers
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer([FromRoute]Guid id)
+        public async Task<ActionResult<Customer>> GetCustomerByID([FromRoute]Guid id)
         {
             var customer = await _customerService.GetCustomerByID(id);
 
@@ -50,38 +50,48 @@ namespace Traibanhoa.Controllers
 
         // POST api/<ValuesController>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PostCustomer([FromBody] CreateCustomerRequest createCustomerRequest)
+        [HttpPost]
+        public async Task<ActionResult<Customer>> PostCustomer([FromBody] CreateCustomerRequest createCustomerRequest)
         {
-            var check = await _customerService.AddNewCustomer(createCustomerRequest);
-            if (check) return Ok();
-            else return BadRequest();
+            try
+            {
+                return Ok(await _customerService.AddNewCustomer(createCustomerRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT api/<ValuesController>/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Customer>> PutCustomer([FromBody] UpdateCustomerRequest updateCustomerRequest)
+        [HttpPut]
+        public async Task<IActionResult> PutCustomer([FromBody] UpdateCustomerRequest updateCustomerRequest)
         {
-            var check = await _customerService.UpdateCustomer(updateCustomerRequest);
-            if (check) return Ok();
-            else return BadRequest();
+            try
+            {
+                await _customerService.UpdateCustomer(updateCustomerRequest);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(Guid id)
         {
-            var customer = await _customerService.GetCustomerByID(id);
-            if (customer == null)
+            try
             {
-                return NotFound();
+                await _customerService.DeleteCustomer(id);
+                return Ok();
             }
-
-            var check = await _customerService.DeleteCustomer(customer);
-
-            if (check) return Ok();
-            else return BadRequest();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }

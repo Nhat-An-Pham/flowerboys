@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Traibanhoa.Modules.BasketModule.Interface;
 using Traibanhoa.Modules.BasketModule.Request;
+using Traibanhoa.Modules.TypeModule.Request;
 
 namespace Traibanhoa.Controllers
 {
@@ -38,49 +39,60 @@ namespace Traibanhoa.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Basket>> GetBasket([FromRoute] Guid id)
         {
-            var basket = await _basketService.GetBasketByID(id);
-
-            if (basket == null)
+            try
             {
-                return NotFound();
+                return Ok(await _basketService.GetBasketByID(id));
             }
-
-            return basket;
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST api/<ValuesController>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PostBasket([FromBody] CreateBasketRequest createBasketRequest)
+        [HttpPost]
+        public async Task<ActionResult<Basket>> PostBasket([FromBody] CreateBasketRequest createBasketRequest)
         {
-            var check = await _basketService.AddNewBasket(createBasketRequest);
-            if (check) return Ok();
-            else return BadRequest();
+            try
+            {
+                return Ok(await _basketService.AddNewBasket(createBasketRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            };
         }
 
         // PUT api/<ValuesController>/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Basket>> PutBasket([FromBody] UpdateBasketRequest updateBasketRequest)
+        [HttpPut]
+        public async Task<IActionResult> PutBasket([FromBody] UpdateBasketRequest updateBasketRequest)
         {
-            var check = await _basketService.UpdateBasket(updateBasketRequest);
-            if (check) return Ok();
-            else return BadRequest();
+            try
+            {
+                await _basketService.UpdateBasket(updateBasketRequest);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            };
         }
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBasket([FromRoute] Guid id)
         {
-            var basket = await _basketService.GetBasketByID(id);
-            if (basket == null)
+            try
             {
-                return NotFound();
+                await _basketService.DeleteBasket(id);
+                return Ok();
             }
-            var check = await _basketService.DeleteBasket(basket);
-
-            if (check) return Ok();
-            else return BadRequest();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

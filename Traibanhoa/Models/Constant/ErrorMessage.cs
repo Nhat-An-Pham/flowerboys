@@ -33,6 +33,22 @@ namespace Models.Constant
             public readonly static string USER_EXISTED = "User is existed";
         }
         #endregion
+
+        #region Customer error message
+        public static class CustomerError
+        {
+            public readonly static string CUSTOMER_NOT_FOUND = "Customer is not existed";
+            public readonly static string CUSTOMER_EXISTED = "Customer is existed";
+        }
+        #endregion
+
+        #region Basket error message
+        public static class BasketError
+        {
+            public readonly static string BASKET_NOT_FOUND = "Basket is not existed";
+            public readonly static string BASKET_EXISTED = "Basket is existed";
+        }
+        #endregion
     }
 }
 
