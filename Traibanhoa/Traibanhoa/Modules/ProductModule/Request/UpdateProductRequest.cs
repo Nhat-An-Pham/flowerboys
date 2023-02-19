@@ -11,7 +11,7 @@ namespace Traibanhoa.Modules.ProductModule.Request
         public bool? Status { get; set; }
         public string? Picture { get; set; }
         public decimal? Price { get; set; }
-        public Guid TypeId { get; set; }
+        public Guid? TypeId { get; set; }
     }
     public class UpdateProductRequestValidator : AbstractValidator<UpdateProductRequest>
     {

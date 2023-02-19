@@ -11,6 +11,8 @@ using Models.Models;
 using Traibanhoa.Modules.ProductModule.Request;
 using Type = Models.Models.Type;
 using Traibanhoa.Modules.TypeModule;
+using FluentValidation.Results;
+using Models.Constant;
 
 namespace Traibanhoa.Modules.ProductModule
 {
@@ -26,67 +28,104 @@ namespace Traibanhoa.Modules.ProductModule
 
         public async Task<ICollection<Product>> GetAll()
         {
-            return await _productRepository.GetAll();
+            return await _productRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList(), includeProperties: "Type");
         }
 
-        public Task<ICollection<Product>> GetProductsBy(
-                Expression<Func<Product,
-                bool>> filter = null,
-                Func<IQueryable<Product>,
-                ICollection<Product>> options = null,
-                string includeProperties = null)
+        public Task<ICollection<Product>> GetProductsForCustomer()
         {
-            return _productRepository.GetProductsBy(filter);
+            return _productRepository.GetProductsBy(x => x.Status == true, options: o => o.OrderByDescending(x => x.UpdatedDate).ToList(), includeProperties: "Type");
         }
 
 
-        public async Task<Boolean> AddNewProduct(CreateProductRequest productRequest)
+        public async Task<Guid?> AddNewProduct(CreateProductRequest productRequest)
         {
+            ValidationResult result = new CreateProductRequestValidator().Validate(productRequest);
+            if (!result.IsValid)
+            {
+                throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
+            }
+
             var newProduct = new Product();
 
             if(_typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == productRequest.TypeId) == null)
             {
-                return false;
+                throw new Exception(ErrorMessage.ProductError.PRODUCT_EXISTED);
             }
-            newProduct.TypeId = Guid.NewGuid();
+            newProduct.ProductId = Guid.NewGuid();
             newProduct.Name = productRequest.Name;
             newProduct.Description = productRequest.Description;
-            newProduct.Status = true;
+            newProduct.CreatedDate = DateTime.Now;
+            newProduct.UpdatedDate = DateTime.Now;
+            newProduct.TypeId = productRequest.TypeId;
+            newProduct.Picture = productRequest.Picture;
+            newProduct.Price = productRequest.Price;
+            newProduct.Status = productRequest.Status ?? true;
 
             await _productRepository.AddAsync(newProduct);
-            return true;
+            return newProduct.ProductId;
         }
 
-        public async Task UpdateType(UpdateTypeRequest typeRequest)
+        public async Task UpdateProduct(UpdateProductRequest productRequest)
         {
-            var typeUpdate = GetTypeByID(typeRequest.TypeId).Result;
+            var productUpdate = GetProductByID(productRequest.ProductId).Result;
 
-            typeUpdate.Name = typeRequest.Name;
-            typeUpdate.Description = typeRequest.Description;
-            typeUpdate.Status = typeRequest.Status;
-
-            await _typeRepository.UpdateAsync(typeUpdate);
-        }
-
-        public async Task DeleteType(Type typeDelete)
-        {
-            typeDelete.Status = false;
-            await _typeRepository.UpdateAsync(typeDelete);
-        }
-
-        public async Task<Type> GetTypeByID(Guid? id)
-        {
-            return await _typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == id);
-        }
-
-        public async Task<ICollection<TypeDropdownResponse>> GetTypeDropdown()
-        {
-            var result = await _typeRepository.GetTypesBy(x => x.Status == true);
-            return result.Select(x => new TypeDropdownResponse
+            if(productUpdate == null)
             {
-                TypeId = x.TypeId,
-                TypeName = x.Name
-            }).ToList();
+                throw new Exception(ErrorMessage.ProductError.PRODUCT_NOT_FOUND);
+            }
+
+            ValidationResult result = new UpdateProductRequestValidator().Validate(productRequest);
+            if (!result.IsValid)
+            {
+                throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
+            }
+
+            if (_typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == productRequest.TypeId) == null)
+            {
+                throw new Exception(ErrorMessage.TypeError.TYPE_NOT_FOUND);
+            }
+
+            productUpdate.Name = productRequest.Name ?? productUpdate.Name;
+            productUpdate.Description = productRequest.Description ?? productUpdate.Description;
+            productUpdate.Status = productRequest.Status ?? productUpdate.Status;
+            productUpdate.UpdatedDate = DateTime.Now;
+            productUpdate.TypeId = productRequest.TypeId ?? productUpdate.TypeId;
+            productUpdate.Picture = productRequest.Picture ?? productUpdate.Picture ;
+            productUpdate.Price = productRequest.Price ?? productUpdate.Price ;
+
+            await _productRepository.UpdateAsync(productUpdate);
+        }
+
+        public async Task DeleteProduct(Guid? productDeleteId)
+        {
+            if (productDeleteId == null)
+            {
+                throw new Exception(ErrorMessage.CommonError.ID_IS_NULL);
+            }
+
+            var productDelete = _productRepository.GetFirstOrDefaultAsync(x => x.ProductId == productDeleteId).Result;
+
+            if (productDelete == null)
+            {
+                throw new Exception(ErrorMessage.ProductError.PRODUCT_NOT_FOUND);
+            }
+
+            productDelete.Status = false;
+            await _productRepository.UpdateAsync(productDelete);
+        }
+
+        public async Task<Product> GetProductByID(Guid? id)
+        {
+            if (id == null)
+            {
+                throw new Exception(ErrorMessage.CommonError.ID_IS_NULL);
+            }
+            var product = await _productRepository.GetFirstOrDefaultAsync(x => x.ProductId == id && x.Status == true, includeProperties: "Type");
+            if (product == null)
+            {
+                throw new Exception(ErrorMessage.ProductError.PRODUCT_NOT_FOUND);
+            }
+            return product;
         }
     }
 }

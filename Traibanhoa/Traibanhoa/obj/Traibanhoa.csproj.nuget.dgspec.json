@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\GitHub\\flowerboys\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj": {}
+    "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj": {}
   },
   "projects": {
-    "D:\\GitHub\\flowerboys\\Traibanhoa\\Models\\Models.csproj": {
+    "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GitHub\\flowerboys\\Traibanhoa\\Models\\Models.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj",
         "projectName": "Models",
-        "projectPath": "D:\\GitHub\\flowerboys\\Traibanhoa\\Models\\Models.csproj",
-        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\GitHub\\flowerboys\\Traibanhoa\\Models\\obj\\",
+        "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -77,17 +77,17 @@
         }
       }
     },
-    "D:\\GitHub\\flowerboys\\Traibanhoa\\Repository\\Repository.csproj": {
+    "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Repository\\Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GitHub\\flowerboys\\Traibanhoa\\Repository\\Repository.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Repository\\Repository.csproj",
         "projectName": "Repository",
-        "projectPath": "D:\\GitHub\\flowerboys\\Traibanhoa\\Repository\\Repository.csproj",
-        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\GitHub\\flowerboys\\Traibanhoa\\Repository\\obj\\",
+        "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Repository\\Repository.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Repository\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -101,8 +101,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "D:\\GitHub\\flowerboys\\Traibanhoa\\Models\\Models.csproj": {
-                "projectPath": "D:\\GitHub\\flowerboys\\Traibanhoa\\Models\\Models.csproj"
+              "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj": {
+                "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj"
               }
             }
           }
@@ -136,17 +136,17 @@
         }
       }
     },
-    "D:\\GitHub\\flowerboys\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj": {
+    "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GitHub\\flowerboys\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj",
         "projectName": "Traibanhoa",
-        "projectPath": "D:\\GitHub\\flowerboys\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj",
-        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\GitHub\\flowerboys\\Traibanhoa\\Traibanhoa\\obj\\",
+        "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Traibanhoa\\Traibanhoa.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Traibanhoa\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -160,11 +160,11 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "D:\\GitHub\\flowerboys\\Traibanhoa\\Models\\Models.csproj": {
-                "projectPath": "D:\\GitHub\\flowerboys\\Traibanhoa\\Models\\Models.csproj"
+              "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj": {
+                "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj"
               },
-              "D:\\GitHub\\flowerboys\\Traibanhoa\\Repository\\Repository.csproj": {
-                "projectPath": "D:\\GitHub\\flowerboys\\Traibanhoa\\Repository\\Repository.csproj"
+              "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Repository\\Repository.csproj": {
+                "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Repository\\Repository.csproj"
               }
             }
           }

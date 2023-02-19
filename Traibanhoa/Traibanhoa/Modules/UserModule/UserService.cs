@@ -86,15 +86,5 @@ namespace Traibanhoa.Modules.UserModule
         {
             return await _UserRepository.GetFirstOrDefaultAsync(x => x.UserId == id);
         }
-
-        //public async Task<ICollection<TypeDropdownResponse>> GetTypeDropdown()
-        //{
-        //    var result = await _typeRepository.GetTypesBy(x => x.Status == true);
-        //    return result.Select(x => new TypeDropdownResponse
-        //    {
-        //        TypeId = x.TypeId,
-        //        TypeName = x.Name
-        //    }).ToList();
-        //}
     }
 }

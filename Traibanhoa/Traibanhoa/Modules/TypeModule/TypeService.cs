@@ -1,6 +1,5 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
-using Models.Enum;
+﻿using FluentValidation.Results;
+using Models.Constant;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,26 +23,21 @@ namespace Traibanhoa.Modules.TypeModule
 
         public async Task<ICollection<Type>> GetAll()
         {
-            return await _typeRepository.GetAll();
+            return await _typeRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList());
         }
 
-        public Task<ICollection<Type>> GetTypesBy(
-                Expression<Func<Type,
-                bool>> filter = null,
-                Func<IQueryable<Type>,
-                ICollection<Type>> options = null,
-                string includeProperties = null)
+        public Task<ICollection<Type>> GetTypesForCustomer()
         {
-            return _typeRepository.GetTypesBy(filter);
+            return _typeRepository.GetTypesBy(x => x.Status == true, options: o => o.OrderByDescending(x => x.UpdatedDate).ToList());
         }
 
 
-        public async Task<ResponseReturnEnum> AddNewType(CreateTypeRequest typeRequest)
+        public async Task<Guid?> AddNewType(CreateTypeRequest typeRequest)
         {
             ValidationResult result = new CreateTypeRequestValidator().Validate(typeRequest);
             if (!result.IsValid)
             {
-                return ResponseReturnEnum.BAD_REQUEST;
+                throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
             }
 
             var newType = new Type();
@@ -51,58 +45,84 @@ namespace Traibanhoa.Modules.TypeModule
             newType.TypeId = Guid.NewGuid();
             newType.Name = typeRequest.Name;
             newType.Description = typeRequest.Description;
+            newType.CreatedDate = DateTime.Now;
+            newType.UpdatedDate = DateTime.Now;
             newType.Status = true;
 
             await _typeRepository.AddAsync(newType);
-            return ResponseReturnEnum.OK;
+            return newType.TypeId;
         }
 
-        public async Task<ResponseReturnEnum> UpdateType(UpdateTypeRequest typeRequest)
+        public async Task UpdateType(UpdateTypeRequest typeRequest)
         {
-            var typeUpdate = GetTypeByID(typeRequest.TypeId).Result;
-
-            if (typeUpdate == null)
+            try
             {
-                return ResponseReturnEnum.NOT_FOUND;
-            }
+                var typeUpdate = GetTypeByID(typeRequest.TypeId).Result;
 
-            ValidationResult result = new UpdateTypeRequestValidator().Validate(typeRequest);
-            if (!result.IsValid)
+                if (typeUpdate == null)
+                {
+                    throw new Exception(ErrorMessage.TypeError.TYPE_NOT_FOUND);
+                }
+
+                ValidationResult result = new UpdateTypeRequestValidator().Validate(typeRequest);
+                if (!result.IsValid)
+                {
+                    throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
+                }
+
+                typeUpdate.Name = typeRequest.Name;
+                typeUpdate.Description = typeRequest.Description;
+                typeUpdate.UpdatedDate = DateTime.Now;
+                typeUpdate.Status = typeRequest.Status;
+
+                await _typeRepository.UpdateAsync(typeUpdate);
+            }
+            catch (Exception ex)
             {
-                return ResponseReturnEnum.BAD_REQUEST;
+                Console.WriteLine("Error at update type: " + ex.Message);
+                throw new Exception(ex.Message);
             }
-
-            typeUpdate.Name = typeRequest.Name;
-            typeUpdate.Description = typeRequest.Description;
-            typeUpdate.Status = typeRequest.Status;
-
-            await _typeRepository.UpdateAsync(typeUpdate);
-            return ResponseReturnEnum.OK;
         }
 
-        public async Task<ResponseReturnEnum> DeleteType(Guid? typeDeleteId)
+        public async Task DeleteType(Guid? typeDeleteId)
         {
-            if (typeDeleteId == null)
+            try
             {
-                return ResponseReturnEnum.BAD_REQUEST;
+                if (typeDeleteId == null)
+                {
+                    throw new Exception(ErrorMessage.CommonError.ID_IS_NULL);
+                }
+
+                Type typeDelete = _typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == typeDeleteId && x.Status == true).Result;
+
+                if (typeDelete == null)
+                {
+                    throw new Exception(ErrorMessage.TypeError.TYPE_NOT_FOUND);
+                }
+
+                typeDelete.Status = false;
+                await _typeRepository.UpdateAsync(typeDelete);
+
             }
-
-            Type typeDelete = _typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == typeDeleteId).Result;
-
-            if (typeDelete == null)
+            catch (Exception ex)
             {
-                return ResponseReturnEnum.NOT_FOUND;
+                Console.WriteLine("Error at delete type: " + ex.Message);
+                throw new Exception(ex.Message);
             }
-
-            typeDelete.Status = false;
-            await _typeRepository.UpdateAsync(typeDelete);
-            
-            return ResponseReturnEnum.OK;
         }
 
         public async Task<Type> GetTypeByID(Guid? id)
         {
-            return await _typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == id);
+            if (id == null)
+            {
+                throw new Exception(ErrorMessage.CommonError.ID_IS_NULL);
+            }
+            var type = await _typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == id);
+            if (type == null)
+            {
+                throw new Exception(ErrorMessage.TypeError.TYPE_NOT_FOUND);
+            }
+            return type;
         }
 
         public async Task<ICollection<TypeDropdownResponse>> GetTypeDropdown()
