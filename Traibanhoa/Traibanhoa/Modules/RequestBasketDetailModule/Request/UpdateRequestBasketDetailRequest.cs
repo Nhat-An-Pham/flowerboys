@@ -13,7 +13,6 @@ namespace Traibanhoa.Modules.RequestBasketDetailModule.Request
     {
         public UpdateRequestBasketRequestDetailValidator()
         {
-            RuleFor(x => x.RequestBasketId).NotEmpty().NotNull();
             RuleFor(x => x.ProductId).NotEmpty().NotNull();
             RuleFor(x => x.Quantity).NotEmpty().NotNull();
         }

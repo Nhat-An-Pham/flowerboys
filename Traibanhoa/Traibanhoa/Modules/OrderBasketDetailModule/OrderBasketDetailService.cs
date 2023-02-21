@@ -6,6 +6,9 @@ using System;
 using Traibanhoa.Modules.OrderBasketDetailModule.Interface;
 using Models.Models;
 using Traibanhoa.Modules.OrderBasketDetailModule.Request;
+using Models.Constant;
+using Traibanhoa.Modules.TypeModule.Request;
+using FluentValidation.Results;
 
 namespace Traibanhoa.Modules.OrderBasketDetailModule
 {
@@ -19,7 +22,7 @@ namespace Traibanhoa.Modules.OrderBasketDetailModule
 
         public async Task<ICollection<OrderBasketDetail>> GetAll()
         {
-            return await _OrderBasketDetailRepository.GetAll();
+            return await _OrderBasketDetailRepository.GetAll(options: o => o.OrderByDescending(x => x.Quantity != 0).ToList());
         }
 
         public Task<ICollection<OrderBasketDetail>> GetOrderBasketDetailsBy(
@@ -33,46 +36,97 @@ namespace Traibanhoa.Modules.OrderBasketDetailModule
         }
 
 
-        public async Task<Boolean> AddNewOrderBasketDetail(CreateOrderBasketDetailRequest OrderBasketDetailRequest)
+        public async Task<Guid?> AddNewOrderBasketDetail(CreateOrderBasketDetailRequest OrderBasketDetailRequest)
         {
+            ValidationResult result = new CreateOrderBasketDetailRequestValidator().Validate(OrderBasketDetailRequest);
+            if (!result.IsValid)
+            {
+                throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
+            }
+
             var newOrderBasketDetail = new OrderBasketDetail();
 
-            if (_OrderBasketDetailRepository.GetFirstOrDefaultAsync(x => x.OrderId == OrderBasketDetailRequest.OrderId) == null)
-            {
-                return false;
-            }
+            newOrderBasketDetail.OrderId = OrderBasketDetailRequest.OrderId;
             newOrderBasketDetail.BasketId = OrderBasketDetailRequest.BasketId;
             newOrderBasketDetail.Quantity = OrderBasketDetailRequest.Quantity;
             newOrderBasketDetail.Price = OrderBasketDetailRequest.Price;
             newOrderBasketDetail.IsRequest = OrderBasketDetailRequest.IsRequest;
 
             await _OrderBasketDetailRepository.AddAsync(newOrderBasketDetail);
-            return true;
+            return newOrderBasketDetail.OrderId;
         }
 
-        public async Task<Boolean> UpdateOrderBasketDetail(UpdateOrderBasketDetailRequest OrderBasketDetailRequest)
+        public async Task UpdateOrderBasketDetail(UpdateOrderBasketDetailRequest OrderBasketDetailRequest)
         {
-            var OrderBasketDetailUpdate = GetOrderBasketDetailByID(OrderBasketDetailRequest.OrderId).Result;
+            try
+            {
+                var OrderBasketDetailUpdate = GetOrderBasketDetailByID(OrderBasketDetailRequest.OrderId).Result;
 
-            OrderBasketDetailUpdate.BasketId = OrderBasketDetailRequest.BasketId;
-            OrderBasketDetailUpdate.Quantity = OrderBasketDetailRequest.Quantity;
-            OrderBasketDetailUpdate.Price = OrderBasketDetailRequest.Price;
-            OrderBasketDetailUpdate.IsRequest = OrderBasketDetailRequest.IsRequest;
+                if (OrderBasketDetailUpdate == null)
+                {
+                    throw new Exception(ErrorMessage.OrderError.ORDER_NOT_FOUND);
+                }
 
-            await _OrderBasketDetailRepository.UpdateAsync(OrderBasketDetailUpdate);
-            return true;
+                ValidationResult result = new UpdateOrderBasketDetailRequestValidator().Validate(OrderBasketDetailRequest);
+                if (!result.IsValid)
+                {
+                    throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
+                }
+
+                OrderBasketDetailUpdate.BasketId = OrderBasketDetailRequest.BasketId;
+                OrderBasketDetailUpdate.Quantity = OrderBasketDetailRequest.Quantity;
+                OrderBasketDetailUpdate.Price = OrderBasketDetailRequest.Price;
+                OrderBasketDetailUpdate.IsRequest = OrderBasketDetailRequest.IsRequest;
+
+                await _OrderBasketDetailRepository.UpdateAsync(OrderBasketDetailUpdate);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at update type: " + ex.Message);
+                throw new Exception(ex.Message);
+            }
+            
         }
 
-        //public async Task<Boolean> DeleteOrderBasketDetail(OrderBasketDetail OrderBasketDetailDelete)
-        //{
-        //    OrderBasketDetailDelete.Status = 0;
-        //    await _OrderBasketDetailRepository.UpdateAsync(OrderBasketDetailDelete);
-        //    return true;
-        //}
+        public async Task DeleteOrderBasketDetail(Guid? orderBasketDetailDeleteID)
+        {
+            try
+            {
+                if (orderBasketDetailDeleteID == null)
+                {
+                    throw new Exception(ErrorMessage.CommonError.ID_IS_NULL);
+                }
+
+                OrderBasketDetail orderBasketDetailDelete = _OrderBasketDetailRepository.GetFirstOrDefaultAsync(x => x.BasketId == orderBasketDetailDeleteID && x.Quantity != 0).Result;
+
+                if (orderBasketDetailDelete == null)
+                {
+                    throw new Exception(ErrorMessage.BasketError.BASKET_NOT_FOUND);
+                }
+
+                orderBasketDetailDelete.Quantity = 0;
+                await _OrderBasketDetailRepository.UpdateAsync(orderBasketDetailDelete);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at delete type: " + ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
 
         public async Task<OrderBasketDetail> GetOrderBasketDetailByID(Guid? id)
         {
-            return await _OrderBasketDetailRepository.GetFirstOrDefaultAsync(x => x.OrderId == id);
+            if (id == null)
+            {
+                throw new Exception(ErrorMessage.CommonError.ID_IS_NULL);
+            }
+            var orderBasketDetail = await _OrderBasketDetailRepository.GetFirstOrDefaultAsync(x => x.OrderId == id);
+            if (orderBasketDetail == null)
+            {
+                throw new Exception(ErrorMessage.OrderError.ORDER_EXISTED);
+            }
+            return orderBasketDetail;
         }
 
         //public async Task<ICollection<TypeDropdownResponse>> GetTypeDropdown()

@@ -6,7 +6,6 @@ namespace Traibanhoa.Modules.OrderModule.Request
 {
     public class CreateOrderRequest
     {
-        public Guid OrderId { get; set; }
         public DateTime? OrderDate { get; set; }
         public DateTime? ShippedDate { get; set; }
         public string ShippedAddress { get; set; }
@@ -21,7 +20,6 @@ namespace Traibanhoa.Modules.OrderModule.Request
     {
         public CreateOrderRequestValidator()
         {
-            RuleFor(x => x.OrderId).NotEmpty().NotNull();
             RuleFor(x => x.OrderDate).NotEmpty().NotNull();
             RuleFor(x => x.ShippedDate).NotEmpty().NotNull();
             RuleFor(x => x.ShippedAddress).NotEmpty().NotNull();

@@ -20,7 +20,6 @@ namespace Traibanhoa.Modules.OrderModule.Request
     {
         public UpdateOrderRequestValidator()
         {
-            RuleFor(x => x.OrderId).NotEmpty().NotNull();
             RuleFor(x => x.OrderDate).NotEmpty().NotNull();
             RuleFor(x => x.ShippedDate).NotEmpty().NotNull();
             RuleFor(x => x.ShippedAddress).NotEmpty().NotNull();

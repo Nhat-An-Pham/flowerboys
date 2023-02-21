@@ -15,7 +15,6 @@ namespace Traibanhoa.Modules.OrderBasketDetailModule.Request
     {
         public UpdateOrderBasketDetailRequestValidator()
         {
-            RuleFor(x => x.OrderId).NotEmpty().NotNull();
             RuleFor(x => x.BasketId).NotEmpty().NotNull();
             RuleFor(x => x.Quantity).NotEmpty().NotNull();
             RuleFor(x => x.Price).NotEmpty().NotNull();

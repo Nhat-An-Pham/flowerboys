@@ -15,11 +15,11 @@ namespace Traibanhoa.Modules.RequestBasketDetailModule.Interface
             Func<IQueryable<RequestBasketDetail>, ICollection<RequestBasketDetail>> options = null,
             string includeProperties = null);
 
-        public Task<Boolean> AddNewRequestBasketDetail(CreateRequestBasketDetailRequest RequestBasketDetailCreate);
+        public Task<Guid?> AddNewRequestBasketDetail(CreateRequestBasketDetailRequest RequestBasketDetailCreate);
 
-        public Task<Boolean> UpdateRequestBasketDetail(UpdateRequestBasketDetailRequest RequestBasketDetailUpdate);
+        public Task UpdateRequestBasketDetail(UpdateRequestBasketDetailRequest RequestBasketDetailUpdate);
 
-        //public Task<Boolean> DeleteRequestBasketDetail(RequestBasketDetail RequestBasketDetailDelete);
+        public Task DeleteRequestBasketDetail(Guid? requestBasketDetailDeleteID);
 
         public Task<ICollection<RequestBasketDetail>> GetAll();
 

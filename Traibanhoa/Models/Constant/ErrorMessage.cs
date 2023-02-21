@@ -49,6 +49,22 @@ namespace Models.Constant
             public readonly static string BASKET_EXISTED = "Basket is existed";
         }
         #endregion
+
+        #region Order error message
+        public static class OrderError
+        {
+            public readonly static string ORDER_NOT_FOUND = "Order is not existed";
+            public readonly static string ORDER_EXISTED = "Order is existed";
+        }
+        #endregion
+
+        #region Request error message
+        public static class RequestError
+        {
+            public readonly static string REQUEST_NOT_FOUND = "Request is not existed";
+            public readonly static string REQUEST_EXISTED = "Request is existed";
+        }
+        #endregion
     }
 }
 

@@ -15,9 +15,9 @@ namespace Traibanhoa.Modules.RequestBasketModule.Interface
             Func<IQueryable<RequestBasket>, ICollection<RequestBasket>> options = null,
             string includeProperties = null);
 
-        public Task<Boolean> AddNewRequestBasket(CreateRequestBasketRequest RequestBasketCreate);
+        public Task<Guid?> AddNewRequestBasket(CreateRequestBasketRequest RequestBasketCreate);
 
-        public Task<Boolean> UpdateRequestBasket(UpdateRequestBasketRequest RequestBasketUpdate);
+        public Task UpdateRequestBasket(UpdateRequestBasketRequest RequestBasketUpdate);
 
         //public Task<Boolean> DeleteRequestBasket(RequestBasket RequestBasketDelete);
 

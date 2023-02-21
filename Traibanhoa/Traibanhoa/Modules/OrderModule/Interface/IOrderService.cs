@@ -15,9 +15,9 @@ namespace Traibanhoa.Modules.OrderModule.Interface
             Func<IQueryable<Order>, ICollection<Order>> options = null,
             string includeProperties = null);
 
-        public Task<Boolean> AddNewOrder(CreateOrderRequest OrderCreate);
+        public Task<Guid?> AddNewOrder(CreateOrderRequest OrderCreate);
 
-        public Task<Boolean> UpdateOrder(UpdateOrderRequest OrderUpdate);
+        public Task UpdateOrder(UpdateOrderRequest OrderUpdate);
 
         //public Task<Boolean> DeleteOrder(Order OrderDelete);
 
