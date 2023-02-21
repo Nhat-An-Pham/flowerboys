@@ -22,7 +22,7 @@ namespace Traibanhoa.Controllers
 
 
         // GET: api/<ValuesController>
-        [HttpGet]
+        [HttpGet("staff-managing")]
         public async Task<ActionResult<IEnumerable<Product>>> GetProductsForStaff()
         {
             try
