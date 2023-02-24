@@ -12,20 +12,17 @@ namespace Traibanhoa.Modules.ProductModule.Interface
 {
     public interface IProductService
     {
-        public Task<ICollection<Product>> GetProductsBy(
-            Expression<Func<Product, bool>> filter = null,
-            Func<IQueryable<Product>, ICollection<Product>> options = null,
-            string includeProperties = null);
+        public Task<ICollection<Product>> GetProductsForCustomer();
 
         public Task<Guid?> AddNewProduct(CreateProductRequest productCreate);
 
-        public Task<bool> UpdateProduct(UpdateProductRequest productUpdate);
+        public Task UpdateProduct(UpdateProductRequest productUpdate);
 
-        public Task<bool> DeleteProduct(Guid? productDeleteId);
+        public Task DeleteProduct(Guid? productDeleteId);
 
         public Task<ICollection<Product>> GetAll();
 
         public Task<Product> GetProductByID(Guid? id);
-        public Task<ICollection<Product>> GetProductsForCustomer();
+
     }
 }

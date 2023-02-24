@@ -374,6 +374,14 @@ namespace Models.Models
 
                 entity.Property(e => e.Description).HasColumnName("description");
 
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("createdDate");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("updatedDate");
+
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .HasColumnName("name");

@@ -11,20 +11,18 @@ namespace Traibanhoa.Modules.TypeModule.Interface
 {
     public interface ITypeService
     {
-        public Task<ICollection<Type>> GetTypesBy(
-            Expression<Func<Type, bool>> filter = null,
-            Func<IQueryable<Type>, ICollection<Type>> options = null,
-            string includeProperties = null);
+        public Task<ICollection<Type>> GetTypesForCustomer();
 
         public Task<Guid?> AddNewType(CreateTypeRequest typeCreate);
 
-        public Task<bool> UpdateType(UpdateTypeRequest typeUpdate);
+        public Task UpdateType(UpdateTypeRequest typeUpdate);
 
-        public Task<bool> DeleteType(Guid? typeDeleteId);
+        public Task DeleteType(Guid? typeDeleteId);
 
         public Task<ICollection<Type>> GetAll();
 
         public Task<Type> GetTypeByID(Guid? id);
+        
         public Task<ICollection<TypeDropdownResponse>> GetTypeDropdown();
     }
 }

@@ -22,11 +22,24 @@ namespace Traibanhoa.Controllers
             _typeService = typeService;
         }
 
-
-
         // GET: api/<ValuesController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Type>>> GetTypes()
+        public async Task<ActionResult<IEnumerable<Type>>> GetTypesForCustomer()
+        {
+            try
+            {
+                var response = await _typeService.GetTypesForCustomer();
+                return Ok(response);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        // GET: api/<ValuesController>
+        [HttpGet("staff-manage")]
+        public async Task<ActionResult<IEnumerable<Type>>> GetTypesForStaff()
         {
             try
             {
@@ -39,27 +52,47 @@ namespace Traibanhoa.Controllers
             }
         }
 
+        // GET: api/<ValuesController>
+        [HttpGet("dropdown")]
+        public async Task<ActionResult<IEnumerable<Type>>> GetTypesDropDown()
+        {
+            try
+            {
+                var response = await _typeService.GetTypeDropdown();
+                return Ok(response);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Type>> GetType([FromRoute] Guid id)
         {
-            var type = await _typeService.GetTypeByID(id);
-
-            if (type == null)
+            try
             {
-                return NotFound();
+                return Ok(await _typeService.GetTypeByID(id));
             }
-
-            return type;
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST api/<ValuesController>
         [HttpPost]
         public async Task<ActionResult<Type>> CreateNewType([FromBody] CreateTypeRequest createTypeRequest)
         {
-            var typeId = await _typeService.AddNewType(createTypeRequest);
-            if (typeId == null) return BadRequest();
-            else return Ok(typeId);
+            try
+            {
+                return Ok(await _typeService.AddNewType(createTypeRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
@@ -67,16 +100,30 @@ namespace Traibanhoa.Controllers
         [HttpPut]
         public async Task<IActionResult> PutType([FromBody] UpdateTypeRequest typeRequest)
         {
-            if (await _typeService.UpdateType(typeRequest) == false) return BadRequest();
-            else return Ok();
+            try
+            {
+                await _typeService.UpdateType(typeRequest);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteType([FromRoute] Guid id)
         {
-            if (await _typeService.DeleteType(id) == false) return BadRequest();
-            return Ok();
+            try
+            {
+                await _typeService.DeleteType(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

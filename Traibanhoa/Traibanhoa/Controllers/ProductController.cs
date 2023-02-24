@@ -23,8 +23,8 @@ namespace Traibanhoa.Controllers
 
 
         // GET: api/<ValuesController>
-        [HttpGet("staff-manage")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProductForStaff()
+        [HttpGet("staff-managing")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsForStaff()
         {
             try
             {
@@ -37,9 +37,10 @@ namespace Traibanhoa.Controllers
             }
         }
 
+        
         // GET: api/<ValuesController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProductForCustomer()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsForCustomer()
         {
             try
             {
@@ -80,8 +81,7 @@ namespace Traibanhoa.Controllers
             }
         }
 
-
-        // PUT api/<ValuesController>
+        // PUT api/<ValuesController>/5
         [HttpPut]
         public async Task<IActionResult> PutProduct([FromBody] UpdateProductRequest productRequest)
         {
