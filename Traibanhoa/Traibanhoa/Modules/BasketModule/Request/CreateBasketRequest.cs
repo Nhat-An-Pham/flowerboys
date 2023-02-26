@@ -5,7 +5,6 @@ namespace Traibanhoa.Modules.BasketModule.Request
 {
     public class CreateBasketRequest
     {
-        public Guid BasketId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }
@@ -24,7 +23,6 @@ namespace Traibanhoa.Modules.BasketModule.Request
             RuleFor(x => x.ImageUrl).NotEmpty().NotNull();
             RuleFor(x => x.View).NotEmpty().NotNull();
             RuleFor(x => x.BasketPrice).NotEmpty().NotNull();
-            RuleFor(x => x.Status).NotEmpty().NotNull();
             RuleFor(x => x.CreatedDate).NotEmpty().NotNull();
             RuleFor(x => x.UpdatedDate).NotEmpty().NotNull();
         }

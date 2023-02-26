@@ -17,7 +17,6 @@ namespace Traibanhoa.Modules.RequestBasketModule.Request
     {
         public UpdateRequestBasketRequestValidator()
         {
-            RuleFor(x => x.RequestBasketId).NotEmpty().NotNull();
             RuleFor(x => x.Title).NotEmpty().NotNull();
             RuleFor(x => x.ImageUrl).NotEmpty().NotNull();
             RuleFor(x => x.CreatedDate).NotEmpty().NotNull();

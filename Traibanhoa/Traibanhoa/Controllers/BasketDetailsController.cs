@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Traibanhoa.Modules.BasketDetailModule.Interface;
 using Traibanhoa.Modules.BasketDetailModule.Request;
+using Traibanhoa.Modules.TypeModule.Request;
 
 namespace Traibanhoa.Controllers
 {
@@ -19,7 +20,7 @@ namespace Traibanhoa.Controllers
             _basketDetailService = basketDetailService;
         }
 
-        // GET: api/BasketDetails
+        // GET api/<ValuesController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BasketDetail>>> GetBasketDetails()
         {
@@ -34,54 +35,65 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        // GET: api/BasketDetails/5
+        // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BasketDetail>> GetBasketDetail([FromRoute] Guid id)
         {
-            var basketDetail = await _basketDetailService.GetBasketDetailByID(id);
-
-            if (basketDetail == null)
+            try
             {
-                return NotFound();
+                return Ok(await _basketDetailService.GetBasketDetailByID(id));
             }
-
-            return basketDetail;
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // PUT: api/BasketDetails/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutBasketDetail([FromBody] CreateBasketDetailRequest createBasketDetailRequest)
-        {
-            var check = await _basketDetailService.AddNewBasketDetail(createBasketDetailRequest);
-            if(check) return Ok();
-            else return BadRequest();
-        }
-
-        // POST: api/BasketDetails
+        // POST api/<ValuesController>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<BasketDetail>> PostBasketDetail([FromBody] UpdateBasketDetailRequest updateBasketDetailRequest)
+        public async Task<ActionResult<BasketDetail>> PostBasketDetail([FromBody] CreateBasketDetailRequest createBasketDetailRequest)
         {
-            var check = await _basketDetailService.UpdateBasketDetail(updateBasketDetailRequest);
-            if (check) return Ok();
-            else return BadRequest();
+            try
+            {
+                return Ok(await _basketDetailService.AddNewBasketDetail(createBasketDetailRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        //// DELETE: api/BasketDetails/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteBasketDetail([FromRoute] Guid id)
-        //{
-        //    var basketDetail = await _basketDetailService.GetBasketDetailByID(id);
-        //    if (basketDetail == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    //await _typeService.DeleteType(type);
-        //    await _basketDetailService.(basketDetail.BasketId);
+        // PUT api/<ValuesController>/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut]
+        public async Task<IActionResult> PutBasketDetail([FromBody] UpdateBasketDetailRequest updateBasketDetailRequest)
+        {
+            try
+            {
+                await _basketDetailService.UpdateBasketDetail(updateBasketDetailRequest);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
-        //    return Ok();
-        //}
+        // DELETE: api/BasketDetails/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBasketDetail([FromRoute] Guid id)
+        {
+            try
+            {
+                await _basketDetailService.DeleteBasketDetail(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }

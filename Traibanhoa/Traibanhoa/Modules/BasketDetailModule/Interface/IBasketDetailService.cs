@@ -17,11 +17,11 @@ namespace Traibanhoa.Modules.BasketDetailModule.Interface
             Func<IQueryable<BasketDetail>, ICollection<BasketDetail>> options = null,
             string includeProperties = null);
 
-        public Task<Boolean> AddNewBasketDetail(CreateBasketDetailRequest BasketDetailCreate);
+        public Task<Guid?> AddNewBasketDetail(CreateBasketDetailRequest BasketDetailCreate);
 
-        public Task<Boolean> UpdateBasketDetail(UpdateBasketDetailRequest BasketDetailUpdate);
+        public Task UpdateBasketDetail(UpdateBasketDetailRequest BasketDetailUpdate);
 
-        //public Task<Boolean> DeleteBasketDetail(BasketDetail BasketDetailDelete);
+        public Task DeleteBasketDetail(Guid? basketDetailDeleteID);
 
         public Task<ICollection<BasketDetail>> GetAll();
 

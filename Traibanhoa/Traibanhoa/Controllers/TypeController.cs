@@ -115,7 +115,6 @@ namespace Traibanhoa.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteType([FromRoute] Guid id)
         {
-
             try
             {
                 await _typeService.DeleteType(id);

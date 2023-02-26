@@ -6,7 +6,6 @@ namespace Traibanhoa.Modules.RequestBasketModule.Request
 {
     public class CreateRequestBasketRequest
     {
-        public Guid RequestBasketId { get; set; }
         public string Title { get; set; }
         public string ImageUrl { get; set; }
         public DateTime? CreatedDate { get; set; }
@@ -18,7 +17,6 @@ namespace Traibanhoa.Modules.RequestBasketModule.Request
     {
         public CreateRequestBasketRequestValidator()
         {
-            RuleFor(x => x.RequestBasketId).NotEmpty().NotNull();
             RuleFor(x => x.Title).NotEmpty().NotNull();
             RuleFor(x => x.ImageUrl).NotEmpty().NotNull();
             RuleFor(x => x.CreatedDate).NotEmpty().NotNull();

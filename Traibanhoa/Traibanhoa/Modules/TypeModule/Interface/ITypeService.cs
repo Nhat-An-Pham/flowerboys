@@ -22,6 +22,7 @@ namespace Traibanhoa.Modules.TypeModule.Interface
         public Task<ICollection<Type>> GetAll();
 
         public Task<Type> GetTypeByID(Guid? id);
+        
         public Task<ICollection<TypeDropdownResponse>> GetTypeDropdown();
     }
 }

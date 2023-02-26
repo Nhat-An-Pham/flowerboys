@@ -5,7 +5,6 @@ namespace Traibanhoa.Modules.CustomerModule.Request
 {
     public class CreateCustomerRequest
     {
-        public Guid CustomerId { get; set; }
         public string Username { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
@@ -32,7 +31,7 @@ namespace Traibanhoa.Modules.CustomerModule.Request
             RuleFor(x => x.CreatedDate).NotEmpty().NotNull();
             RuleFor(x => x.UpdatedDate).NotEmpty().NotNull();
             RuleFor(x => x.IsGoogle).NotEmpty().NotNull();
-            RuleFor(x => x.IsBlocked).NotEmpty().NotNull();
+            //RuleFor(x => x.IsBlocked).NotEmpty().NotNull();
         }
     }
 }

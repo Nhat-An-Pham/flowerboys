@@ -15,11 +15,11 @@ namespace Traibanhoa.Modules.OrderProductDetailModule.Interface
             Func<IQueryable<OrderProductDetail>, ICollection<OrderProductDetail>> options = null,
             string includeProperties = null);
 
-        public Task<Boolean> AddNewOrderProductDetail(CreateOrderProductDetailRequest OrderProductDetailCreate);
+        public Task<Guid?> AddNewOrderProductDetail(CreateOrderProductDetailRequest OrderProductDetailCreate);
 
-        public Task<Boolean> UpdateOrderProductDetail(UpdateOrderProductDetailRequest OrderProductDetailUpdate);
+        public Task UpdateOrderProductDetail(UpdateOrderProductDetailRequest OrderProductDetailUpdate);
 
-        //public Task<Boolean> DeleteOrderProductDetail(OrderProductDetail OrderProductDetailDelete);
+        public Task DeleteOrderProductDetail(Guid? OorderProductDetailDeleteID);
 
         public Task<ICollection<OrderProductDetail>> GetAll();
 

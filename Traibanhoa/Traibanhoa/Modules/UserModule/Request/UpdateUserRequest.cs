@@ -23,6 +23,7 @@ namespace Traibanhoa.Modules.UserModule.Request
     {
         public UpdateUserRequestValidator()
         {
+            RuleFor(x => x.UserId).NotEmpty().NotNull();
             RuleFor(x => x.Username).NotEmpty().NotNull();
             RuleFor(x => x.Name).NotEmpty().NotNull();
             RuleFor(x => x.Email).NotEmpty().NotNull();
@@ -34,7 +35,7 @@ namespace Traibanhoa.Modules.UserModule.Request
             RuleFor(x => x.CreatedDate).NotEmpty().NotNull();
             RuleFor(x => x.UpdatedDate).NotEmpty().NotNull();
             RuleFor(x => x.IsGoogle).NotEmpty().NotNull();
-            RuleFor(x => x.IsBlocked).NotEmpty().NotNull();
+            //RuleFor(x => x.IsBlocked).NotEmpty().NotNull();
         }
     }
 }

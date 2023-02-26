@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Traibanhoa.Modules.OrderBasketDetailModule.Interface;
 using Traibanhoa.Modules.OrderBasketDetailModule.Request;
+using Traibanhoa.Modules.TypeModule.Request;
 
 namespace Traibanhoa.Controllers
 {
@@ -19,7 +20,7 @@ namespace Traibanhoa.Controllers
             _orderbasketDetailService = orderbasketDetailService;
         }
 
-        // GET: api/OrderBasketDetails
+        // GET api/<ValuesController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderBasketDetail>>> GetOrderBasketDetails()
         {
@@ -34,56 +35,66 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        // GET: api/OrderBasketDetails/5
+        // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderBasketDetail>> GetOrderBasketDetail([FromRoute]Guid id)
         {
-            var orderBasketDetail = await _orderbasketDetailService.GetOrderBasketDetailByID(id);
-
-            if (orderBasketDetail == null)
+            try
             {
-                return NotFound();
+                return Ok(await _orderbasketDetailService.GetOrderBasketDetailByID(id));
             }
-
-            return orderBasketDetail;
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // PUT: api/OrderBasketDetails/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrderBasketDetail([FromBody] CreateOrderBasketDetailRequest createOrderBasketDetailRequest)
-        {
-            var check = await _orderbasketDetailService.AddNewOrderBasketDetail(createOrderBasketDetailRequest);
-            if (check) return Ok();
-            else return BadRequest();
-        }
-
-        // POST: api/OrderBasketDetails
+        // POST api/<ValuesController>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<OrderBasketDetail>> PostOrderBasketDetail([FromBody] UpdateOrderBasketDetailRequest updateOrderBasketDetailRequest)
+        public async Task<ActionResult<OrderBasketDetail>> PostOrderBasketDetail([FromBody] CreateOrderBasketDetailRequest createOrderBasketDetailRequest)
         {
-            var check = await _orderbasketDetailService.UpdateOrderBasketDetail(updateOrderBasketDetailRequest);
-            if (check) return Ok();
-            else return BadRequest();
+            try
+            {
+                return Ok(await _orderbasketDetailService.AddNewOrderBasketDetail(createOrderBasketDetailRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        //// DELETE: api/OrderBasketDetails/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteOrderBasketDetail([FromRoute] Guid id)
-        //{
-        //    var orderBasketDetail = await _orderbasketDetailService.de(id);
-        //    if (orderBasketDetail == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // PUT api/<ValuesController>/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut]
+        public async Task<IActionResult> PutOrderBasketDetail([FromBody] UpdateOrderBasketDetailRequest updateOrderBasketDetailRequest)
+        {
+            try
+            {
+                await _orderbasketDetailService.UpdateOrderBasketDetail(updateOrderBasketDetailRequest);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
 
-        //    _context.OrderBasketDetails.Remove(orderBasketDetail);
-        //    await _context.SaveChangesAsync();
+            }
+        }
+        // DELETE: api/OrderBasketDetails/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrderBasketDetail([FromRoute] Guid id)
+        {
+            try
+            {
+                await _orderbasketDetailService.DeleteOrderBasketDetail(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
-        //    return NoContent();
-        //}
 
-        
     }
 }

@@ -37,6 +37,7 @@ namespace Traibanhoa.Modules.TypeModule
             ValidationResult result = new CreateTypeRequestValidator().Validate(typeRequest);
             if (!result.IsValid)
             {
+                return null;
                 throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
             }
 
@@ -79,10 +80,11 @@ namespace Traibanhoa.Modules.TypeModule
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error at update type: " + ex.Message);
-                throw new Exception(ex.Message);
+                throw new Message(ex.Message);
             }
+
         }
+
 
         public async Task DeleteType(Guid? typeDeleteId)
         {
@@ -106,8 +108,7 @@ namespace Traibanhoa.Modules.TypeModule
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error at delete type: " + ex.Message);
-                throw new Exception(ex.Message);
+                throw new Message(ex.Message);
             }
         }
 

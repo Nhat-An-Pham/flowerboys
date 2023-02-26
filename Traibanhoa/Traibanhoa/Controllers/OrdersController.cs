@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Traibanhoa.Modules.OrderModule.Interface;
 using Traibanhoa.Modules.OrderModule.Request;
+using Traibanhoa.Modules.TypeModule.Request;
 
 namespace Traibanhoa.Controllers
 {
@@ -19,7 +20,7 @@ namespace Traibanhoa.Controllers
             _orderSevice = orderSevice;
         }
 
-        // GET: api/Orders
+        // GET api/<ValuesController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
@@ -34,38 +35,49 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        // GET: api/Orders/5
+        // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder([FromRoute]Guid id)
         {
-            var order = await _orderSevice.GetOrderByID(id);
-
-            if (order == null)
+            try
             {
-                return NotFound();
+                return Ok(await _orderSevice.GetOrderByID(id));
             }
-
-            return order;
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // PUT: api/Orders/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder([FromBody] CreateOrderRequest createOrderRequest)
-        {
-            var check = await _orderSevice.AddNewOrder(createOrderRequest);
-            if (check) return Ok();
-            else return BadRequest();
-        }
-
-        // POST: api/Orders
+        // POST api/<ValuesController>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder([FromBody] UpdateOrderRequest updateOrderRequest)
+        public async Task<ActionResult<Order>> PostOrder([FromBody] CreateOrderRequest createOrderRequest)
         {
-            var check = await _orderSevice.UpdateOrder(updateOrderRequest);
-            if (check) return Ok();
-            else return BadRequest();
+            try
+            {
+                return Ok(await _orderSevice.AddNewOrder(createOrderRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // PUT api/<ValuesController>/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut]
+        public async Task<IActionResult> PutOrder([FromBody] UpdateOrderRequest updateOrderRequest)
+        {
+            try
+            {
+                await _orderSevice.UpdateOrder(updateOrderRequest);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //// DELETE: api/Orders/5

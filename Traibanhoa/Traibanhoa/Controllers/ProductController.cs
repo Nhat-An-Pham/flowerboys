@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Traibanhoa.Modules.ProductModule.Interface;
 using Traibanhoa.Modules.ProductModule.Request;
+using Traibanhoa.Modules.TypeModule.Request;
 
 namespace Traibanhoa.Controllers
 {
@@ -35,6 +36,7 @@ namespace Traibanhoa.Controllers
                 return BadRequest();
             }
         }
+
         
         // GET: api/<ValuesController>
         [HttpGet]
@@ -78,7 +80,6 @@ namespace Traibanhoa.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
 
         // PUT api/<ValuesController>/5
         [HttpPut]

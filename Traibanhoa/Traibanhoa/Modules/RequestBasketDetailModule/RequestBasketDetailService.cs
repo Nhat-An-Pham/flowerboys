@@ -6,6 +6,10 @@ using System;
 using Traibanhoa.Modules.RequestBasketDetailModule.Interface;
 using Models.Models;
 using Traibanhoa.Modules.RequestBasketDetailModule.Request;
+using Models.Constant;
+using Traibanhoa.Modules.TypeModule.Request;
+using FluentValidation.Results;
+using FluentValidation;
 
 namespace Traibanhoa.Modules.RequestBasketDetailModule
 {
@@ -19,7 +23,7 @@ namespace Traibanhoa.Modules.RequestBasketDetailModule
 
         public async Task<ICollection<RequestBasketDetail>> GetAll()
         {
-            return await _RequestBasketDetailRepository.GetAll();
+            return await _RequestBasketDetailRepository.GetAll(options: o => o.OrderByDescending(x => x.Quantity != 0).ToList());
         }
 
         public Task<ICollection<RequestBasketDetail>> GetRequestBasketDetailsBy(
@@ -33,45 +37,93 @@ namespace Traibanhoa.Modules.RequestBasketDetailModule
         }
 
 
-        public async Task<Boolean> AddNewRequestBasketDetail(CreateRequestBasketDetailRequest RequestBasketDetailRequest)
+        public async Task<Guid?> AddNewRequestBasketDetail(CreateRequestBasketDetailRequest RequestBasketDetailRequest)
         {
             var newRequestBasketDetail = new RequestBasketDetail();
 
-            if (_RequestBasketDetailRepository.GetFirstOrDefaultAsync(x => x.RequestBasketId == RequestBasketDetailRequest.RequestBasketId) == null)
+            ValidationResult result = new CreateRequestBasketDetailRequestValidator().Validate(RequestBasketDetailRequest);
+            if (!result.IsValid)
             {
-                return false;
+                throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
             }
+
             newRequestBasketDetail.RequestBasketId = RequestBasketDetailRequest.RequestBasketId;
             newRequestBasketDetail.ProductId = RequestBasketDetailRequest.ProductId;
             newRequestBasketDetail.Quantity = RequestBasketDetailRequest.Quantity;
 
 
             await _RequestBasketDetailRepository.AddAsync(newRequestBasketDetail);
-            return true;
+            return newRequestBasketDetail.RequestBasketId;
         }
 
-        public async Task<Boolean> UpdateRequestBasketDetail(UpdateRequestBasketDetailRequest RequestBasketDetailRequest)
+        public async Task UpdateRequestBasketDetail(UpdateRequestBasketDetailRequest RequestBasketDetailRequest)
         {
-            var RequestBasketDetailUpdate = GetRequestBasketDetailByID(RequestBasketDetailRequest.RequestBasketId).Result;
+            try
+            {
+                var RequestBasketDetailUpdate = GetRequestBasketDetailByID(RequestBasketDetailRequest.RequestBasketId).Result;
+                
+                if (RequestBasketDetailUpdate == null)
+                {
+                    throw new Exception(ErrorMessage.RequestError.REQUEST_NOT_FOUND);
+                }
 
-            RequestBasketDetailUpdate.RequestBasketId = RequestBasketDetailRequest.RequestBasketId;
-            RequestBasketDetailUpdate.ProductId = RequestBasketDetailRequest.ProductId;
-            RequestBasketDetailUpdate.Quantity = RequestBasketDetailRequest.Quantity;
+                ValidationResult result = new UpdateRequestBasketRequestDetailValidator().Validate(RequestBasketDetailRequest);
+                if (!result.IsValid)
+                {
+                    throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
+                }
 
-            await _RequestBasketDetailRepository.UpdateAsync(RequestBasketDetailUpdate);
-            return true;
+                RequestBasketDetailUpdate.ProductId = RequestBasketDetailRequest.ProductId;
+                RequestBasketDetailUpdate.Quantity = RequestBasketDetailRequest.Quantity;
+
+                await _RequestBasketDetailRepository.UpdateAsync(RequestBasketDetailUpdate);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at update type: " + ex.Message);
+                throw new Exception(ex.Message);
+            }
         }
 
-        //public async Task<Boolean> DeleteRequestBasketDetail(RequestBasketDetail RequestBasketDetailDelete)
-        //{
-        //    RequestBasketDetailDelete.Status = 0;
-        //    await _RequestBasketDetailRepository.UpdateAsync(RequestBasketDetailDelete);
-        //    return true;
-        //}
+        public async Task DeleteRequestBasketDetail(Guid? requestBasketDetailDeleteID)
+        {
+            try
+            {
+                if (requestBasketDetailDeleteID == null)
+                {
+                    throw new Exception(ErrorMessage.CommonError.ID_IS_NULL);
+                }
+
+                RequestBasketDetail requestBasketDetailDelete = _RequestBasketDetailRepository.GetFirstOrDefaultAsync(x => x.ProductId == requestBasketDetailDeleteID && x.Quantity != 0).Result;
+
+                if (requestBasketDetailDelete == null)
+                {
+                    throw new Exception(ErrorMessage.ProductError.PRODUCT_NOT_FOUND);
+                }
+
+                requestBasketDetailDelete.Quantity = 0;
+                await _RequestBasketDetailRepository.UpdateAsync(requestBasketDetailDelete);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at delete type: " + ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
 
         public async Task<RequestBasketDetail> GetRequestBasketDetailByID(Guid? id)
         {
-            return await _RequestBasketDetailRepository.GetFirstOrDefaultAsync(x => x.RequestBasketId == id);
+            if (id == null)
+            {
+                throw new Exception(ErrorMessage.CommonError.ID_IS_NULL);
+            }
+            var requestBasketDetail = await _RequestBasketDetailRepository.GetFirstOrDefaultAsync(x => x.RequestBasketId == id);
+            if (requestBasketDetail == null)
+            {
+                throw new Exception(ErrorMessage.RequestError.REQUEST_NOT_FOUND);
+            }
+            return requestBasketDetail;
         }
 
         //public async Task<ICollection<TypeDropdownResponse>> GetTypeDropdown()
