@@ -34,24 +34,31 @@ namespace Traibanhoa.Modules.TypeModule
 
         public async Task<Guid?> AddNewType(CreateTypeRequest typeRequest)
         {
-            ValidationResult result = new CreateTypeRequestValidator().Validate(typeRequest);
-            if (!result.IsValid)
+            try
             {
-                return null;
-                throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
+                ValidationResult result = new CreateTypeRequestValidator().Validate(typeRequest);
+                if (!result.IsValid)
+                {
+                    return null;
+                    throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
+                }
+
+                var newType = new Type();
+
+                newType.TypeId = Guid.NewGuid();
+                newType.Name = typeRequest.Name;
+                newType.Description = typeRequest.Description;
+                newType.CreatedDate = DateTime.Now;
+                newType.UpdatedDate = DateTime.Now;
+                newType.Status = true;
+
+                await _typeRepository.AddAsync(newType);
+                return newType.TypeId;
             }
-
-            var newType = new Type();
-
-            newType.TypeId = Guid.NewGuid();
-            newType.Name = typeRequest.Name;
-            newType.Description = typeRequest.Description;
-            newType.CreatedDate = DateTime.Now;
-            newType.UpdatedDate = DateTime.Now;
-            newType.Status = true;
-
-            await _typeRepository.AddAsync(newType);
-            return newType.TypeId;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task UpdateType(UpdateTypeRequest typeRequest)
@@ -80,7 +87,7 @@ namespace Traibanhoa.Modules.TypeModule
             }
             catch (Exception ex)
             {
-                throw new Message(ex.Message);
+                throw new Exception(ex.Message);
             }
 
         }
@@ -108,7 +115,7 @@ namespace Traibanhoa.Modules.TypeModule
             }
             catch (Exception ex)
             {
-                throw new Message(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 

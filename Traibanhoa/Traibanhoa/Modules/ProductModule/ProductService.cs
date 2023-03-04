@@ -28,7 +28,6 @@ namespace Traibanhoa.Modules.ProductModule
 
         public async Task<ICollection<Product>> GetAll()
         {
-            //return await _productRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList());
             return await _productRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList(), includeProperties: "Type");
         }
 
@@ -37,10 +36,6 @@ namespace Traibanhoa.Modules.ProductModule
             return _productRepository.GetProductsBy(x => x.Status == true, options: o => o.OrderByDescending(x => x.UpdatedDate).ToList(), includeProperties: "Type");
         }
 
-        //public Task<ICollection<Product>> GetProductsForCustomer()
-        //{
-        //    return _productRepository.GetProductsBy(x => x.Status == true, options: o => o.OrderByDescending(x => x.UpdatedDate).ToList());
-        //}
 
         public async Task<Guid?> AddNewProduct(CreateProductRequest productRequest)
         {
@@ -52,6 +47,10 @@ namespace Traibanhoa.Modules.ProductModule
 
             var newProduct = new Product();
 
+            if (_typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == productRequest.TypeId) == null)
+            {
+                throw new Exception(ErrorMessage.ProductError.PRODUCT_EXISTED);
+            }
             newProduct.ProductId = Guid.NewGuid();
             newProduct.Name = productRequest.Name;
             newProduct.Description = productRequest.Description;
@@ -66,49 +65,11 @@ namespace Traibanhoa.Modules.ProductModule
             return newProduct.ProductId;
         }
 
-        public async Task<bool> UpdateProduct(UpdateProductRequest productRequest)
-        {
-            var productUpdate = GetProductByID(productRequest.ProductId).Result;
-
-            if(productUpdate == null)
-            {
-                return false;
-            }
-
-            ValidationResult result = new UpdateProductRequestValidator().Validate(productRequest);
-            if (!result.IsValid)
-            {
-                return false;
-            }
-
-            if (_typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == productRequest.TypeId) == null)
-            {
-                return false;
-            }
-
-            productUpdate.Name = productRequest.Name ?? productUpdate.Name;
-            productUpdate.Description = productRequest.Description ?? productUpdate.Description;
-            productUpdate.Status = productRequest.Status ?? productUpdate.Status;
-            productUpdate.TypeId = productRequest.TypeId ?? productUpdate.TypeId;
-            productUpdate.Picture = productRequest.Picture ?? productUpdate.Picture ;
-            productUpdate.Price = productRequest.Price ?? productUpdate.Price ;
-
-            await _productRepository.UpdateAsync(productUpdate);
-            return true;
-        }
-
-        public async Task<bool> DeleteProduct(Guid? productDeleteId)
-        {
-            if (productDeleteId == null)
-            {
-                return false;
-        }
-
         public async Task UpdateProduct(UpdateProductRequest productRequest)
         {
             var productUpdate = GetProductByID(productRequest.ProductId).Result;
 
-            if(productUpdate == null)
+            if (productUpdate == null)
             {
                 throw new Exception(ErrorMessage.ProductError.PRODUCT_NOT_FOUND);
             }
@@ -129,8 +90,8 @@ namespace Traibanhoa.Modules.ProductModule
             productUpdate.Status = productRequest.Status ?? productUpdate.Status;
             productUpdate.UpdatedDate = DateTime.Now;
             productUpdate.TypeId = productRequest.TypeId ?? productUpdate.TypeId;
-            productUpdate.Picture = productRequest.Picture ?? productUpdate.Picture ;
-            productUpdate.Price = productRequest.Price ?? productUpdate.Price ;
+            productUpdate.Picture = productRequest.Picture ?? productUpdate.Picture;
+            productUpdate.Price = productRequest.Price ?? productUpdate.Price;
 
             await _productRepository.UpdateAsync(productUpdate);
         }
