@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System;
 using Models.Models;
 using Traibanhoa.Modules.BasketModule.Request;
+using Traibanhoa.Modules.BasketModule.Response;
 
 namespace Traibanhoa.Modules.BasketModule.Interface
 {
@@ -22,6 +23,9 @@ namespace Traibanhoa.Modules.BasketModule.Interface
         public Task DeleteBasket(Guid? basketDeleteID);
 
         public Task<ICollection<Basket>> GetAll();
+        public Task<ICollection<HomeNewBasketResponse>> GetNewBasketsForHome();
+        public Task<ICollection<DetailHomeViewBasketResponse>> GetMostViewBaskets();
+        public Task<ICollection<DetailHomeViewBasketResponse>> GetBasketsByPrice();
 
         public Task<Basket> GetBasketByID(Guid? id);
     }

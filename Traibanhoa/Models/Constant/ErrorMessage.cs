@@ -8,6 +8,7 @@ namespace Models.Constant
         {
             public readonly static string ID_IS_NULL = "ID request is null";
             public readonly static string INVALID_REQUEST = "Request is not valid";
+            public readonly static string LIST_IS_NULL = "List is null";
         }
         #endregion
 

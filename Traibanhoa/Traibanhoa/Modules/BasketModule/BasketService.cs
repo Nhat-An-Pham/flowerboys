@@ -10,20 +10,129 @@ using Models.Constant;
 using Traibanhoa.Modules.TypeModule.Request;
 using FluentValidation;
 using FluentValidation.Results;
+using Traibanhoa.Modules.BasketModule.Response;
+using Models.Enum;
+using Traibanhoa.Modules.BasketDetailModule.Interface;
+using Traibanhoa.Modules.TypeModule.Response;
 
 namespace Traibanhoa.Modules.BasketModule
 {
     public class BasketService : IBasketService
     {
         private readonly IBasketRepository _BasketRepository;
-        public BasketService(IBasketRepository BasketRepository)
+        private readonly IBasketDetailRepository _basketDetailRepository;
+
+        public BasketService(IBasketRepository BasketRepository, IBasketDetailRepository basketDetailRepository)
         {
             _BasketRepository = BasketRepository;
+            _basketDetailRepository = basketDetailRepository;
         }
 
         public async Task<ICollection<Basket>> GetAll()
         {
             return await _BasketRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList());
+        }
+
+        public async Task<ICollection<HomeNewBasketResponse>> GetNewBasketsForHome()
+        {
+            try
+            {
+                var result = _BasketRepository.GetBasketsBy(x => x.Status == (int?)BasketStatus.Active).Result.OrderByDescending(x => x.UpdatedDate).Take(6)
+                    .Select(x => new HomeNewBasketResponse
+                    {
+                        BasketId = x.BasketId,
+                        Title = x.Title,
+                        Description = x.Description,
+                        ImageUrl = x.ImageUrl
+                    }).ToList();
+
+                if (result.Count() == 0)
+                {
+                    throw new Exception(ErrorMessage.CommonError.LIST_IS_NULL);
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at GetNewBasketsForHome:" + ex.Message);
+                throw;
+            }
+        }
+
+        public List<ProductBasketDetail> GetProductBasketDetails(Guid basketId, ICollection<BasketDetail> basketDetails)
+        {
+            return _basketDetailRepository.GetBasketDetailsBy(x => x.BasketId == basketId, includeProperties: "Product").Result.Select(x => new ProductBasketDetail
+            {
+                ProductId = x.ProductId,
+                ProductName = x.Product.Name,
+                Quantity = (int)x.Quantity
+            }).ToList();
+        }
+
+        public async Task<ICollection<DetailHomeViewBasketResponse>> GetMostViewBaskets()
+        {
+            try
+            {
+                var baskets = _BasketRepository.GetBasketsBy(x => x.Status == (int?)BasketStatus.Active).Result.OrderByDescending(x => x.View).Take(12).ToList();
+                var basketsDetails = await _basketDetailRepository.GetAll(includeProperties: "Product");
+
+                var result = baskets.Select(x => new DetailHomeViewBasketResponse
+                {
+                    BasketId = x.BasketId,
+                    Title = x.Title,
+                    Description = x.Description,
+                    ImageUrl = x.ImageUrl,
+                    BasketPrice = (decimal)x.BasketPrice,
+                    View = (int)x.View,
+                    ListProduct = GetProductBasketDetails(x.BasketId, basketsDetails)
+                }).ToList();
+
+                if (result.Count() == 0)
+                {
+                    throw new Exception(ErrorMessage.CommonError.LIST_IS_NULL);
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at GetMostViewBaskets:" + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<ICollection<DetailHomeViewBasketResponse>> GetBasketsByPrice()
+        {
+            try
+            {
+                var baskets = _BasketRepository.GetBasketsBy(x => x.Status == (int?)BasketStatus.Active && x.BasketPrice >= 200000 && x.BasketPrice <= 400000).Result
+                    .OrderByDescending(x => x.UpdatedDate).Take(12).ToList();
+                var basketsDetails = await _basketDetailRepository.GetAll(includeProperties: "Product");
+
+                var result = baskets.Select(x => new DetailHomeViewBasketResponse
+                {
+                    BasketId = x.BasketId,
+                    Title = x.Title,
+                    Description = x.Description,
+                    ImageUrl = x.ImageUrl,
+                    BasketPrice = (decimal)x.BasketPrice,
+                    View = (int)x.View,
+                    ListProduct = GetProductBasketDetails(x.BasketId, basketsDetails)
+                }).ToList();
+
+                if (result.Count() == 0)
+                {
+                    throw new Exception(ErrorMessage.CommonError.LIST_IS_NULL);
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at GetBasketsByPrice:" + ex.Message);
+                throw;
+            }
         }
 
         public Task<ICollection<Basket>> GetBasketsBy(
@@ -47,7 +156,7 @@ namespace Traibanhoa.Modules.BasketModule
 
             var newBasket = new Basket();
 
-            newBasket.BasketId= Guid.NewGuid();
+            newBasket.BasketId = Guid.NewGuid();
             newBasket.Title = BasketRequest.Title;
             newBasket.Description = BasketRequest.Description;
             newBasket.ImageUrl = BasketRequest.ImageUrl;
@@ -135,15 +244,5 @@ namespace Traibanhoa.Modules.BasketModule
             }
             return basket;
         }
-
-        //public async Task<ICollection<TypeDropdownResponse>> GetTypeDropdown()
-        //{
-        //    var result = await _typeRepository.GetTypesBy(x => x.Status == true);
-        //    return result.Select(x => new TypeDropdownResponse
-        //    {
-        //        TypeId = x.TypeId,
-        //        TypeName = x.Name
-        //    }).ToList();
-        //}
     }
 }

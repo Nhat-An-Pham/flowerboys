@@ -29,9 +29,9 @@ namespace Traibanhoa.Controllers
                 var response = await _basketService.GetAll();
                 return Ok(response);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
