@@ -10,6 +10,7 @@ namespace Models.Models
         public Basket()
         {
             BasketDetails = new HashSet<BasketDetail>();
+            BasketSubCates = new HashSet<BasketSubCate>();
             OrderBasketDetails = new HashSet<OrderBasketDetail>();
         }
 
@@ -24,6 +25,7 @@ namespace Models.Models
         public int? Status { get; set; }
 
         public virtual ICollection<BasketDetail> BasketDetails { get; set; }
+        public virtual ICollection<BasketSubCate> BasketSubCates { get; set; }
         public virtual ICollection<OrderBasketDetail> OrderBasketDetails { get; set; }
     }
 }

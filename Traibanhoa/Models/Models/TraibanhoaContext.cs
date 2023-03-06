@@ -19,6 +19,10 @@ namespace Models.Models
 
         public virtual DbSet<Basket> Baskets { get; set; }
         public virtual DbSet<BasketDetail> BasketDetails { get; set; }
+        public virtual DbSet<BasketSubCate> BasketSubCates { get; set; }
+        public virtual DbSet<Cart> Carts { get; set; }
+        public virtual DbSet<CartDetail> CartDetails { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderBasketDetail> OrderBasketDetails { get; set; }
@@ -26,6 +30,7 @@ namespace Models.Models
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<RequestBasket> RequestBaskets { get; set; }
         public virtual DbSet<RequestBasketDetail> RequestBasketDetails { get; set; }
+        public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<Type> Types { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
@@ -34,7 +39,7 @@ namespace Models.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=Traibanhoa;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=MSI\\MONKINAM;Uid=sa;Pwd=Monki123;Database=Traibanhoa;");
             }
         }
 
@@ -100,6 +105,86 @@ namespace Models.Models
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BasketDetail_Product");
+            });
+
+            modelBuilder.Entity<BasketSubCate>(entity =>
+            {
+                entity.HasKey(e => new { e.BasketId, e.SubCateId });
+
+                entity.ToTable("BasketSubCate");
+
+                entity.Property(e => e.BasketId).HasColumnName("basketId");
+
+                entity.Property(e => e.SubCateId).HasColumnName("subCateId");
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("createdDate");
+
+                entity.Property(e => e.Status).HasColumnName("status");
+
+                entity.HasOne(d => d.Basket)
+                    .WithMany(p => p.BasketSubCates)
+                    .HasForeignKey(d => d.BasketId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BasketSubCate_Basket");
+
+                entity.HasOne(d => d.SubCate)
+                    .WithMany(p => p.BasketSubCates)
+                    .HasForeignKey(d => d.SubCateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BasketSubCate_SubCategory");
+            });
+
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                entity.ToTable("Cart");
+
+                entity.Property(e => e.CartId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("cartId");
+
+                entity.Property(e => e.CustomerId).HasColumnName("customerId");
+
+                entity.Property(e => e.QuantityOfItem).HasColumnName("quantityOfItem");
+            });
+
+            modelBuilder.Entity<CartDetail>(entity =>
+            {
+                entity.HasKey(e => new { e.CartId, e.ItemId });
+
+                entity.ToTable("CartDetail");
+
+                entity.Property(e => e.CartId).HasColumnName("cartId");
+
+                entity.Property(e => e.ItemId).HasColumnName("itemId");
+
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
+
+                entity.Property(e => e.UnitPrice)
+                    .HasColumnType("money")
+                    .HasColumnName("unitPrice");
+            });
+
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.ToTable("Category");
+
+                entity.Property(e => e.CategoryId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("categoryId");
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("createdDate");
+
+                entity.Property(e => e.Description).HasColumnName("description");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(150)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.Status).HasColumnName("status");
             });
 
             modelBuilder.Entity<Customer>(entity =>
@@ -362,6 +447,34 @@ namespace Models.Models
                     .HasForeignKey(d => d.RequestBasketId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RequestBasketDetail_RequestBasket");
+            });
+
+            modelBuilder.Entity<SubCategory>(entity =>
+            {
+                entity.ToTable("SubCategory");
+
+                entity.Property(e => e.SubCategoryId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("subCategoryId");
+
+                entity.Property(e => e.CategoryId).HasColumnName("categoryId");
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("createdDate");
+
+                entity.Property(e => e.Description).HasColumnName("description");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(150)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.Status).HasColumnName("status");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.SubCategories)
+                    .HasForeignKey(d => d.CategoryId)
+                    .HasConstraintName("FK_SubCategory_Category");
             });
 
             modelBuilder.Entity<Type>(entity =>
