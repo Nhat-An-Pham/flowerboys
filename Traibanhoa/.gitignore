@@ -74,9 +74,6 @@ bld/
 # Visual Studio 2017 auto generated files
 Generated\ Files/
 
-# Visual Studio 2022 auto generated files
-Generated\ Files/
-
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
@@ -432,28 +429,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-
-Traibanhoa/Models/obj/Debug/net5.0/Models.assets.cache
-Traibanhoa/Models/obj/Debug/net5.0/Models.csproj.AssemblyReference.cache
-Traibanhoa/Models/obj/Debug/net5.0/Models.GeneratedMSBuildEditorConfig.editorconfig
-Traibanhoa/Models/obj/Models.csproj.nuget.dgspec.json
-Traibanhoa/Models/obj/Models.csproj.nuget.g.props
-Traibanhoa/Models/obj/project.assets.json
-Traibanhoa/Models/obj/project.nuget.cache
-Traibanhoa/Repository/obj/Debug/net5.0/Repository.assets.cache
-Traibanhoa/Repository/obj/Debug/net5.0/Repository.csproj.AssemblyReference.cache
-Traibanhoa/Repository/obj/Debug/net5.0/Repository.GeneratedMSBuildEditorConfig.editorconfig
-Traibanhoa/Repository/obj/project.assets.json
-Traibanhoa/Repository/obj/project.nuget.cache
-Traibanhoa/Repository/obj/Repository.csproj.nuget.dgspec.json
-Traibanhoa/Repository/obj/Repository.csproj.nuget.g.props
-Traibanhoa/Traibanhoa/obj/Debug/net5.0/Traibanhoa.assets.cache
-Traibanhoa/Traibanhoa/obj/Debug/net5.0/Traibanhoa.csproj.AssemblyReference.cache
-Traibanhoa/Traibanhoa/obj/Debug/net5.0/Traibanhoa.GeneratedMSBuildEditorConfig.editorconfig
-Traibanhoa/Traibanhoa/obj/project.assets.json
-Traibanhoa/Traibanhoa/obj/project.nuget.cache
-Traibanhoa/Traibanhoa/obj/Traibanhoa.csproj.nuget.dgspec.json
-Traibanhoa/Traibanhoa/obj/Traibanhoa.csproj.nuget.g.props
 
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
