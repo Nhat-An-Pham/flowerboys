@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj": {}
+    "C:\\Users\\Nam\\Desktop\\New folder (3)\\Traibanhoa\\Models\\Models.csproj": {}
   },
   "projects": {
-    "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj": {
+    "C:\\Users\\Nam\\Desktop\\New folder (3)\\Traibanhoa\\Models\\Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj",
+        "projectUniqueName": "C:\\Users\\Nam\\Desktop\\New folder (3)\\Traibanhoa\\Models\\Models.csproj",
         "projectName": "Models",
-        "projectPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\Models.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\USER\\Desktop\\traibanhoa\\Traibanhoa\\Models\\obj\\",
+        "projectPath": "C:\\Users\\Nam\\Desktop\\New folder (3)\\Traibanhoa\\Models\\Models.csproj",
+        "packagesPath": "C:\\Users\\Nam\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Nam\\Desktop\\New folder (3)\\Traibanhoa\\Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Nam\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -63,8 +63,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -73,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

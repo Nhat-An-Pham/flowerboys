@@ -2,10 +2,12 @@
 using Models.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Traibanhoa.Modules.BasketModule.Interface;
 using Traibanhoa.Modules.BasketModule.Request;
-using Traibanhoa.Modules.TypeModule.Request;
+using Traibanhoa.Modules.BasketModule.Response;
 
 namespace Traibanhoa.Controllers
 {
@@ -29,9 +31,9 @@ namespace Traibanhoa.Controllers
                 var response = await _basketService.GetAll();
                 return Ok(response);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -52,11 +54,11 @@ namespace Traibanhoa.Controllers
         // POST api/<ValuesController>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Basket>> PostBasket([FromBody] CreateBasketRequest createBasketRequest)
+        public async Task<ActionResult<Basket>> PostBasket()
         {
             try
             {
-                return Ok(await _basketService.AddNewBasket(createBasketRequest));
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -92,6 +94,34 @@ namespace Traibanhoa.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("basket-searching")]
+        public async Task<ActionResult<IEnumerable<SearchBasketResponse>>> GetBasketByName([FromQuery(Name = "title")] string title)
+        {
+            if (title != "" && title != null && title is string)
+            {
+                title = Regex.Replace(title, @"\s+", " ");
+                var result = "dm";
+                if (result.Any())
+                {
+                    return new JsonResult(new
+                    {
+                        result = result,
+                    });
+                }
+                else
+                {
+                    return new JsonResult(new
+                    {
+                        result = "",
+                    });
+                }
+            }
+            else
+            {
+                return BadRequest();
             }
         }
     }

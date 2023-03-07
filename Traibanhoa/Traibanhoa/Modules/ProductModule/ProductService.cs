@@ -66,44 +66,6 @@ namespace Traibanhoa.Modules.ProductModule
             return newProduct.ProductId;
         }
 
-        public async Task<bool> UpdateProduct(UpdateProductRequest productRequest)
-        {
-            var productUpdate = GetProductByID(productRequest.ProductId).Result;
-
-            if(productUpdate == null)
-            {
-                return false;
-            }
-
-            ValidationResult result = new UpdateProductRequestValidator().Validate(productRequest);
-            if (!result.IsValid)
-            {
-                return false;
-            }
-
-            if (_typeRepository.GetFirstOrDefaultAsync(x => x.TypeId == productRequest.TypeId) == null)
-            {
-                return false;
-            }
-
-            productUpdate.Name = productRequest.Name ?? productUpdate.Name;
-            productUpdate.Description = productRequest.Description ?? productUpdate.Description;
-            productUpdate.Status = productRequest.Status ?? productUpdate.Status;
-            productUpdate.TypeId = productRequest.TypeId ?? productUpdate.TypeId;
-            productUpdate.Picture = productRequest.Picture ?? productUpdate.Picture ;
-            productUpdate.Price = productRequest.Price ?? productUpdate.Price ;
-
-            await _productRepository.UpdateAsync(productUpdate);
-            return true;
-        }
-
-        public async Task<bool> DeleteProduct(Guid? productDeleteId)
-        {
-            if (productDeleteId == null)
-            {
-                return false;
-        }
-
         public async Task UpdateProduct(UpdateProductRequest productRequest)
         {
             var productUpdate = GetProductByID(productRequest.ProductId).Result;

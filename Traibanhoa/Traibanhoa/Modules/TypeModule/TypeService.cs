@@ -80,7 +80,7 @@ namespace Traibanhoa.Modules.TypeModule
             }
             catch (Exception ex)
             {
-                throw new Message(ex.Message);
+                throw new Exception(ex.Message);
             }
 
         }
@@ -108,7 +108,7 @@ namespace Traibanhoa.Modules.TypeModule
             }
             catch (Exception ex)
             {
-                throw new Message(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 

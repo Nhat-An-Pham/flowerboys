@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System;
 using Models.Models;
 using Traibanhoa.Modules.BasketModule.Request;
+using Traibanhoa.Modules.BasketModule.Response;
 
 namespace Traibanhoa.Modules.BasketModule.Interface
 {
@@ -15,14 +16,17 @@ namespace Traibanhoa.Modules.BasketModule.Interface
             Func<IQueryable<Basket>, ICollection<Basket>> options = null,
             string includeProperties = null);
 
-        public Task<Guid?> AddNewBasket(CreateBasketRequest BasketCreate);
+        public Task<Guid> AddNewBasket();
 
         public Task UpdateBasket(UpdateBasketRequest BasketUpdate);
 
         public Task DeleteBasket(Guid? basketDeleteID);
 
         public Task<ICollection<Basket>> GetAll();
-
+        public Task<ICollection<HomeNewBasketResponse>> GetNewBasketsForHome();
+        public Task<ICollection<DetailHomeViewBasketResponse>> GetMostViewBaskets();
+        public Task<ICollection<DetailHomeViewBasketResponse>> GetBasketsByPrice();
+        public Task<ICollection<SearchBasketResponse>> GetBasketByName(String name);
         public Task<Basket> GetBasketByID(Guid? id);
     }
 }
