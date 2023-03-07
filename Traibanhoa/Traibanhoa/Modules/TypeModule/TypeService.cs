@@ -34,31 +34,24 @@ namespace Traibanhoa.Modules.TypeModule
 
         public async Task<Guid?> AddNewType(CreateTypeRequest typeRequest)
         {
-            try
+            ValidationResult result = new CreateTypeRequestValidator().Validate(typeRequest);
+            if (!result.IsValid)
             {
-                ValidationResult result = new CreateTypeRequestValidator().Validate(typeRequest);
-                if (!result.IsValid)
-                {
-                    return null;
-                    throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
-                }
-
-                var newType = new Type();
-
-                newType.TypeId = Guid.NewGuid();
-                newType.Name = typeRequest.Name;
-                newType.Description = typeRequest.Description;
-                newType.CreatedDate = DateTime.Now;
-                newType.UpdatedDate = DateTime.Now;
-                newType.Status = true;
-
-                await _typeRepository.AddAsync(newType);
-                return newType.TypeId;
+                return null;
+                throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            var newType = new Type();
+
+            newType.TypeId = Guid.NewGuid();
+            newType.Name = typeRequest.Name;
+            newType.Description = typeRequest.Description;
+            newType.CreatedDate = DateTime.Now;
+            newType.UpdatedDate = DateTime.Now;
+            newType.Status = true;
+
+            await _typeRepository.AddAsync(newType);
+            return newType.TypeId;
         }
 
         public async Task UpdateType(UpdateTypeRequest typeRequest)

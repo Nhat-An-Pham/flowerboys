@@ -3,11 +3,9 @@ using Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Traibanhoa.Modules.ProductModule.Interface;
 using Traibanhoa.Modules.ProductModule.Request;
-using Traibanhoa.Modules.ProductModule.Response;
 using Traibanhoa.Modules.TypeModule.Request;
 
 namespace Traibanhoa.Controllers
@@ -110,34 +108,6 @@ namespace Traibanhoa.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("product-searching")]
-        public async Task<ActionResult<IEnumerable<SearchProductResponse>>> GetBlogAndRecipeByName([FromQuery(Name = "name")] string name)
-        {
-            if (name is string && !String.IsNullOrEmpty(name))
-            {
-                name = Regex.Replace(name.Trim(), @"\s+", " ");
-                var result = await _productService.GetProductByName(name);
-                if (result.Any())
-                {
-                    return new JsonResult(new
-                    {
-                        result = result,
-                    });
-                }
-                else
-                {
-                    return new JsonResult(new
-                    {
-                        result = "",
-                    });
-                }
-            }
-            else
-            {
-                return BadRequest();
             }
         }
     }

@@ -11,9 +11,9 @@ using Traibanhoa.Modules.BasketModule.Response;
 using Models.Enum;
 using Traibanhoa.Modules.BasketDetailModule.Interface;
 using Microsoft.EntityFrameworkCore;
-using Traibanhoa.Modules.BlogSubCateModule.Interface;
 using System.Text.RegularExpressions;
 using System.Text;
+using Traibanhoa.Modules.BasketSubCateModule.Interface;
 
 namespace Traibanhoa.Modules.BasketModule
 {
@@ -171,110 +171,7 @@ namespace Traibanhoa.Modules.BasketModule
         }
 
         public async Task UpdateBasket(UpdateBasketRequest request)
-        {
-            try
-            {
-                #region validation
-                // basket not existed
-                var basket = _BasketRepository
-                    .GetBasketsBy(b => b.BasketId.Equals(request.BasketId),
-                        options: (l) => l.AsNoTracking().ToList())
-                    .Result
-                    .FirstOrDefault();
-
-                if (basket == null)
-                    throw new Exception(ErrorMessage.BasketError.BASKET_NOT_FOUND);
-                #endregion
-
-                #region update basket details
-                // get products of basket
-                var basketDetails = await _basketDetailRepository
-                    .GetBasketDetailsBy(r => r.BasketId.Equals(basket.BasketId),
-                        options: (l) => l.AsNoTracking().ToList());
-
-                // check if exist then update, else add
-                var joinBasketDetail = request.BasketDetailRequests
-                    .Join(basketDetails, l => l.ProductId, r => r.ProductId,
-                    (l, r) => l).ToList();
-
-                foreach (var r in request.BasketDetailRequests)
-                {
-                    if (!joinBasketDetail.Contains(r))
-                    {
-                        var newBasketDetail = new BasketDetail
-                        {
-                            BasketId = basket.BasketId,
-                            ProductId = r.ProductId,
-                            Quantity = r.Quantity
-                        };
-                        await _basketDetailRepository.AddAsync(newBasketDetail);
-                    }
-                }
-                // check if leftover then remove
-                foreach (var rd in basketDetails)
-                {
-                    var r = joinBasketDetail.Find(r => r.ProductId == rd.ProductId);
-                    if (r == null)
-                        await _basketDetailRepository.RemoveAsync(rd);
-                    else
-                    {
-                        rd.Quantity = r.Quantity;
-                        await _basketDetailRepository.UpdateAsync(rd);
-                    }
-                }
-                #endregion
-
-                #region update basket and subcates
-                // get sub cates of blog 
-                var subCates = await _basketSubCateRepository
-                    .GetBlogSubCatesBy(b => b.BasketId.Equals(request.BasketId),
-                        options: (l) => l.AsNoTracking().ToList());
-
-                // check if not exist then add
-                var joinSubCate = request.BasketSubCates
-                    .Join(subCates, l => l.SubCateId, r => r.SubCateId,
-                    (l, r) => l).ToList();
-
-                foreach (var b in request.BasketSubCates)
-                {
-                    if (!joinSubCate.Contains(b))
-                    {
-                        var newBasketSubCate = new BasketSubCate
-                        {
-                            BasketId = basket.BasketId,
-                            CreatedDate = DateTime.Now,
-                            Status = true,
-                            SubCateId = b.SubCateId
-                        };
-                        await _basketSubCateRepository.AddAsync(newBasketSubCate);
-                    }
-                }
-                // check if leftover then remove
-                foreach (var s in subCates)
-                {
-                    if (!joinSubCate.Select(j => j.SubCateId).ToList().Contains(s.SubCateId))
-                    {
-                        await _basketSubCateRepository.RemoveAsync(s);
-                    }
-                }
-                #endregion
-
-                // update blog
-                basket.UpdatedDate = DateTime.Now;
-                basket.Status = request.Status;
-                basket.Title = request.Title;
-                basket.ImageUrl = request.ImageUrl;
-                basket.Description = request.Description;
-                basket.BasketPrice = request.BasketPrice;
-
-                await _BasketRepository.UpdateAsync(basket);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error at UpdateBlog: " + ex.Message);
-                throw new Exception(ex.Message);
-            }
-        }
+        { return; }
 
         public async Task DeleteBasket(Guid? basketDeleteID)
         {

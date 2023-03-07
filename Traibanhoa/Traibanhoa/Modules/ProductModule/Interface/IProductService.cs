@@ -7,7 +7,6 @@ using Traibanhoa.Modules.TypeModule.Request;
 using Traibanhoa.Modules.TypeModule.Response;
 using Models.Models;
 using Traibanhoa.Modules.ProductModule.Request;
-using Traibanhoa.Modules.ProductModule.Response;
 
 namespace Traibanhoa.Modules.ProductModule.Interface
 {
@@ -22,7 +21,6 @@ namespace Traibanhoa.Modules.ProductModule.Interface
         public Task DeleteProduct(Guid? productDeleteId);
 
         public Task<ICollection<Product>> GetAll();
-        public Task<ICollection<SearchProductResponse>> GetProductByName(string name);
 
         public Task<Product> GetProductByID(Guid? id);
 

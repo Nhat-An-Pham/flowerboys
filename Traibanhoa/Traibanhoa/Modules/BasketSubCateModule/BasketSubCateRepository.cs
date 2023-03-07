@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System;
 using Models.Models;
 using Repository.Utils.Repository;
-using Traibanhoa.Modules.BlogSubCateModule.Interface;
+using Traibanhoa.Modules.BasketSubCateModule.Interface;
 
-namespace Traibanhoa.Modules.BlogSubCateModule
+namespace Traibanhoa.Modules.BasketSubCateModule
 {
     public class BasketSubCateRepository : Repository<BasketSubCate>, IBasketSubCateRepository
     {

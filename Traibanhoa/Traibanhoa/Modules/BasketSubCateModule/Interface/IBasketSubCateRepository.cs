@@ -6,7 +6,7 @@ using System;
 using Repository.Utils.Repository.Interface;
 using Models.Models;
 
-namespace Traibanhoa.Modules.BlogSubCateModule.Interface
+namespace Traibanhoa.Modules.BasketSubCateModule.Interface
 {
     public interface IBasketSubCateRepository : IRepository<BasketSubCate>
     {

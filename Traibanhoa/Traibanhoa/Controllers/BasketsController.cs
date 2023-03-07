@@ -58,7 +58,7 @@ namespace Traibanhoa.Controllers
         {
             try
             {
-                return Ok(await _basketService.AddNewBasket());
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -103,7 +103,7 @@ namespace Traibanhoa.Controllers
             if (title != "" && title != null && title is string)
             {
                 title = Regex.Replace(title, @"\s+", " ");
-                var result = await _basketService.GetBasketByName(title);
+                var result = "dm";
                 if (result.Any())
                 {
                     return new JsonResult(new

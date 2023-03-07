@@ -10,6 +10,8 @@ using Traibanhoa.Modules.BasketDetailModule;
 using Traibanhoa.Modules.BasketDetailModule.Interface;
 using Traibanhoa.Modules.BasketModule;
 using Traibanhoa.Modules.BasketModule.Interface;
+using Traibanhoa.Modules.BasketSubCateModule;
+using Traibanhoa.Modules.BasketSubCateModule.Interface;
 using Traibanhoa.Modules.CartDetailModule;
 using Traibanhoa.Modules.CartDetailModule.Interface;
 using Traibanhoa.Modules.CartModule;
@@ -92,6 +94,11 @@ namespace Traibanhoa
             //RequestBasketDetail Module
             services.AddScoped<IRequestBasketDetailRepository, RequestBasketDetailRepository>();
             services.AddScoped<IRequestBasketDetailService, RequestBasketDetailService>();
+            //RequestBasket Module
+            services.AddScoped<IRequestBasketRepository, RequestBasketRepository>();
+            services.AddScoped<IRequestBasketService, RequestBasketService>();
+            //Basket SubCate Module
+            services.AddScoped<IBasketSubCateRepository, BasketSubCateRepository>();
             //RequestBasket Module
             services.AddScoped<IRequestBasketRepository, RequestBasketRepository>();
             services.AddScoped<IRequestBasketService, RequestBasketService>();
