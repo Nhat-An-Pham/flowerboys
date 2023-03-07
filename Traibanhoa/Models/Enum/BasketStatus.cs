@@ -9,6 +9,7 @@ namespace Models.Enum
     public enum BasketStatus
     {
         Active = 1,
-        Deactive
+        Deactive = 2,
+        Draft = 3
     }
 }

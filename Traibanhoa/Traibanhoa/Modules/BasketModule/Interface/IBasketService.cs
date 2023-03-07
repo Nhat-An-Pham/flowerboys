@@ -16,7 +16,7 @@ namespace Traibanhoa.Modules.BasketModule.Interface
             Func<IQueryable<Basket>, ICollection<Basket>> options = null,
             string includeProperties = null);
 
-        public Task<Guid?> AddNewBasket(CreateBasketRequest BasketCreate);
+        public Task<Guid> AddNewBasket();
 
         public Task UpdateBasket(UpdateBasketRequest BasketUpdate);
 
@@ -26,7 +26,7 @@ namespace Traibanhoa.Modules.BasketModule.Interface
         public Task<ICollection<HomeNewBasketResponse>> GetNewBasketsForHome();
         public Task<ICollection<DetailHomeViewBasketResponse>> GetMostViewBaskets();
         public Task<ICollection<DetailHomeViewBasketResponse>> GetBasketsByPrice();
-
+        public Task<ICollection<SearchBasketResponse>> GetBasketByName(String name);
         public Task<Basket> GetBasketByID(Guid? id);
     }
 }

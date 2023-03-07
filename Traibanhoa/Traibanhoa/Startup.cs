@@ -10,6 +10,12 @@ using Traibanhoa.Modules.BasketDetailModule;
 using Traibanhoa.Modules.BasketDetailModule.Interface;
 using Traibanhoa.Modules.BasketModule;
 using Traibanhoa.Modules.BasketModule.Interface;
+using Traibanhoa.Modules.CartDetailModule;
+using Traibanhoa.Modules.CartDetailModule.Interface;
+using Traibanhoa.Modules.CartModule;
+using Traibanhoa.Modules.CartModule.Interface;
+using Traibanhoa.Modules.CategoryModule;
+using Traibanhoa.Modules.CategoryModule.Interface;
 using Traibanhoa.Modules.CustomerModule;
 using Traibanhoa.Modules.CustomerModule.Interface;
 using Traibanhoa.Modules.OrderBasketDetailModule;
@@ -24,6 +30,8 @@ using Traibanhoa.Modules.RequestBasketDetailModule;
 using Traibanhoa.Modules.RequestBasketDetailModule.Interface;
 using Traibanhoa.Modules.RequestBasketModule;
 using Traibanhoa.Modules.RequestBasketModule.Interface;
+using Traibanhoa.Modules.SubCateModule;
+using Traibanhoa.Modules.SubCateModule.Interface;
 using Traibanhoa.Modules.TypeModule;
 using Traibanhoa.Modules.TypeModule.Interface;
 using Traibanhoa.Modules.UserModule;
@@ -87,6 +95,18 @@ namespace Traibanhoa
             //RequestBasket Module
             services.AddScoped<IRequestBasketRepository, RequestBasketRepository>();
             services.AddScoped<IRequestBasketService, RequestBasketService>();
+            //Cart Module
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICartService, CartService>();
+            //Cart Detail Module
+            services.AddScoped<ICartDetailRepository, CartDetailRepository>();
+            services.AddScoped<ICartDetailService, CartDetailService>();
+            //Category Module
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            //Sub-Category Module
+            services.AddScoped<ISubCateRepository, SubCateRepository>();
+            services.AddScoped<ISubCateService, SubCateService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

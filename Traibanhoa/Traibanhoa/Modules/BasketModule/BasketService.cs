@@ -7,13 +7,13 @@ using Traibanhoa.Modules.BasketModule.Interface;
 using Models.Models;
 using Traibanhoa.Modules.BasketModule.Request;
 using Models.Constant;
-using Traibanhoa.Modules.TypeModule.Request;
-using FluentValidation;
-using FluentValidation.Results;
 using Traibanhoa.Modules.BasketModule.Response;
 using Models.Enum;
 using Traibanhoa.Modules.BasketDetailModule.Interface;
-using Traibanhoa.Modules.TypeModule.Response;
+using Microsoft.EntityFrameworkCore;
+using Traibanhoa.Modules.BlogSubCateModule.Interface;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Traibanhoa.Modules.BasketModule
 {
@@ -21,11 +21,13 @@ namespace Traibanhoa.Modules.BasketModule
     {
         private readonly IBasketRepository _BasketRepository;
         private readonly IBasketDetailRepository _basketDetailRepository;
+        private readonly IBasketSubCateRepository _basketSubCateRepository;
 
-        public BasketService(IBasketRepository BasketRepository, IBasketDetailRepository basketDetailRepository)
+        public BasketService(IBasketRepository BasketRepository, IBasketDetailRepository basketDetailRepository, IBasketSubCateRepository basketSubCateRepository)
         {
             _BasketRepository = BasketRepository;
             _basketDetailRepository = basketDetailRepository;
+            _basketSubCateRepository = basketSubCateRepository;
         }
 
         public async Task<ICollection<Basket>> GetAll()
@@ -145,61 +147,131 @@ namespace Traibanhoa.Modules.BasketModule
             return _BasketRepository.GetBasketsBy(filter);
         }
 
-
-        public async Task<Guid?> AddNewBasket(CreateBasketRequest BasketRequest)
-        {
-            ValidationResult result = new CreateBasketRequestValidator().Validate(BasketRequest);
-            if (!result.IsValid)
-            {
-                throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
-            }
-
-            var newBasket = new Basket();
-
-            newBasket.BasketId = Guid.NewGuid();
-            newBasket.Title = BasketRequest.Title;
-            newBasket.Description = BasketRequest.Description;
-            newBasket.ImageUrl = BasketRequest.ImageUrl;
-            newBasket.View = BasketRequest.View;
-            newBasket.BasketPrice = BasketRequest.BasketPrice;
-            newBasket.Status = BasketRequest.Status;
-            newBasket.CreatedDate = DateTime.Now;
-            newBasket.UpdatedDate = DateTime.Now;
-
-            await _BasketRepository.AddAsync(newBasket);
-            return newBasket.BasketId;
-        }
-
-        public async Task UpdateBasket(UpdateBasketRequest BasketRequest)
+        public async Task<Guid> AddNewBasket()
         {
             try
             {
-                var BasketUpdate = GetBasketByID(BasketRequest.BasketId).Result;
-
-                if (BasketUpdate == null)
+                // add an empty basket
+                Basket basket = new Basket()
                 {
-                    throw new Exception(ErrorMessage.BasketError.BASKET_NOT_FOUND);
-                }
+                    BasketId = Guid.NewGuid(),
+                    CreatedDate = DateTime.Now,
+                    View = 0,
+                    Status = (int?)BasketStatus.Draft
+                };
+                await _BasketRepository.AddAsync(basket);
 
-                ValidationResult result = new UpdateBasketRequestValidator().Validate(BasketRequest);
-                if (!result.IsValid)
-                {
-                    throw new Exception(ErrorMessage.CommonError.INVALID_REQUEST);
-                }
-
-                BasketUpdate.Title = BasketRequest.Title;
-                BasketUpdate.Description = BasketRequest.Description;
-                BasketUpdate.ImageUrl = BasketRequest.ImageUrl;
-                BasketUpdate.View = BasketRequest.View;
-                BasketUpdate.BasketPrice = BasketRequest.BasketPrice;
-                BasketUpdate.Status = BasketRequest.Status;
-                BasketUpdate.UpdatedDate = DateTime.Now;
-
-                await _BasketRepository.UpdateAsync(BasketUpdate);
+                return basket.BasketId;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error at update type: " + ex.Message);
+                Console.WriteLine("Error at AddNewBasket: " + ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task UpdateBasket(UpdateBasketRequest request)
+        {
+            try
+            {
+                #region validation
+                // basket not existed
+                var basket = _BasketRepository
+                    .GetBasketsBy(b => b.BasketId.Equals(request.BasketId),
+                        options: (l) => l.AsNoTracking().ToList())
+                    .Result
+                    .FirstOrDefault();
+
+                if (basket == null)
+                    throw new Exception(ErrorMessage.BasketError.BASKET_NOT_FOUND);
+                #endregion
+
+                #region update basket details
+                // get products of basket
+                var basketDetails = await _basketDetailRepository
+                    .GetBasketDetailsBy(r => r.BasketId.Equals(basket.BasketId),
+                        options: (l) => l.AsNoTracking().ToList());
+
+                // check if exist then update, else add
+                var joinBasketDetail = request.BasketDetailRequests
+                    .Join(basketDetails, l => l.ProductId, r => r.ProductId,
+                    (l, r) => l).ToList();
+
+                foreach (var r in request.BasketDetailRequests)
+                {
+                    if (!joinBasketDetail.Contains(r))
+                    {
+                        var newBasketDetail = new BasketDetail
+                        {
+                            BasketId = basket.BasketId,
+                            ProductId = r.ProductId,
+                            Quantity = r.Quantity
+                        };
+                        await _basketDetailRepository.AddAsync(newBasketDetail);
+                    }
+                }
+                // check if leftover then remove
+                foreach (var rd in basketDetails)
+                {
+                    var r = joinBasketDetail.Find(r => r.ProductId == rd.ProductId);
+                    if (r == null)
+                        await _basketDetailRepository.RemoveAsync(rd);
+                    else
+                    {
+                        rd.Quantity = r.Quantity;
+                        await _basketDetailRepository.UpdateAsync(rd);
+                    }
+                }
+                #endregion
+
+                #region update basket and subcates
+                // get sub cates of blog 
+                var subCates = await _basketSubCateRepository
+                    .GetBlogSubCatesBy(b => b.BasketId.Equals(request.BasketId),
+                        options: (l) => l.AsNoTracking().ToList());
+
+                // check if not exist then add
+                var joinSubCate = request.BasketSubCates
+                    .Join(subCates, l => l.SubCateId, r => r.SubCateId,
+                    (l, r) => l).ToList();
+
+                foreach (var b in request.BasketSubCates)
+                {
+                    if (!joinSubCate.Contains(b))
+                    {
+                        var newBasketSubCate = new BasketSubCate
+                        {
+                            BasketId = basket.BasketId,
+                            CreatedDate = DateTime.Now,
+                            Status = true,
+                            SubCateId = b.SubCateId
+                        };
+                        await _basketSubCateRepository.AddAsync(newBasketSubCate);
+                    }
+                }
+                // check if leftover then remove
+                foreach (var s in subCates)
+                {
+                    if (!joinSubCate.Select(j => j.SubCateId).ToList().Contains(s.SubCateId))
+                    {
+                        await _basketSubCateRepository.RemoveAsync(s);
+                    }
+                }
+                #endregion
+
+                // update blog
+                basket.UpdatedDate = DateTime.Now;
+                basket.Status = request.Status;
+                basket.Title = request.Title;
+                basket.ImageUrl = request.ImageUrl;
+                basket.Description = request.Description;
+                basket.BasketPrice = request.BasketPrice;
+
+                await _BasketRepository.UpdateAsync(basket);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at UpdateBlog: " + ex.Message);
                 throw new Exception(ex.Message);
             }
         }
@@ -220,7 +292,7 @@ namespace Traibanhoa.Modules.BasketModule
                     throw new Exception(ErrorMessage.BasketError.BASKET_NOT_FOUND);
                 }
 
-                basketDelete.Status = 0;
+                basketDelete.Status = (int?)BasketStatus.Deactive;
                 await _BasketRepository.UpdateAsync(basketDelete);
 
             }
@@ -243,6 +315,40 @@ namespace Traibanhoa.Modules.BasketModule
                 throw new Exception(ErrorMessage.BasketError.BASKET_NOT_FOUND);
             }
             return basket;
+        }
+
+        public async Task<ICollection<SearchBasketResponse>> GetBasketByName(String name)
+        {
+            var Baskets = await _BasketRepository.GetBasketsBy(x => x.Status == (int)BasketStatus.Active);
+            var basketResponse = Baskets.Where(x => ConvertToUnSign(x.Title)
+                .Contains(ConvertToUnSign(name), StringComparison.CurrentCultureIgnoreCase) || x.Title.Contains(name, StringComparison.CurrentCultureIgnoreCase))
+                .ToList()
+                .Select(x => new SearchBasketResponse
+                {
+                    BasketName = x.Title,
+                    BasketId = x.BasketId
+                }
+                )
+                .ToList();
+
+            return basketResponse;
+        }
+
+        private string ConvertToUnSign(string input)
+        {
+            input = input.Trim();
+            for (int i = 0x20; i < 0x30; i++)
+            {
+                input = input.Replace(((char)i).ToString(), " ");
+            }
+            Regex regex = new Regex(@"\p{IsCombiningDiacriticalMarks}+");
+            string str = input.Normalize(NormalizationForm.FormD);
+            string str2 = regex.Replace(str, string.Empty).Replace('đ', 'd').Replace('Đ', 'D');
+            while (str2.IndexOf("?") >= 0)
+            {
+                str2 = str2.Remove(str2.IndexOf("?"), 1);
+            }
+            return str2;
         }
     }
 }

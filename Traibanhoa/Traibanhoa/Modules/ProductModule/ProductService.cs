@@ -13,6 +13,9 @@ using Type = Models.Models.Type;
 using Traibanhoa.Modules.TypeModule;
 using FluentValidation.Results;
 using Models.Constant;
+using Traibanhoa.Modules.ProductModule.Response;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Traibanhoa.Modules.ProductModule
 {
@@ -126,6 +129,49 @@ namespace Traibanhoa.Modules.ProductModule
                 throw new Exception(ErrorMessage.ProductError.PRODUCT_NOT_FOUND);
             }
             return product;
+        }
+
+        public async Task<ICollection<SearchProductResponse>> GetProductByName(String name)
+        {
+
+            var products = await _productRepository.GetProductsBy(x => x.Status == true, includeProperties: "Type");
+
+            return products.Where(x => ConvertToUnSign(x.Name).Contains(name, StringComparison.CurrentCultureIgnoreCase) 
+            || x.Name.Contains(name, StringComparison.CurrentCultureIgnoreCase)).ToList().Select(ToSearchResponse).ToList();
+        }
+
+        private string ConvertToUnSign(string input)
+        {
+            input = input.Trim();
+            for (int i = 0x20; i < 0x30; i++)
+            {
+                input = input.Replace(((char)i).ToString(), " ");
+            }
+            Regex regex = new Regex(@"\p{IsCombiningDiacriticalMarks}+");
+            string str = input.Normalize(NormalizationForm.FormD);
+            string str2 = regex.Replace(str, string.Empty).Replace('đ', 'd').Replace('Đ', 'D');
+            while (str2.IndexOf("?") >= 0)
+            {
+                str2 = str2.Remove(str2.IndexOf("?"), 1);
+            }
+            return str2;
+        }
+
+        public SearchProductResponse ToSearchResponse(Product product)
+        {
+            if (product != null)
+            {
+                return new SearchProductResponse()
+                {
+                    ProductId = product.ProductId,
+                    ProductName = product.Name,
+                    ProductPrice = product.Price.Value
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
