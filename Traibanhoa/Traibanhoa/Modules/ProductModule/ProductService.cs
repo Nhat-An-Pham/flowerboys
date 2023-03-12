@@ -32,9 +32,14 @@ namespace Traibanhoa.Modules.ProductModule
             return await _productRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList(), includeProperties: "Type");
         }
 
-        public Task<ICollection<Product>> GetProductsForCustomer()
+        public async Task<ICollection<Product>> GetProductsForCustomer()
         {
-            return _productRepository.GetProductsBy(x => x.Status == true, options: o => o.OrderByDescending(x => x.UpdatedDate).ToList(), includeProperties: "Type");
+            var result = _productRepository.GetProductsBy(x => x.Status == true, includeProperties: "Type").Result;
+            if (result.Count() == 0)
+            {
+                throw new Exception(ErrorMessage.CommonError.LIST_IS_NULL);
+            }
+            return result;
         }
 
         //public Task<ICollection<Product>> GetProductsForCustomer()

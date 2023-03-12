@@ -21,8 +21,6 @@ namespace Models.Models
         public virtual DbSet<Basket> Baskets { get; set; }
         public virtual DbSet<BasketDetail> BasketDetails { get; set; }
         public virtual DbSet<BasketSubCate> BasketSubCates { get; set; }
-        public virtual DbSet<Cart> Carts { get; set; }
-        public virtual DbSet<CartDetail> CartDetails { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
@@ -135,36 +133,6 @@ namespace Models.Models
                     .HasForeignKey(d => d.SubCateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BasketSubCate_SubCategory");
-            });
-
-            modelBuilder.Entity<Cart>(entity =>
-            {
-                entity.ToTable("Cart");
-
-                entity.Property(e => e.CartId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("cartId");
-
-                entity.Property(e => e.CustomerId).HasColumnName("customerId");
-
-                entity.Property(e => e.QuantityOfItem).HasColumnName("quantityOfItem");
-            });
-
-            modelBuilder.Entity<CartDetail>(entity =>
-            {
-                entity.HasKey(e => new { e.CartId, e.ItemId });
-
-                entity.ToTable("CartDetail");
-
-                entity.Property(e => e.CartId).HasColumnName("cartId");
-
-                entity.Property(e => e.ItemId).HasColumnName("itemId");
-
-                entity.Property(e => e.Quantity).HasColumnName("quantity");
-
-                entity.Property(e => e.UnitPrice)
-                    .HasColumnType("money")
-                    .HasColumnName("unitPrice");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -486,21 +454,21 @@ namespace Models.Models
                     .ValueGeneratedNever()
                     .HasColumnName("typeId");
 
-                entity.Property(e => e.Description).HasColumnName("description");
-
                 entity.Property(e => e.CreatedDate)
-                   .HasColumnType("datetime")
-                   .HasColumnName("createdDate");
-
-                entity.Property(e => e.UpdatedDate)
                     .HasColumnType("datetime")
-                    .HasColumnName("updatedDate");
+                    .HasColumnName("createdDate");
+
+                entity.Property(e => e.Description).HasColumnName("description");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .HasColumnName("name");
 
                 entity.Property(e => e.Status).HasColumnName("status");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("updatedDate");
             });
 
             modelBuilder.Entity<User>(entity =>

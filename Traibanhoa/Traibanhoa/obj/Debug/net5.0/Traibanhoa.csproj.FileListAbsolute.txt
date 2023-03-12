@@ -277,7 +277,6 @@ C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\zh-Hans\Micro
 C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\runtimes\win-arm\lib\net5.0\dotnet-aspnet-codegenerator-design.exe
 C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\runtimes\win-arm64\lib\net5.0\dotnet-aspnet-codegenerator-design.exe
-C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\obj\Debug\net5.0\Traibanhoa.csproj.CopyComplete
 C:\Users\USER\Desktop\traibanhoa\Traibanhoa\Traibanhoa\bin\Debug\net5.0\appsettings.Development.json
 C:\Users\USER\Desktop\traibanhoa\Traibanhoa\Traibanhoa\bin\Debug\net5.0\appsettings.json
 C:\Users\USER\Desktop\traibanhoa\Traibanhoa\Traibanhoa\bin\Debug\net5.0\Traibanhoa.StaticWebAssets.xml

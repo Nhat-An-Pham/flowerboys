@@ -1,21 +1,19 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Models.Models;
+using System.Linq;
 using Traibanhoa.Modules.BasketDetailModule;
 using Traibanhoa.Modules.BasketDetailModule.Interface;
 using Traibanhoa.Modules.BasketModule;
 using Traibanhoa.Modules.BasketModule.Interface;
 using Traibanhoa.Modules.BasketSubCateModule;
 using Traibanhoa.Modules.BasketSubCateModule.Interface;
-using Traibanhoa.Modules.CartDetailModule;
-using Traibanhoa.Modules.CartDetailModule.Interface;
-using Traibanhoa.Modules.CartModule;
-using Traibanhoa.Modules.CartModule.Interface;
 using Traibanhoa.Modules.CategoryModule;
 using Traibanhoa.Modules.CategoryModule.Interface;
 using Traibanhoa.Modules.CustomerModule;
@@ -53,8 +51,26 @@ namespace Traibanhoa
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvcCore().ConfigureApiBehaviorOptions(options =>
+            {
+                options.InvalidModelStateResponseFactory = (errorContext) =>
+                {
+                    var errors = errorContext.ModelState.Values.SelectMany(e => e.Errors.Select(m => new
+                    {
+                        ErrorMessage = m.ErrorMessage
+                    })).ToList();
+                    var result = new
+                    {
+                        Errors = errors.Select(e => e.ErrorMessage).ToList()
+                    };
+                    return new BadRequestObjectResult(result);
+                };
+            });
 
-            services.AddControllers();
+            services
+                 .AddControllers()
+                 .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                 .AddNewtonsoftJson(x => x.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Traibanhoa", Version = "v1" });
@@ -64,6 +80,7 @@ namespace Traibanhoa
                     Configuration.GetConnectionString("DefaultConnection")
                 )
             );
+
             //Type Module
             services.AddScoped<ITypeRepository, TypeRepository>();
             services.AddScoped<ITypeService, TypeService>();
@@ -102,12 +119,6 @@ namespace Traibanhoa
             //RequestBasket Module
             services.AddScoped<IRequestBasketRepository, RequestBasketRepository>();
             services.AddScoped<IRequestBasketService, RequestBasketService>();
-            //Cart Module
-            services.AddScoped<ICartRepository, CartRepository>();
-            services.AddScoped<ICartService, CartService>();
-            //Cart Detail Module
-            services.AddScoped<ICartDetailRepository, CartDetailRepository>();
-            services.AddScoped<ICartDetailService, CartDetailService>();
             //Category Module
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICategoryService, CategoryService>();
