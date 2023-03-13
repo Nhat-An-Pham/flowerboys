@@ -13,6 +13,7 @@ using Type = Models.Models.Type;
 using Traibanhoa.Modules.TypeModule;
 using FluentValidation.Results;
 using Models.Constant;
+using Traibanhoa.Modules.ProductModule.Response;
 
 namespace Traibanhoa.Modules.ProductModule
 {
@@ -26,15 +27,19 @@ namespace Traibanhoa.Modules.ProductModule
             _typeRepository = typeRepository;
         }
 
-        public async Task<ICollection<Product>> GetAll()
+        public async Task<ICollection<GetProductResponse>> GetAll()
         {
-            //return await _productRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList());
-            return await _productRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList(), includeProperties: "Type");
-        }
-
-        public async Task<ICollection<Product>> GetProductsForCustomer()
-        {
-            var result = _productRepository.GetProductsBy(x => x.Status == true, includeProperties: "Type").Result;
+            var result = _productRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList(), includeProperties: "Type").Result.Select(x => new GetProductResponse
+            {
+                ProductId = x.ProductId,
+                Name = x.Name,
+                Description = x.Description,
+                Picture = x.Picture,
+                CreatedDate = x.CreatedDate,
+                Price = x.Price,
+                TypeId = x.Type.TypeId,
+                TypeName = x.Type.Name
+            }).ToList();
             if (result.Count() == 0)
             {
                 throw new Exception(ErrorMessage.CommonError.LIST_IS_NULL);
@@ -42,10 +47,25 @@ namespace Traibanhoa.Modules.ProductModule
             return result;
         }
 
-        //public Task<ICollection<Product>> GetProductsForCustomer()
-        //{
-        //    return _productRepository.GetProductsBy(x => x.Status == true, options: o => o.OrderByDescending(x => x.UpdatedDate).ToList());
-        //}
+        public async Task<ICollection<GetProductResponse>> GetProductsForCustomer()
+        {
+            var result = _productRepository.GetProductsBy(x => x.Status == true, includeProperties: "Type").Result.Select(x => new GetProductResponse
+            {
+                ProductId = x.ProductId,
+                Name = x.Name,
+                Description = x.Description,
+                Picture = x.Picture,
+                CreatedDate = x.CreatedDate,
+                Price = x.Price,
+                TypeId = x.Type.TypeId,
+                TypeName = x.Type.Name
+            }).ToList();
+            if (result.Count() == 0)
+            {
+                throw new Exception(ErrorMessage.CommonError.LIST_IS_NULL);
+            }
+            return result;
+        }
 
         public async Task<Guid?> AddNewProduct(CreateProductRequest productRequest)
         {
@@ -73,7 +93,7 @@ namespace Traibanhoa.Modules.ProductModule
 
         public async Task UpdateProduct(UpdateProductRequest productRequest)
         {
-            var productUpdate = GetProductByID(productRequest.ProductId).Result;
+            var productUpdate = _productRepository.GetByIdAsync(productRequest.ProductId).Result;
 
             if(productUpdate == null)
             {
@@ -120,7 +140,7 @@ namespace Traibanhoa.Modules.ProductModule
             await _productRepository.UpdateAsync(productDelete);
         }
 
-        public async Task<Product> GetProductByID(Guid? id)
+        public async Task<GetProductResponse> GetProductByID(Guid? id)
         {
             if (id == null)
             {
@@ -131,7 +151,18 @@ namespace Traibanhoa.Modules.ProductModule
             {
                 throw new Exception(ErrorMessage.ProductError.PRODUCT_NOT_FOUND);
             }
-            return product;
+            var result = new GetProductResponse()
+            {
+                ProductId = product.ProductId,
+                Name = product.Name,
+                Description = product.Description,
+                Picture = product.Picture,
+                CreatedDate = product.CreatedDate,
+                Price = product.Price,
+                TypeId = product.Type.TypeId,
+                TypeName = product.Type.Name
+            };
+            return result;
         }
     }
 }

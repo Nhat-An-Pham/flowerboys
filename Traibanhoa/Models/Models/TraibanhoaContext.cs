@@ -186,6 +186,10 @@ namespace Models.Models
                     .HasMaxLength(50)
                     .HasColumnName("name");
 
+                entity.Property(e => e.Displayname)
+                    .HasMaxLength(50)
+                    .HasColumnName("displayname");
+
                 entity.Property(e => e.Password)
                     .HasMaxLength(50)
                     .HasColumnName("password");
@@ -490,6 +494,10 @@ namespace Models.Models
                 entity.Property(e => e.Email)
                     .HasMaxLength(100)
                     .HasColumnName("email");
+
+                entity.Property(e => e.Displayname)
+                    .HasMaxLength(50)
+                    .HasColumnName("displayname");
 
                 entity.Property(e => e.Gender).HasColumnName("gender");
 

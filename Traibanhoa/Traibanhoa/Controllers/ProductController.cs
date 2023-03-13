@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Traibanhoa.Modules.ProductModule.Interface;
 using Traibanhoa.Modules.ProductModule.Request;
+using Traibanhoa.Modules.ProductModule.Response;
 using Traibanhoa.Modules.TypeModule.Request;
 
 namespace Traibanhoa.Controllers
@@ -24,7 +25,7 @@ namespace Traibanhoa.Controllers
 
         // GET: api/<ValuesController>
         [HttpGet("staff-managing")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProductsForStaff()
+        public async Task<ActionResult<IEnumerable<GetProductResponse>>> GetProductsForStaff()
         {
             try
             {
@@ -40,7 +41,7 @@ namespace Traibanhoa.Controllers
         
         // GET: api/<ValuesController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProductsForCustomer()
+        public async Task<ActionResult<IEnumerable<GetProductResponse>>> GetProductsForCustomer()
         {
             try
             {
@@ -55,7 +56,7 @@ namespace Traibanhoa.Controllers
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct([FromRoute] Guid id)
+        public async Task<ActionResult<GetProductResponse>> GetProduct([FromRoute] Guid id)
         {
             try
             {

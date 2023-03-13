@@ -86,7 +86,7 @@ namespace Traibanhoa.Modules.SubCateModule
             subCateUpdate.Description = subCateUpdateReq.Description ?? subCateUpdate.Description;
             if (subCateUpdate.Status == false && subCateUpdateReq.Status == true)
             {
-                var listBlogSubCate = _basketSubCateRepository.GetBlogSubCatesBy(x => x.SubCateId == subCateUpdate.SubCategoryId).Result;
+                var listBlogSubCate = _basketSubCateRepository.GetBasketSubCatesBy(x => x.SubCateId == subCateUpdate.SubCategoryId).Result;
                 foreach (var item in listBlogSubCate)
                 {
                     item.Status = true;
@@ -114,7 +114,7 @@ namespace Traibanhoa.Modules.SubCateModule
                 return false;
             }
 
-            var listBlogSubCateDelete = _basketSubCateRepository.GetBlogSubCatesBy(x => x.SubCateId == _deleteSubCate.SubCategoryId).Result.ToList();
+            var listBlogSubCateDelete = _basketSubCateRepository.GetBasketSubCatesBy(x => x.SubCateId == _deleteSubCate.SubCategoryId).Result.ToList();
             foreach (var item in listBlogSubCateDelete)
             {
                 item.Status = false;

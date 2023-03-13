@@ -21,8 +21,9 @@ namespace Traibanhoa.Modules.BasketModule.Interface
         public Task UpdateBasket(UpdateBasketRequest BasketUpdate);
 
         public Task DeleteBasket(Guid? basketDeleteID);
+        public Task RestoreBasket(Guid? basketRestoreID);
 
-        public Task<ICollection<Basket>> GetAll();
+        public Task<ICollection<GetBasketResponse>> GetAll();
         public Task<ICollection<HomeNewBasketResponse>> GetNewBasketsForHome();
         public Task<ICollection<DetailHomeViewBasketResponse>> GetMostViewBaskets();
         public Task<ICollection<DetailHomeViewBasketResponse>> GetBasketsByPrice();

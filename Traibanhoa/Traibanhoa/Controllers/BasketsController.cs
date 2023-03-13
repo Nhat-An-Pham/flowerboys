@@ -23,7 +23,7 @@ namespace Traibanhoa.Controllers
         }
 
         // GET api/<ValuesController>
-        [HttpGet]
+        [HttpGet("staff-managing")]
         public async Task<ActionResult<IEnumerable<Basket>>> GetBaskets()
         {
             try
@@ -89,6 +89,20 @@ namespace Traibanhoa.Controllers
             try
             {
                 await _basketService.DeleteBasket(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("restore/{id}")]
+        public async Task<IActionResult> RestoreBasket([FromRoute] Guid id)
+        {
+            try
+            {
+                await _basketService.RestoreBasket(id);
                 return Ok();
             }
             catch (Exception ex)

@@ -417,3 +417,8 @@ C:\Users\USER\Desktop\traibanhoa\Traibanhoa\Traibanhoa\obj\Debug\net5.0\refint\T
 C:\Users\USER\Desktop\traibanhoa\Traibanhoa\Traibanhoa\obj\Debug\net5.0\Traibanhoa.pdb
 C:\Users\USER\Desktop\traibanhoa\Traibanhoa\Traibanhoa\obj\Debug\net5.0\Traibanhoa.genruntimeconfig.cache
 C:\Users\USER\Desktop\traibanhoa\Traibanhoa\Traibanhoa\obj\Debug\net5.0\ref\Traibanhoa.dll
+C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll
+C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Nam\Desktop\PRN231\Traibanhoa\Traibanhoa\obj\Debug\net5.0\Traibanhoa.csproj.CopyComplete

@@ -30,9 +30,24 @@ namespace Traibanhoa.Modules.BasketModule
             _basketSubCateRepository = basketSubCateRepository;
         }
 
-        public async Task<ICollection<Basket>> GetAll()
+        public async Task<ICollection<GetBasketResponse>> GetAll()
         {
-            return await _BasketRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList());
+            var basketsDetails = await _basketDetailRepository.GetAll(includeProperties: "Product");
+            var result = _BasketRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList()).Result.Select(x => new GetBasketResponse
+            {
+                BasketId = x.BasketId,
+                Title = x.Title,
+                Description = x.Description,
+                ImageUrl = x.ImageUrl,
+                BasketPrice = (decimal)x.BasketPrice,
+                View = (int)x.View,
+                ListProduct = GetProductBasketDetails(x.BasketId, basketsDetails)
+            }).ToList();
+            if (result.Count() == 0)
+            {
+                throw new Exception(ErrorMessage.CommonError.LIST_IS_NULL);
+            }
+            return result;
         }
 
         public async Task<ICollection<HomeNewBasketResponse>> GetNewBasketsForHome()
@@ -171,7 +186,113 @@ namespace Traibanhoa.Modules.BasketModule
         }
 
         public async Task UpdateBasket(UpdateBasketRequest request)
-        { return; }
+        {
+            try
+            {
+                #region validation
+                // sub cates exceed limit
+                if (request.BasketSubCates.Count > 5)
+                    throw new Exception(ErrorMessage.BasketError.BASKET_SUBCATES_LIMIT);
+
+                // basket not existed
+                var basket = _BasketRepository
+                    .GetBasketsBy(b => b.BasketId.Equals(request.BasketId),
+                        options: (l) => l.AsNoTracking().ToList())
+                    .Result
+                    .FirstOrDefault();
+
+                if (basket == null)
+                    throw new Exception(ErrorMessage.BasketError.BASKET_NOT_FOUND);
+                #endregion
+
+                #region update recipe and recipe details
+                // get products of basket
+                var basketDetails = await _basketDetailRepository
+                    .GetBasketDetailsBy(r => r.BasketId.Equals(basket.BasketId),
+                        options: (l) => l.AsNoTracking().ToList());
+
+                // check if exist then update, else add
+                var joinBasketDetail = request.BasketDetailRequests
+                    .Join(basketDetails, l => l.ProductId, r => r.ProductId,
+                    (l, r) => l).ToList();
+
+                foreach (var r in request.BasketDetailRequests)
+                {
+                    if (!joinBasketDetail.Contains(r))
+                    {
+                        var newBasketDetail = new BasketDetail
+                        {
+                            ProductId = r.ProductId,
+                            Quantity = r.Quantity,
+                            BasketId = basket.BasketId
+                        };
+                        await _basketDetailRepository.AddAsync(newBasketDetail);
+                    }
+                }
+                // check if leftover then remove
+                foreach (var rd in basketDetails)
+                {
+                    var r = joinBasketDetail.Find(r => r.ProductId.Equals(rd.ProductId));
+                    if (r == null)
+                        await _basketDetailRepository.RemoveAsync(rd);
+                    else
+                    {
+                        rd.Quantity = r.Quantity;
+                        await _basketDetailRepository.UpdateAsync(rd);
+                    }
+                }
+                #endregion
+
+                #region update basket and subcates
+                // get sub cates of blog 
+                var subCates = await _basketSubCateRepository
+                    .GetBasketSubCatesBy(b => b.BasketId.Equals(request.BasketId),
+                        options: (l) => l.AsNoTracking().ToList());
+
+                // check if not exist then add
+                var joinSubCate = request.BasketSubCates
+                    .Join(subCates, l => l.SubCateId, r => r.SubCateId,
+                    (l, r) => l).ToList();
+
+                foreach (var b in request.BasketSubCates)
+                {
+                    if (!joinSubCate.Contains(b))
+                    {
+                        var newBasketSubCate = new BasketSubCate
+                        {
+                            BasketId = basket.BasketId,
+                            CreatedDate = DateTime.Now,
+                            Status = true,
+                            SubCateId = b.SubCateId
+                        };
+                        await _basketSubCateRepository.AddAsync(newBasketSubCate);
+                    }
+                }
+                // check if leftover then remove
+                foreach (var s in subCates)
+                {
+                    if (!joinSubCate.Select(j => j.SubCateId).ToList().Contains(s.SubCateId))
+                    {
+                        await _basketSubCateRepository.RemoveAsync(s);
+                    }
+                }
+
+                // update basket
+                basket.UpdatedDate = DateTime.Now;
+                basket.Title = request.Title;
+                basket.Description = request.Description;
+                basket.ImageUrl = request.ImageUrl;
+                basket.BasketPrice = request.BasketPrice;
+                basket.Status = request.Status;
+                await _BasketRepository.UpdateAsync(basket);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at UpdateBasket: " + ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
 
         public async Task DeleteBasket(Guid? basketDeleteID)
         {
@@ -182,20 +303,75 @@ namespace Traibanhoa.Modules.BasketModule
                     throw new Exception(ErrorMessage.CommonError.ID_IS_NULL);
                 }
 
-                Basket basketDelete = _BasketRepository.GetFirstOrDefaultAsync(x => x.BasketId == basketDeleteID && x.Status == 0).Result;
+                Basket basketDelete = _BasketRepository.GetFirstOrDefaultAsync(x => x.BasketId == basketDeleteID).Result;
 
                 if (basketDelete == null)
                 {
                     throw new Exception(ErrorMessage.BasketError.BASKET_NOT_FOUND);
                 }
 
-                basketDelete.Status = (int?)BasketStatus.Deactive;
-                await _BasketRepository.UpdateAsync(basketDelete);
+                var listBasketSubCate = await _basketSubCateRepository.GetBasketSubCatesBy(x => x.BasketId == basketDelete.BasketId);
+
+                if (basketDelete.Status == (int?)BasketStatus.Active)
+                {
+                    foreach (var item in listBasketSubCate)
+                    {
+                        item.Status = false;
+                    }
+                    await _basketSubCateRepository.UpdateRangeAsync(listBasketSubCate);
+
+                    basketDelete.Status = (int?)BasketStatus.Deactive;
+                    await _BasketRepository.UpdateAsync(basketDelete);
+
+                } else if (basketDelete.Status == (int?)BasketStatus.Draft) {
+                    await _basketSubCateRepository.RemoveRangeAsync(listBasketSubCate);
+                    var listBasketDetail = await _basketDetailRepository.GetBasketDetailsBy(x => x.BasketId == basketDelete.BasketId);
+
+                    await _basketDetailRepository.RemoveRangeAsync(listBasketDetail);
+
+                    basketDelete.Status = (int?)BasketStatus.Deactive;
+                    await _BasketRepository.RemoveAsync(basketDelete);
+                }
+
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error at delete type: " + ex.Message);
+                Console.WriteLine("Error at delete basket: " + ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task RestoreBasket(Guid? basketRestoreID)
+        {
+            try
+            {
+                if (basketRestoreID == null)
+                {
+                    throw new Exception(ErrorMessage.CommonError.ID_IS_NULL);
+                }
+
+                Basket basketRestore = _BasketRepository.GetFirstOrDefaultAsync(x => x.BasketId == basketRestoreID && x.Status == (int?) BasketStatus.Deactive).Result;
+
+                if (basketRestore == null)
+                {
+                    throw new Exception(ErrorMessage.BasketError.BASKET_NOT_FOUND);
+                }
+
+                var listBasketSubCate = await _basketSubCateRepository.GetBasketSubCatesBy(x => x.BasketId == basketRestore.BasketId && x.Status == false);
+                foreach (var item in listBasketSubCate)
+                {
+                    item.Status = true;
+                }
+
+                basketRestore.Status = (int?)BasketStatus.Active;
+                await _basketSubCateRepository.UpdateRangeAsync(listBasketSubCate);
+                await _BasketRepository.UpdateAsync(basketRestore);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at restore basket: " + ex.Message);
                 throw new Exception(ex.Message);
             }
         }

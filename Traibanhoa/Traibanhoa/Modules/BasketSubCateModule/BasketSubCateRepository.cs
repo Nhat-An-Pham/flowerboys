@@ -18,7 +18,7 @@ namespace Traibanhoa.Modules.BasketSubCateModule
         {
             _db = db;
         }
-        public async Task<ICollection<BasketSubCate>> GetBlogSubCatesBy(
+        public async Task<ICollection<BasketSubCate>> GetBasketSubCatesBy(
             Expression<Func<BasketSubCate, bool>> filter = null,
             Func<IQueryable<BasketSubCate>, ICollection<BasketSubCate>> options = null,
             string includeProperties = null

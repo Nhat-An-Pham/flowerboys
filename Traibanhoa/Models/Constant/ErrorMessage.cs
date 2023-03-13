@@ -57,6 +57,7 @@ namespace Models.Constant
         {
             public readonly static string BASKET_NOT_FOUND = "Basket is not existed";
             public readonly static string BASKET_EXISTED = "Basket is existed";
+            public readonly static string BASKET_SUBCATES_LIMIT = "Max Sub categories for basket is 5";
         }
         #endregion
 
