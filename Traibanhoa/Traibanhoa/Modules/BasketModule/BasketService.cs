@@ -32,7 +32,6 @@ namespace Traibanhoa.Modules.BasketModule
 
         public async Task<ICollection<GetBasketResponse>> GetAll()
         {
-            var basketsDetails = await _basketDetailRepository.GetAll(includeProperties: "Product");
             var result = _BasketRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList()).Result.Select(x => new GetBasketResponse
             {
                 BasketId = x.BasketId,
@@ -41,7 +40,8 @@ namespace Traibanhoa.Modules.BasketModule
                 ImageUrl = x.ImageUrl,
                 BasketPrice = (decimal)x.BasketPrice,
                 View = (int)x.View,
-                ListProduct = GetProductBasketDetails(x.BasketId, basketsDetails)
+                Status = x.Status,
+                ListProduct = GetProductBasketDetails(x.BasketId)
             }).ToList();
             if (result.Count() == 0)
             {
@@ -77,7 +77,7 @@ namespace Traibanhoa.Modules.BasketModule
             }
         }
 
-        public List<ProductBasketDetail> GetProductBasketDetails(Guid basketId, ICollection<BasketDetail> basketDetails)
+        public List<ProductBasketDetail> GetProductBasketDetails(Guid basketId)
         {
             return _basketDetailRepository.GetBasketDetailsBy(x => x.BasketId == basketId, includeProperties: "Product").Result.Select(x => new ProductBasketDetail
             {
@@ -92,7 +92,6 @@ namespace Traibanhoa.Modules.BasketModule
             try
             {
                 var baskets = _BasketRepository.GetBasketsBy(x => x.Status == (int?)BasketStatus.Active).Result.OrderByDescending(x => x.View).Take(12).ToList();
-                var basketsDetails = await _basketDetailRepository.GetAll(includeProperties: "Product");
 
                 var result = baskets.Select(x => new DetailHomeViewBasketResponse
                 {
@@ -102,7 +101,7 @@ namespace Traibanhoa.Modules.BasketModule
                     ImageUrl = x.ImageUrl,
                     BasketPrice = (decimal)x.BasketPrice,
                     View = (int)x.View,
-                    ListProduct = GetProductBasketDetails(x.BasketId, basketsDetails)
+                    ListProduct = GetProductBasketDetails(x.BasketId)
                 }).ToList();
 
                 if (result.Count() == 0)
@@ -125,7 +124,6 @@ namespace Traibanhoa.Modules.BasketModule
             {
                 var baskets = _BasketRepository.GetBasketsBy(x => x.Status == (int?)BasketStatus.Active && x.BasketPrice >= 200000 && x.BasketPrice <= 400000).Result
                     .OrderByDescending(x => x.UpdatedDate).Take(12).ToList();
-                var basketsDetails = await _basketDetailRepository.GetAll(includeProperties: "Product");
 
                 var result = baskets.Select(x => new DetailHomeViewBasketResponse
                 {
@@ -135,7 +133,7 @@ namespace Traibanhoa.Modules.BasketModule
                     ImageUrl = x.ImageUrl,
                     BasketPrice = (decimal)x.BasketPrice,
                     View = (int)x.View,
-                    ListProduct = GetProductBasketDetails(x.BasketId, basketsDetails)
+                    ListProduct = GetProductBasketDetails(x.BasketId)
                 }).ToList();
 
                 if (result.Count() == 0)

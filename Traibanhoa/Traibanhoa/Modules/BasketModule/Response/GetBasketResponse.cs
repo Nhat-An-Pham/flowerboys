@@ -12,6 +12,7 @@ namespace Traibanhoa.Modules.BasketModule.Response
         public string Description { get; set; }
         public string ImageUrl { get; set; }
         public int View { get; set; }
+        public int? Status { get; set; }
         public decimal BasketPrice { get; set; }
         public List<ProductBasketDetail> ListProduct { get; set; }
     }

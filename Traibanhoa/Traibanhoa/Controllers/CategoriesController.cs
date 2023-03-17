@@ -29,6 +29,13 @@ namespace Traibanhoa.Controllers
             return Ok(await _categoryService.GetAll());
         }
 
+        // GET: api/Categories
+        [HttpGet("staff-managing")]
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategoriesForStaff()
+        {
+            return Ok(await _categoryService.GetAllForStaff());
+        }
+
         // GET: api/Categories/available
         [HttpGet("dropdown-category")]
         public async Task<ActionResult<IEnumerable<DropdownCategory>>> GetCategoriesAvailable()

@@ -380,6 +380,10 @@ namespace Models.Models
                     .HasMaxLength(100)
                     .HasColumnName("imageURL");
 
+                entity.Property(e => e.EstimatePrice)
+                    .HasColumnType("money")
+                    .HasColumnName("estimatePrice");
+
                 entity.Property(e => e.RequestStatus).HasColumnName("requestStatus");
 
                 entity.Property(e => e.Title)

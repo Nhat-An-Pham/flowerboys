@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Models.Constant;
 using Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Traibanhoa.Modules.RequestBasketModule.Interface;
 using Traibanhoa.Modules.RequestBasketModule.Request;
+using Traibanhoa.Modules.UserModule.Interface;
 
 namespace Traibanhoa.Controllers
 {
@@ -13,10 +15,12 @@ namespace Traibanhoa.Controllers
     public class RequestBasketsController : ControllerBase
     {
         private readonly IRequestBasketService _requestBasketService;
+        private readonly IUserService _userService;
 
-        public RequestBasketsController(IRequestBasketService requestBasketService)
+        public RequestBasketsController(IRequestBasketService requestBasketService, IUserService userService)
         {
             _requestBasketService = requestBasketService;
+            _userService = userService;
         }
 
         // GET api/<ValuesController>
@@ -48,14 +52,47 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        // Post api/<ValuesController>
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<RequestBasket>> PostRequestBasket([FromBody] CreateRequestBasketRequest createRequestBasketRequest)
+        // GET api/<ValuesController>/5
+        [HttpGet("confirmer/{id}")]
+        public async Task<ActionResult<RequestBasket>> GetRequestBasketByConfirmer([FromRoute] Guid id)
         {
             try
             {
-                return Ok(await _requestBasketService.AddNewRequestBasket(createRequestBasketRequest));
+                return Ok(await _requestBasketService.GetRequestBasketByConfirmerID(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // GET api/<ValuesController>/5
+        [HttpGet("author/{id}")]
+        public async Task<ActionResult<RequestBasket>> GetRequestBasketByAuthor([FromRoute] Guid id)
+        {
+            try
+            {
+                return Ok(await _requestBasketService.GetRequestBasketByAuthorID(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // Post api/<ValuesController>
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<RequestBasket>> PostRequestBasket()
+        {
+            try
+            {
+                var currentCustomer = _userService.GetCurrentUser(Request.Headers["Authorization"]);
+                if (currentCustomer == null)
+                {
+                    throw new Exception(ErrorMessage.UserError.USER_NOT_LOGIN);
+                }
+                return Ok(await _requestBasketService.AddNewRequestBasket(currentCustomer.Id));
             }
             catch (Exception ex)
             {
@@ -79,25 +116,19 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        //// DELETE: api/RequestBaskets/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteRequestBasket(Guid id)
-        //{
-        //    var requestBasket = await _context.RequestBaskets.FindAsync(id);
-        //    if (requestBasket == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    _requestBasketService.De
-        //    _context.RequestBaskets.Remove(requestBasket);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool RequestBasketExists(Guid id)
-        //{
-        //    return _context.RequestBaskets.Any(e => e.RequestBasketId == id);
-        //}
+        // DELETE api/<ValuesController>/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteRequestBasket([FromRoute] Guid id)
+        {
+            try
+            {
+                await _requestBasketService.DeleteRequestBasket(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

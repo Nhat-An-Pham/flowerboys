@@ -135,7 +135,6 @@ namespace Traibanhoa
             services.AddScoped<IBasketService, BasketService>();
             //BasketDetail Module
             services.AddScoped<IBasketDetailRepository, BasketDetailRepository>();
-            services.AddScoped<IBasketDetailService, BasketDetailService>();
             //Customer Module
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICustomerService, CustomerService>();

@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Traibanhoa.Modules.CustomerModule.Interface;
 using Traibanhoa.Modules.UserModule.Interface;
 using Traibanhoa.Modules.UserModule.Request;
+using Traibanhoa.Modules.UserModule.Response;
 
 namespace Traibanhoa.Modules.UserModule
 {
@@ -400,7 +401,50 @@ namespace Traibanhoa.Modules.UserModule
         }
 
         #endregion
+        public CurrentUserResponse GetCurrentUser(string authHeader)
+        {
+            try
+            {
+                if (authHeader != null)
+                {
+                    string token = authHeader.Split(" ")[1];
+                    var handler = new JwtSecurityTokenHandler();
+                    var jsonToken = handler.ReadToken(token);
+                    var tokenS = jsonToken as JwtSecurityToken;
+                    var id = new Guid(tokenS.Claims.First(claim => claim.Type == "Id").Value);
+                    var Displayname = tokenS.Claims.First(x => x.Type == "Displayname")?.Value;
+                    var Username = tokenS.Claims.First(x => x.Type == "unique_name")?.Value;
+                    var Firstname = tokenS.Claims.First(x => x.Type == "Firstname")?.Value;
+                    var Lastname = tokenS.Claims.First(x => x.Type == "Lastname")?.Value;
+                    var Email = tokenS.Claims.First(x => x.Type == "email")?.Value;
+                    var Avatar = tokenS.Claims.First(x => x.Type == "Avatar")?.Value;
+                    var Phonenumber = tokenS.Claims.First(x => x.Type == "Phone Number")?.Value;
+                    var Gender = Int32.Parse(tokenS.Claims.First(x => x.Type == "gender")?.Value);
+                    var Role = tokenS.Claims.First(x => x.Type == "role")?.Value;
+                    CurrentUserResponse currentUser = new CurrentUserResponse()
+                    {
+                        Id = id,
+                        Displayname = Displayname,
+                        Username = Username,
+                        Firstname = Firstname,
+                        Lastname = Lastname,
+                        Email = Email,
+                        Avatar = Avatar,
+                        Phonenumber = Phonenumber,
+                        Gender = Gender,
+                        Role = Role
+                    };
 
+                    return currentUser;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error at GetCurrentLoginUser: " + ex.Message);
+                throw new Exception(ErrorMessage.UserError.USER_NOT_LOGIN);
+            }
+        }
         public Customer GetCustomerByUsername(string? username)
         {
             return _customerRepository.GetFirstOrDefaultAsync(x => x.Username == username).Result;

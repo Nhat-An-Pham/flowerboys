@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using System;
 using Models.Models;
 using Traibanhoa.Modules.RequestBasketModule.Request;
+using Traibanhoa.Modules.BasketModule.Request;
+using Traibanhoa.Modules.BasketModule.Response;
+using Traibanhoa.Modules.RequestBasketModule.Response;
 
 namespace Traibanhoa.Modules.RequestBasketModule.Interface
 {
@@ -15,14 +18,15 @@ namespace Traibanhoa.Modules.RequestBasketModule.Interface
             Func<IQueryable<RequestBasket>, ICollection<RequestBasket>> options = null,
             string includeProperties = null);
 
-        public Task<Guid?> AddNewRequestBasket(CreateRequestBasketRequest RequestBasketCreate);
+        public Task<Guid> AddNewRequestBasket(Guid? currentCustomerId);
 
-        public Task UpdateRequestBasket(UpdateRequestBasketRequest RequestBasketUpdate);
+        public Task UpdateRequestBasket(UpdateRequestBasketRequest requestBasketUpdate);
 
-        //public Task<Boolean> DeleteRequestBasket(RequestBasket RequestBasketDelete);
+        public Task DeleteRequestBasket(Guid? requestBasketDeleteID);
 
-        public Task<ICollection<RequestBasket>> GetAll();
-
+        public Task<ICollection<GetRequestBasketResponse>> GetAll();
         public Task<RequestBasket> GetRequestBasketByID(Guid? id);
+        public Task<RequestBasket> GetRequestBasketByAuthorID(Guid? id);
+        public Task<RequestBasket> GetRequestBasketByConfirmerID(Guid? id);
     }
 }

@@ -23,6 +23,10 @@ namespace Traibanhoa.Modules.CategoryModule
         }
         public async Task<ICollection<Category>> GetAll()
         {
+            return await _categoryRepository.GetCategoriesBy(x => x.Status == true, includeProperties: "SubCategories");
+        }
+        public async Task<ICollection<Category>> GetAllForStaff()
+        {
             return await _categoryRepository.GetAll(includeProperties: "SubCategories");
         }
         public Task<ICollection<Category>> GetCategoriesBy(Expression<Func<Category, bool>> filter = null,

@@ -41,6 +41,7 @@ namespace Models.Constant
         {
             public readonly static string USER_NOT_FOUND = "User is not existed";
             public readonly static string USER_EXISTED = "User is existed";
+            public readonly static string USER_NOT_LOGIN = "You did not login. Login and try this action again, please!";
         }
         #endregion
 
@@ -58,6 +59,14 @@ namespace Models.Constant
             public readonly static string BASKET_NOT_FOUND = "Basket is not existed";
             public readonly static string BASKET_EXISTED = "Basket is existed";
             public readonly static string BASKET_SUBCATES_LIMIT = "Max Sub categories for basket is 5";
+        }
+        #endregion
+
+        #region Request Basket error message
+        public static class RequestBasketError
+        {
+            public readonly static string REQUEST_BASKET_NOT_FOUND = "Basket is not existed";
+            public readonly static string REQUEST_BASKET_EXISTED = "Basket is existed";
         }
         #endregion
 

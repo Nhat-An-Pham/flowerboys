@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using System;
+using System.Collections.Generic;
 
 namespace Traibanhoa.Modules.RequestBasketModule.Request
 {
@@ -8,21 +9,15 @@ namespace Traibanhoa.Modules.RequestBasketModule.Request
         public Guid RequestBasketId { get; set; }
         public string Title { get; set; }
         public string ImageUrl { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public decimal? EstimatePrice { get; set; }
         public int? RequestStatus { get; set; }
-        public Guid? CreateBy { get; set; }
         public Guid? ConfirmBy { get; set; }
+        public List<BasketDetailRequest> BasketDetailRequests { get; set; }
     }
-    public class UpdateRequestBasketRequestValidator : AbstractValidator<UpdateRequestBasketRequest>
+
+    public class BasketDetailRequest
     {
-        public UpdateRequestBasketRequestValidator()
-        {
-            RuleFor(x => x.Title).NotEmpty().NotNull();
-            RuleFor(x => x.ImageUrl).NotEmpty().NotNull();
-            RuleFor(x => x.CreatedDate).NotEmpty().NotNull();
-            RuleFor(x => x.RequestStatus).NotEmpty().NotNull();
-            RuleFor(x => x.CreateBy).NotEmpty().NotNull();
-            RuleFor(x => x.ConfirmBy).NotEmpty().NotNull();
-        }
+        public Guid ProductId { get; set; }
+        public int? Quantity { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace Traibanhoa.Modules.CategoryModule.Interface
         public Task<bool> UpdateCategory(UpdateCategoryRequest categoryUpdate);
         public Task DeleteCategory(Guid? ID);
         public Task<ICollection<Category>> GetAll();
+        public Task<ICollection<Category>> GetAllForStaff();
         public Task<ICollection<DropdownCategory>> GetDropdownCategory();
         public Task<ICollection<Category>> GetCategoriesBy(Expression<Func<Category, bool>> filter = null,
             Func<IQueryable<Category>, ICollection<Category>> options = null,
