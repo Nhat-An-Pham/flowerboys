@@ -20,7 +20,7 @@ namespace Traibanhoa.Modules.RequestBasketModule.Interface
 
         public Task<Guid> AddNewRequestBasket(Guid? currentCustomerId);
 
-        public Task UpdateRequestBasket(UpdateRequestBasketRequest requestBasketUpdate);
+        public Task UpdateRequestBasket(UpdateRequestBasket requestBasketUpdate);
 
         public Task DeleteRequestBasket(Guid? requestBasketDeleteID);
 

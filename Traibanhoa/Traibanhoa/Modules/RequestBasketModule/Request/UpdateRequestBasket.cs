@@ -1,10 +1,10 @@
-﻿using FluentValidation;
+﻿using System.Collections.Generic;
 using System;
-using System.Collections.Generic;
+using Traibanhoa.Modules.BasketModule.Request;
 
 namespace Traibanhoa.Modules.RequestBasketModule.Request
 {
-    public class UpdateRequestBasketRequest
+    public class UpdateRequestBasket
     {
         public Guid RequestBasketId { get; set; }
         public string Title { get; set; }
@@ -13,11 +13,5 @@ namespace Traibanhoa.Modules.RequestBasketModule.Request
         public int? RequestStatus { get; set; }
         public Guid? ConfirmBy { get; set; }
         public List<BasketDetailRequest> BasketDetailRequests { get; set; }
-    }
-
-    public class BasketDetailRequest
-    {
-        public Guid ProductId { get; set; }
-        public int? Quantity { get; set; }
     }
 }

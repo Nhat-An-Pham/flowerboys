@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+
+using Microsoft.AspNetCore.Mvc;
 using Models.Constant;
 using Models.Models;
 using System;
@@ -53,12 +55,12 @@ namespace Traibanhoa.Controllers
         }
 
         // GET api/<ValuesController>/5
-        [HttpGet("confirmer/{id}")]
-        public async Task<ActionResult<RequestBasket>> GetRequestBasketByConfirmer([FromRoute] Guid id)
+        [HttpGet("confirmer/{confirmerId}")]
+        public async Task<ActionResult<RequestBasket>> GetRequestBasketByConfirmer([FromRoute] Guid confirmerId)
         {
             try
             {
-                return Ok(await _requestBasketService.GetRequestBasketByConfirmerID(id));
+                return Ok(await _requestBasketService.GetRequestBasketByConfirmerID(confirmerId));
             }
             catch (Exception ex)
             {
@@ -67,12 +69,12 @@ namespace Traibanhoa.Controllers
         }
 
         // GET api/<ValuesController>/5
-        [HttpGet("author/{id}")]
-        public async Task<ActionResult<RequestBasket>> GetRequestBasketByAuthor([FromRoute] Guid id)
+        [HttpGet("author/{authorId}")]
+        public async Task<ActionResult<RequestBasket>> GetRequestBasketByAuthor([FromRoute] Guid authorId)
         {
             try
             {
-                return Ok(await _requestBasketService.GetRequestBasketByAuthorID(id));
+                return Ok(await _requestBasketService.GetRequestBasketByAuthorID(authorId));
             }
             catch (Exception ex)
             {
@@ -103,17 +105,17 @@ namespace Traibanhoa.Controllers
         // PUT api/<ValuesController>/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> PutRequestBasket([FromBody] UpdateRequestBasketRequest updateRequestBasketRequest)
+        public async Task<IActionResult> PutRequestBasket([FromBody] UpdateRequestBasket updateRequestBasket)
         {
             try
             {
-                await _requestBasketService.UpdateRequestBasket(updateRequestBasketRequest);
+                await _requestBasketService.UpdateRequestBasket(updateRequestBasket);
                 return Ok();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
+            };
         }
 
         // DELETE api/<ValuesController>/5

@@ -95,7 +95,7 @@ namespace Traibanhoa.Modules.RequestBasketModule
             }
         }
 
-        public async Task UpdateRequestBasket(UpdateRequestBasketRequest request)
+        public async Task UpdateRequestBasket(UpdateRequestBasket request)
         {
             try
             {
@@ -163,7 +163,7 @@ namespace Traibanhoa.Modules.RequestBasketModule
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error at UpdateBasket: " + ex.Message);
+                Console.WriteLine("Error at UpdateRequestBasket: " + ex.Message);
                 throw new Exception(ex.Message);
             }
         }
