@@ -169,7 +169,6 @@ namespace Traibanhoa.Modules.UserModule
                     new Claim(ClaimTypes.Name, customer.Username),
                     new Claim(ClaimTypes.Email, customer.Email == null ? "" : customer.Email),
                     new Claim("Phone Number", customer.Phonenumber),
-                    new Claim("Displayname", customer.Displayname == null ? "" : customer.Displayname),
                     new Claim("Name", customer.Name),
                     new Claim(ClaimTypes.Gender,customer.Gender.ToString()),
                     new Claim("Avatar", customer.Avatar  == null ? "" : customer.Avatar),
@@ -200,7 +199,6 @@ namespace Traibanhoa.Modules.UserModule
                     new Claim(ClaimTypes.Name, user.Username),
                     new Claim(ClaimTypes.Email, user.Email == null ? "" : user.Email),
                     new Claim("Phone Number", user.Phonenumber),
-                    new Claim("Displayname", user.Displayname == null ? "" : user.Displayname),
                     new Claim("Name", user.Name),
                     new Claim(ClaimTypes.Gender,user.Gender.ToString()),
                     new Claim("Avatar", user.Avatar  == null ? "" : user.Avatar),
@@ -239,7 +237,6 @@ namespace Traibanhoa.Modules.UserModule
                     new Claim(ClaimTypes.Name, customer.Username),
                     new Claim(ClaimTypes.Email, customer.Email == null ? "" : customer.Email),
                     new Claim("Phone Number", customer.Phonenumber),
-                    new Claim("Displayname", customer.Displayname == null ? "" : customer.Displayname),
                     new Claim("Name", customer.Name),
                     new Claim(ClaimTypes.Gender,customer.Gender.ToString()),
                     new Claim("Avatar", customer.Avatar  == null ? "" : customer.Avatar),
@@ -257,7 +254,7 @@ namespace Traibanhoa.Modules.UserModule
                     var cus = new Customer
                     {
                         Email = loginGoogle.Email,
-                        Displayname = loginGoogle.Displayname,
+                        Name = loginGoogle.Displayname,
                         Avatar = loginGoogle.Avatar
                     };
                     cus.CustomerId = Guid.NewGuid();
@@ -277,7 +274,6 @@ namespace Traibanhoa.Modules.UserModule
                     new Claim(ClaimTypes.Name, cus.Username == null ? "": cus.Username),
                     new Claim(ClaimTypes.Email, cus.Email),
                     new Claim("Phone Number", cus.Phonenumber == null ? "": cus.Phonenumber),
-                    new Claim("Displayname", cus.Displayname == null ? "" : cus.Displayname),
                     new Claim("Name",cus.Name == null ? "": cus.Name),
                     new Claim(ClaimTypes.Gender,cus.Gender.ToString() == null ? "": cus.Gender.ToString()),
                     new Claim("Avatar", cus.Avatar  == null ? "" : cus.Avatar),
@@ -306,7 +302,6 @@ namespace Traibanhoa.Modules.UserModule
                     new Claim(ClaimTypes.Name, user.Username == null ? "": user.Username),
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim("Phone Number", user.Phonenumber == null ? "": user.Phonenumber),
-                    new Claim("Displayname", user.Displayname),
                     new Claim("Name", user.Name == null ? "": user.Name),
                     new Claim(ClaimTypes.Gender,user.Gender.ToString() == null ? "": user.Gender.ToString()),
                     new Claim("Avatar", user.Avatar  == null ? "" : user.Avatar),
@@ -335,7 +330,6 @@ namespace Traibanhoa.Modules.UserModule
                 Username = register.Username,
                 Gender = register.Gender,
                 Name = register.Name,
-                Displayname = register.Name,
                 Password = register.Password,
                 Phonenumber = register.Phonenumber
             };
@@ -412,10 +406,8 @@ namespace Traibanhoa.Modules.UserModule
                     var jsonToken = handler.ReadToken(token);
                     var tokenS = jsonToken as JwtSecurityToken;
                     var id = new Guid(tokenS.Claims.First(claim => claim.Type == "Id").Value);
-                    var Displayname = tokenS.Claims.First(x => x.Type == "Displayname")?.Value;
                     var Username = tokenS.Claims.First(x => x.Type == "unique_name")?.Value;
-                    var Firstname = tokenS.Claims.First(x => x.Type == "Firstname")?.Value;
-                    var Lastname = tokenS.Claims.First(x => x.Type == "Lastname")?.Value;
+                    var Name = tokenS.Claims.First(x => x.Type == "Name")?.Value;
                     var Email = tokenS.Claims.First(x => x.Type == "email")?.Value;
                     var Avatar = tokenS.Claims.First(x => x.Type == "Avatar")?.Value;
                     var Phonenumber = tokenS.Claims.First(x => x.Type == "Phone Number")?.Value;
@@ -424,10 +416,8 @@ namespace Traibanhoa.Modules.UserModule
                     CurrentUserResponse currentUser = new CurrentUserResponse()
                     {
                         Id = id,
-                        Displayname = Displayname,
                         Username = Username,
-                        Firstname = Firstname,
-                        Lastname = Lastname,
+                        Name = Name,
                         Email = Email,
                         Avatar = Avatar,
                         Phonenumber = Phonenumber,

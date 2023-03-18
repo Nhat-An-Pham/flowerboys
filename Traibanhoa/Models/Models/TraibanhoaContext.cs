@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Models.Models;
 
 #nullable disable
 
@@ -185,10 +184,6 @@ namespace Models.Models
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .HasColumnName("name");
-
-                entity.Property(e => e.Displayname)
-                    .HasMaxLength(50)
-                    .HasColumnName("displayname");
 
                 entity.Property(e => e.Password)
                     .HasMaxLength(50)
@@ -376,13 +371,13 @@ namespace Models.Models
                     .HasColumnType("datetime")
                     .HasColumnName("createdDate");
 
-                entity.Property(e => e.ImageUrl)
-                    .HasMaxLength(100)
-                    .HasColumnName("imageURL");
-
                 entity.Property(e => e.EstimatePrice)
                     .HasColumnType("money")
                     .HasColumnName("estimatePrice");
+
+                entity.Property(e => e.ImageUrl)
+                    .HasMaxLength(100)
+                    .HasColumnName("imageURL");
 
                 entity.Property(e => e.RequestStatus).HasColumnName("requestStatus");
 
@@ -498,10 +493,6 @@ namespace Models.Models
                 entity.Property(e => e.Email)
                     .HasMaxLength(100)
                     .HasColumnName("email");
-
-                entity.Property(e => e.Displayname)
-                    .HasMaxLength(50)
-                    .HasColumnName("displayname");
 
                 entity.Property(e => e.Gender).HasColumnName("gender");
 

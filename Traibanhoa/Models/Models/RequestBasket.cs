@@ -16,9 +16,9 @@ namespace Models.Models
         public Guid RequestBasketId { get; set; }
         public string Title { get; set; }
         public string ImageUrl { get; set; }
-        public decimal? EstimatePrice { get; set; }
         public DateTime? CreatedDate { get; set; }
         public int? RequestStatus { get; set; }
+        public decimal? EstimatePrice { get; set; }
         public Guid? CreateBy { get; set; }
         public Guid? ConfirmBy { get; set; }
 
