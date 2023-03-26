@@ -9,13 +9,13 @@ namespace Models.Models
     {
         public RequestBasket()
         {
-            OrderBasketDetails = new HashSet<OrderBasketDetail>();
             RequestBasketDetails = new HashSet<RequestBasketDetail>();
         }
 
         public Guid RequestBasketId { get; set; }
         public string Title { get; set; }
         public string ImageUrl { get; set; }
+        public string Phone { get; set; }
         public DateTime? CreatedDate { get; set; }
         public int? RequestStatus { get; set; }
         public decimal? EstimatePrice { get; set; }
@@ -24,7 +24,6 @@ namespace Models.Models
 
         public virtual User ConfirmByNavigation { get; set; }
         public virtual Customer CreateByNavigation { get; set; }
-        public virtual ICollection<OrderBasketDetail> OrderBasketDetails { get; set; }
         public virtual ICollection<RequestBasketDetail> RequestBasketDetails { get; set; }
     }
 }

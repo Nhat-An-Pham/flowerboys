@@ -426,3 +426,4 @@ C:\Users\USER\Desktop\traibanhoa\Traibanhoa\Traibanhoa\obj\Debug\net5.0\refint\T
 C:\Users\USER\Desktop\traibanhoa\Traibanhoa\Traibanhoa\obj\Debug\net5.0\Traibanhoa.pdb
 C:\Users\USER\Desktop\traibanhoa\Traibanhoa\Traibanhoa\obj\Debug\net5.0\Traibanhoa.genruntimeconfig.cache
 C:\Users\USER\Desktop\traibanhoa\Traibanhoa\Traibanhoa\obj\Debug\net5.0\ref\Traibanhoa.dll
+C:\Users\USER\Desktop\traibanhoa\Traibanhoa\Traibanhoa\bin\Debug\net5.0\PayPal.dll

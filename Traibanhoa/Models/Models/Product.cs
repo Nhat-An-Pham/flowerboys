@@ -10,7 +10,7 @@ namespace Models.Models
         public Product()
         {
             BasketDetails = new HashSet<BasketDetail>();
-            OrderProductDetails = new HashSet<OrderProductDetail>();
+            OrderDetails = new HashSet<OrderDetail>();
             RequestBasketDetails = new HashSet<RequestBasketDetail>();
         }
 
@@ -23,10 +23,11 @@ namespace Models.Models
         public bool? Status { get; set; }
         public decimal? Price { get; set; }
         public Guid? TypeId { get; set; }
+        public bool? ForSelling { get; set; }
 
         public virtual Type Type { get; set; }
         public virtual ICollection<BasketDetail> BasketDetails { get; set; }
-        public virtual ICollection<OrderProductDetail> OrderProductDetails { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<RequestBasketDetail> RequestBasketDetails { get; set; }
     }
 }

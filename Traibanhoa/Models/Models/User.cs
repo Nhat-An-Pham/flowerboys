@@ -9,7 +9,6 @@ namespace Models.Models
     {
         public User()
         {
-            Orders = new HashSet<Order>();
             RequestBaskets = new HashSet<RequestBasket>();
         }
 
@@ -27,7 +26,6 @@ namespace Models.Models
         public bool? IsGoogle { get; set; }
         public bool? IsBlocked { get; set; }
 
-        public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<RequestBasket> RequestBaskets { get; set; }
     }
 }

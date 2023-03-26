@@ -23,12 +23,12 @@ namespace Models.Models
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<OrderBasketDetail> OrderBasketDetails { get; set; }
-        public virtual DbSet<OrderProductDetail> OrderProductDetails { get; set; }
+        public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<RequestBasket> RequestBaskets { get; set; }
         public virtual DbSet<RequestBasketDetail> RequestBasketDetails { get; set; }
         public virtual DbSet<SubCategory> SubCategories { get; set; }
+        public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<Type> Types { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
@@ -210,11 +210,11 @@ namespace Models.Models
                     .ValueGeneratedNever()
                     .HasColumnName("orderId");
 
-                entity.Property(e => e.ConfirmBy).HasColumnName("confirmBy");
-
                 entity.Property(e => e.Email)
                     .HasMaxLength(100)
                     .HasColumnName("email");
+
+                entity.Property(e => e.IsRequest).HasColumnName("isRequest");
 
                 entity.Property(e => e.OrderBy).HasColumnName("orderBy");
 
@@ -223,6 +223,8 @@ namespace Models.Models
                     .HasColumnName("orderDate");
 
                 entity.Property(e => e.OrderStatus).HasColumnName("orderStatus");
+
+                entity.Property(e => e.PaymentMethod).HasColumnName("paymentMethod");
 
                 entity.Property(e => e.Phonenumber)
                     .HasMaxLength(50)
@@ -238,81 +240,43 @@ namespace Models.Models
                     .HasColumnType("money")
                     .HasColumnName("totalPrice");
 
-                entity.HasOne(d => d.ConfirmByNavigation)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.ConfirmBy)
-                    .HasConstraintName("FK_Order_User");
-
                 entity.HasOne(d => d.OrderByNavigation)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.OrderBy)
                     .HasConstraintName("FK_Order_Customer");
             });
 
-            modelBuilder.Entity<OrderBasketDetail>(entity =>
+            modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.HasKey(e => new { e.OrderId, e.BasketId });
+                entity.ToTable("OrderDetail");
 
-                entity.ToTable("OrderBasketDetail");
-
-                entity.Property(e => e.OrderId).HasColumnName("orderId");
+                entity.Property(e => e.OrderDetailId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("orderDetailId");
 
                 entity.Property(e => e.BasketId).HasColumnName("basketId");
 
-                entity.Property(e => e.IsRequest).HasColumnName("isRequest");
+                entity.Property(e => e.OrderId).HasColumnName("orderId");
 
                 entity.Property(e => e.Price)
                     .HasColumnType("money")
                     .HasColumnName("price");
-
-                entity.Property(e => e.Quantity).HasColumnName("quantity");
-
-                entity.HasOne(d => d.Basket)
-                    .WithMany(p => p.OrderBasketDetails)
-                    .HasForeignKey(d => d.BasketId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderBasketDetail_Basket");
-
-                entity.HasOne(d => d.BasketNavigation)
-                    .WithMany(p => p.OrderBasketDetails)
-                    .HasForeignKey(d => d.BasketId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderBasketDetail_RequestBasket");
-
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.OrderBasketDetails)
-                    .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderBasketDetail_Order");
-            });
-
-            modelBuilder.Entity<OrderProductDetail>(entity =>
-            {
-                entity.HasKey(e => new { e.OrderId, e.ProductId });
-
-                entity.ToTable("OrderProductDetail");
-
-                entity.Property(e => e.OrderId).HasColumnName("orderId");
 
                 entity.Property(e => e.ProductId).HasColumnName("productId");
 
-                entity.Property(e => e.Price)
-                    .HasColumnType("money")
-                    .HasColumnName("price");
-
                 entity.Property(e => e.Quantity).HasColumnName("quantity");
 
+                entity.Property(e => e.RequestBasketId).HasColumnName("requestBasketId");
+
                 entity.HasOne(d => d.Order)
-                    .WithMany(p => p.OrderProductDetails)
+                    .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderProductDetail_Order");
+                    .HasConstraintName("FK_OrderDetail_Order");
 
                 entity.HasOne(d => d.Product)
-                    .WithMany(p => p.OrderProductDetails)
+                    .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderProductDetail_Product");
+                    .HasConstraintName("FK_OrderDetail_Product");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -328,6 +292,8 @@ namespace Models.Models
                     .HasColumnName("createdDate");
 
                 entity.Property(e => e.Description).HasColumnName("description");
+
+                entity.Property(e => e.ForSelling).HasColumnName("forSelling");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
@@ -378,6 +344,10 @@ namespace Models.Models
                 entity.Property(e => e.ImageUrl)
                     .HasMaxLength(100)
                     .HasColumnName("imageURL");
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(50)
+                    .HasColumnName("phone");
 
                 entity.Property(e => e.RequestStatus).HasColumnName("requestStatus");
 
@@ -447,6 +417,34 @@ namespace Models.Models
                     .WithMany(p => p.SubCategories)
                     .HasForeignKey(d => d.CategoryId)
                     .HasConstraintName("FK_SubCategory_Category");
+            });
+
+            modelBuilder.Entity<Transaction>(entity =>
+            {
+                entity.ToTable("Transaction");
+
+                entity.Property(e => e.TransactionId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("transactionId");
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("createdDate");
+
+                entity.Property(e => e.CustomerId).HasColumnName("customerId");
+
+                entity.Property(e => e.OrderId).HasColumnName("orderId");
+
+                entity.Property(e => e.TotalAmount)
+                    .HasColumnType("money")
+                    .HasColumnName("totalAmount");
+
+                entity.Property(e => e.TransactionStatus).HasColumnName("transactionStatus");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.Transactions)
+                    .HasForeignKey(d => d.OrderId)
+                    .HasConstraintName("FK_Transaction_Order");
             });
 
             modelBuilder.Entity<Type>(entity =>

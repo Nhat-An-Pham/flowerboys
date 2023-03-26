@@ -58,6 +58,7 @@ namespace Traibanhoa.Controllers
         {
             try
             {
+                await _basketService.AddNewBasket();
                 return Ok();
             }
             catch (Exception ex)

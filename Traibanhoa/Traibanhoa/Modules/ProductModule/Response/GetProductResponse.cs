@@ -15,5 +15,6 @@ namespace Traibanhoa.Modules.ProductModule.Response
         public decimal? Price { get; set; }
         public Guid TypeId { get; set; }
         public string TypeName { get; set; }
+        public bool? ForSelling { get; set; }
     }
 }

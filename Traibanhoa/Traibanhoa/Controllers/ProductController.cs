@@ -3,6 +3,7 @@ using Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Traibanhoa.Modules.ProductModule.Interface;
 using Traibanhoa.Modules.ProductModule.Request;
@@ -25,11 +26,11 @@ namespace Traibanhoa.Controllers
 
         // GET: api/<ValuesController>
         [HttpGet("staff-managing")]
-        public async Task<ActionResult<IEnumerable<GetProductResponse>>> GetProductsForStaff()
+        public async Task<ActionResult<IEnumerable<GetProductResponse>>> GetProductsForStaff([FromQuery] bool? forSelling)
         {
             try
             {
-                var response = await _productService.GetAll();
+                var response = await _productService.GetAll(forSelling);
                 return Ok(response);
             }
             catch
@@ -41,11 +42,11 @@ namespace Traibanhoa.Controllers
         
         // GET: api/<ValuesController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetProductResponse>>> GetProductsForCustomer()
+        public async Task<ActionResult<IEnumerable<GetProductResponse>>> GetProductsForCustomer([FromQuery] bool? forSelling)
         {
             try
             {
-                var response = await _productService.GetProductsForCustomer();
+                var response = await _productService.GetProductsForCustomer(forSelling);
                 return Ok(response);
             }
             catch
@@ -99,7 +100,7 @@ namespace Traibanhoa.Controllers
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUpdate([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
         {
             try
             {
@@ -109,6 +110,37 @@ namespace Traibanhoa.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("product-searching")]
+        public async Task<ActionResult<IEnumerable<SearchProductResponse>>> GetProductByName([FromQuery(Name = "name")] string name)
+        {
+            if (name is string && !String.IsNullOrEmpty(name))
+            {
+                name = Regex.Replace(name.Trim(), @"\s+", " ");
+                var result = await _productService.GetProductByName(name);
+                if (result.Any())
+                {
+                    return new JsonResult(new
+                    {
+                        result = result,
+                    });
+                }
+                else
+                {
+                    return new JsonResult(new
+                    {
+                        result = "",
+                    });
+                }
+            }
+            else
+            {
+                return new JsonResult(new
+                {
+                    status = "failed"
+                });
             }
         }
     }

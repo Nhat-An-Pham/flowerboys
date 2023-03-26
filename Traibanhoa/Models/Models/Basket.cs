@@ -11,7 +11,6 @@ namespace Models.Models
         {
             BasketDetails = new HashSet<BasketDetail>();
             BasketSubCates = new HashSet<BasketSubCate>();
-            OrderBasketDetails = new HashSet<OrderBasketDetail>();
         }
 
         public Guid BasketId { get; set; }
@@ -26,6 +25,5 @@ namespace Models.Models
 
         public virtual ICollection<BasketDetail> BasketDetails { get; set; }
         public virtual ICollection<BasketSubCate> BasketSubCates { get; set; }
-        public virtual ICollection<OrderBasketDetail> OrderBasketDetails { get; set; }
     }
 }

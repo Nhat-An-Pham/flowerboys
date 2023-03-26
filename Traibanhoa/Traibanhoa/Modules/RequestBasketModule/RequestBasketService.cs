@@ -153,6 +153,7 @@ namespace Traibanhoa.Modules.RequestBasketModule
                 #region update basket
 
                 // update request basket
+                requestBasket.Phone = request.Phone;
                 requestBasket.Title = request.Title;
                 requestBasket.ImageUrl = request.ImageUrl;
                 requestBasket.EstimatePrice = request.EstimatePrice;

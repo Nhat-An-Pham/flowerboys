@@ -8,6 +8,7 @@ namespace Traibanhoa.Modules.RequestBasketModule.Request
     {
         public Guid RequestBasketId { get; set; }
         public string Title { get; set; }
+        public string Phone { get; set; }
         public string ImageUrl { get; set; }
         public decimal? EstimatePrice { get; set; }
         public int? RequestStatus { get; set; }

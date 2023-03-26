@@ -25,12 +25,8 @@ using Traibanhoa.Modules.CategoryModule;
 using Traibanhoa.Modules.CategoryModule.Interface;
 using Traibanhoa.Modules.CustomerModule;
 using Traibanhoa.Modules.CustomerModule.Interface;
-using Traibanhoa.Modules.OrderBasketDetailModule;
-using Traibanhoa.Modules.OrderBasketDetailModule.Interface;
 using Traibanhoa.Modules.OrderModule;
 using Traibanhoa.Modules.OrderModule.Interface;
-using Traibanhoa.Modules.OrderProductDetailModule;
-using Traibanhoa.Modules.OrderProductDetailModule.Interface;
 using Traibanhoa.Modules.ProductModule;
 using Traibanhoa.Modules.ProductModule.Interface;
 using Traibanhoa.Modules.RequestBasketDetailModule;
@@ -39,6 +35,8 @@ using Traibanhoa.Modules.RequestBasketModule;
 using Traibanhoa.Modules.RequestBasketModule.Interface;
 using Traibanhoa.Modules.SubCateModule;
 using Traibanhoa.Modules.SubCateModule.Interface;
+using Traibanhoa.Modules.TransactionModule;
+using Traibanhoa.Modules.TransactionModule.Interface;
 using Traibanhoa.Modules.TypeModule;
 using Traibanhoa.Modules.TypeModule.Interface;
 using Traibanhoa.Modules.UserModule;
@@ -138,15 +136,12 @@ namespace Traibanhoa
             //Customer Module
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICustomerService, CustomerService>();
-            //OrderBasketDetail Module
-            services.AddScoped<IOrderBasketDetailRepository, OrderBasketDetailRepository>();
-            services.AddScoped<IOrderBasketDetailService, OrderBasketDetailService>();
             //Order Module
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderService, OrderService>();
-            //OrderProductDetail Module
-            services.AddScoped<IOrderProductDetailRepository, OrderProductDetailRepository>();
-            services.AddScoped<IOrderProductDetailService, OrderProductDetailService>();
+            //Transaction Module
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
+            services.AddScoped<ITransactionService, TransactionService>();
             //RequestBasketDetail Module
             services.AddScoped<IRequestBasketDetailRepository, RequestBasketDetailRepository>();
             services.AddScoped<IRequestBasketDetailService, RequestBasketDetailService>();

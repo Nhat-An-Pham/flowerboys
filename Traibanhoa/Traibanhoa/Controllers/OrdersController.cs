@@ -3,6 +3,7 @@ using Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Traibanhoa.Modules.OrderModule;
 using Traibanhoa.Modules.OrderModule.Interface;
 using Traibanhoa.Modules.OrderModule.Request;
 using Traibanhoa.Modules.TypeModule.Request;
@@ -13,50 +14,65 @@ namespace Traibanhoa.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderService _orderSevice;
+        private readonly IOrderService _orderService;
 
-        public OrdersController(IOrderService orderSevice)
+        public OrdersController(IOrderService orderService)
         {
-            _orderSevice = orderSevice;
+            _orderService = orderService;
         }
 
-        // GET api/<ValuesController>
+        #region Get all orders for staff include deleted, without paging
+        // GET: api/Orders
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        public async Task<ActionResult> GetAll()
         {
             try
             {
-                var response = await _orderSevice.GetAll();
-                return Ok(response);
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder([FromRoute]Guid id)
-        {
-            try
-            {
-                return Ok(await _orderSevice.GetOrderByID(id));
+                var res = await _orderService.GetAll();
+                return Ok(res);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
-        // POST api/<ValuesController>
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        #region Get all orders by customer, without paging
+        // GET: api/Orders/5
+        [HttpGet("/Customer/{id}")]
+        public async Task<ActionResult<Order>> GetByCustomer([FromRoute] Guid id)
+        {
+            try
+            {
+                var res = await _orderService.GetByCustomer(id);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        #endregion
+
+        // POST: api/Orders
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder([FromBody] CreateOrderRequest createOrderRequest)
+        public async Task<ActionResult> Post([FromBody] CreateOrderRequest request)
         {
             try
             {
-                return Ok(await _orderSevice.AddNewOrder(createOrderRequest));
+                var order = new Order();
+                order.OrderBy = request.OrderBy;
+                order.Phonenumber = request.Phonenumber;
+                order.PaymentMethod = request.PaymentMethod;
+                order.TotalPrice = request.TotalPrice;
+                order.Email = request.Email;
+                order.ShippedAddress = request.ShippedAddress;
+                order.IsRequest = request.IsRequest;
+
+                var redirectUrl = await _orderService.AddNewOrder(order);
+                return Ok(redirectUrl);
             }
             catch (Exception ex)
             {
@@ -64,14 +80,72 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        // PUT api/<ValuesController>/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut]
-        public async Task<IActionResult> PutOrder([FromBody] UpdateOrderRequest updateOrderRequest)
+        [HttpPut("accept/{id}")]
+        public async Task<ActionResult> AcceptOrder([FromRoute] Guid id)
         {
             try
             {
-                await _orderSevice.UpdateOrder(updateOrderRequest);
+                await _orderService.AcceptOrder(id);
+                return Ok("Order accepted");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("deny/{id}")]
+        public async Task<ActionResult> DenyAsync([FromRoute] Guid id)
+        {
+            try
+            {
+                await _orderService.DenyOrder(id);
+                return Ok("Order denied");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("cancel/{id}")]
+        public async Task<ActionResult> Cancel([FromRoute] Guid id)
+        {
+            try
+            {
+                await _orderService.CancelOrder(id);
+                return Ok("Order cancelled");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("shipping/{id}")]
+        public async Task<ActionResult> Shipping([FromRoute] Guid id)
+        {
+            try
+            {
+                await _orderService.Shipping(id);
+                return Ok("Shipping");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("delivered/{id}")]
+        public async Task<ActionResult> Delivered([FromRoute] Guid id, [FromQuery] bool fail)
+        {
+            try
+            {
+                if (fail)
+                    await _orderService.DeliveredFail(id);
+                else
+                    await _orderService.Delivered(id);
+
                 return Ok();
             }
             catch (Exception ex)
@@ -80,25 +154,18 @@ namespace Traibanhoa.Controllers
             }
         }
 
-        //// DELETE: api/Orders/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteOrder(Guid id)
-        //{
-        //    var order = await _context.Orders.FindAsync(id);
-        //    if (order == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _orderSevice.de
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool OrderExists(Guid id)
-        //{
-        //    return _context.Orders.Any(e => e.OrderId == id);
-        //}
+        [HttpGet("status")]
+        public async Task<ActionResult> GetOrderResponse([FromQuery] int status)
+        {
+            try
+            {
+                var res = await _orderService.GetOrderResponse(status);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

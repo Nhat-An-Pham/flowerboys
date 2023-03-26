@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Models.Models;
+using System;
 using System.Collections.Generic;
 
-#nullable disable
-
-namespace Models.Models
+namespace Traibanhoa.Modules.OrderModule.Response
 {
-    public partial class Order
+    public class OrderResponse
     {
-        public Order()
+
+        public OrderResponse()
         {
             OrderDetails = new HashSet<OrderDetail>();
-            Transactions = new HashSet<Transaction>();
         }
 
         public Guid OrderId { get; set; }
@@ -25,8 +24,7 @@ namespace Models.Models
         public bool? IsRequest { get; set; }
         public int? PaymentMethod { get; set; }
 
-        public virtual Customer OrderByNavigation { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
+

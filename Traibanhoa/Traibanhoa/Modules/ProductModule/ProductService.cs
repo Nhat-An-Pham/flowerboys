@@ -14,6 +14,9 @@ using Traibanhoa.Modules.TypeModule;
 using FluentValidation.Results;
 using Models.Constant;
 using Traibanhoa.Modules.ProductModule.Response;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Traibanhoa.Modules.ProductModule
 {
@@ -27,7 +30,7 @@ namespace Traibanhoa.Modules.ProductModule
             _typeRepository = typeRepository;
         }
 
-        public async Task<ICollection<GetProductResponse>> GetAll()
+        public async Task<ICollection<GetProductResponse>> GetAll(bool? forSelling)
         {
             var result = _productRepository.GetAll(options: o => o.OrderByDescending(x => x.UpdatedDate).ToList(), includeProperties: "Type").Result.Select(x => new GetProductResponse
             {
@@ -38,16 +41,24 @@ namespace Traibanhoa.Modules.ProductModule
                 CreatedDate = x.CreatedDate,
                 Price = x.Price,
                 TypeId = x.Type.TypeId,
-                TypeName = x.Type.Name
+                TypeName = x.Type.Name,
+                ForSelling = x.ForSelling
             }).ToList();
             if (result.Count() == 0)
             {
                 throw new Exception(ErrorMessage.CommonError.LIST_IS_NULL);
             }
+            if (forSelling == true)
+            {
+                result = result.Where(x => x.ForSelling == forSelling).ToList();
+            } else if (forSelling == false)
+            {
+                result = result.Where(x => x.ForSelling == forSelling).ToList();
+            }
             return result;
         }
 
-        public async Task<ICollection<GetProductResponse>> GetProductsForCustomer()
+        public async Task<ICollection<GetProductResponse>> GetProductsForCustomer(bool? forSelling)
         {
             var result = _productRepository.GetProductsBy(x => x.Status == true, includeProperties: "Type").Result.Select(x => new GetProductResponse
             {
@@ -58,11 +69,20 @@ namespace Traibanhoa.Modules.ProductModule
                 CreatedDate = x.CreatedDate,
                 Price = x.Price,
                 TypeId = x.Type.TypeId,
-                TypeName = x.Type.Name
+                TypeName = x.Type.Name,
+                ForSelling = x.ForSelling
             }).ToList();
             if (result.Count() == 0)
             {
                 throw new Exception(ErrorMessage.CommonError.LIST_IS_NULL);
+            }
+            if (forSelling == true)
+            {
+                result = result.Where(x => x.ForSelling == forSelling).ToList();
+            }
+            else if (forSelling == false)
+            {
+                result = result.Where(x => x.ForSelling == forSelling).ToList();
             }
             return result;
         }
@@ -86,6 +106,7 @@ namespace Traibanhoa.Modules.ProductModule
             newProduct.Picture = productRequest.Picture;
             newProduct.Price = productRequest.Price;
             newProduct.Status = productRequest.Status ?? true;
+            newProduct.ForSelling = productRequest.ForSelling;
 
             await _productRepository.AddAsync(newProduct);
             return newProduct.ProductId;
@@ -118,6 +139,7 @@ namespace Traibanhoa.Modules.ProductModule
             productUpdate.TypeId = productRequest.TypeId ?? productUpdate.TypeId;
             productUpdate.Picture = productRequest.Picture ?? productUpdate.Picture ;
             productUpdate.Price = productRequest.Price ?? productUpdate.Price ;
+            productUpdate.ForSelling = productRequest.ForSelling ?? productUpdate.ForSelling ;
 
             await _productRepository.UpdateAsync(productUpdate);
         }
@@ -163,6 +185,46 @@ namespace Traibanhoa.Modules.ProductModule
                 TypeName = product.Type.Name
             };
             return result;
+        }
+        public async Task<ICollection<SearchProductResponse>> GetProductByName(String name)
+        {
+
+            var products = await _productRepository.GetProductsBy(x => x.Status == true);
+
+            return products.Where(x => ConvertToUnSign(x.Name).Contains(name, StringComparison.CurrentCultureIgnoreCase) || x.Name.Contains(name, StringComparison.CurrentCultureIgnoreCase)).ToList().Select(ToSearchResponse).ToList();
+        }
+
+        public SearchProductResponse ToSearchResponse(Product product)
+        {
+            if (product != null)
+            {
+                return new SearchProductResponse()
+                {
+                    ProductId = product.ProductId,
+                    ProductName = product.Name,
+                    ProductPrice = (decimal)product.Price,
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+        private string ConvertToUnSign(string input)
+        {
+            input = input.Trim();
+            for (int i = 0x20; i < 0x30; i++)
+            {
+                input = input.Replace(((char)i).ToString(), " ");
+            }
+            Regex regex = new Regex(@"\p{IsCombiningDiacriticalMarks}+");
+            string str = input.Normalize(NormalizationForm.FormD);
+            string str2 = regex.Replace(str, string.Empty).Replace('đ', 'd').Replace('Đ', 'D');
+            while (str2.IndexOf("?") >= 0)
+            {
+                str2 = str2.Remove(str2.IndexOf("?"), 1);
+            }
+            return str2;
         }
     }
 }
